@@ -10,4 +10,6 @@ class ApiUrl {
   static const String token = "$palpajun/api/api/token/";
   static const String refreshToken = "$palpajun/api/api/token/refresh/";
   static const String employeeSalary = "$palpajun/api/employee-salary/";
+
+  ///{{palpajun}}/api/ledger/?year=2082&month=2
 }

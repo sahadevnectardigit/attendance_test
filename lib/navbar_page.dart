@@ -1,0 +1,44 @@
+import 'package:attendance/core/provider/bottom_navbar_provider.dart';
+import 'package:attendance/feature/dashboard/pages/test.dart';
+import 'package:attendance/feature/profile/page/profile_page.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class NavBarPage extends StatelessWidget {
+  const NavBarPage({super.key});
+
+  final List<Widget> _pages = const [
+    // HomePage(),
+    // HomePagetest(),
+    AttendanceDashboardPage(),
+    // AttendanceDashboardPage(),
+    Center(child: Text("💰 Salary Page", style: TextStyle(fontSize: 22))),
+    Center(child: Text("📒 Ledger Page", style: TextStyle(fontSize: 22))),
+    ProfilePage(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final navProvider = Provider.of<BottomNavProvider>(context);
+
+    return Scaffold(
+      body: IndexedStack(index: navProvider.currentIndex, children: _pages),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: navProvider.currentIndex,
+        onTap: navProvider.updateIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.attach_money),
+            label: "Salary",
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: "Ledger"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
+      ),
+    );
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:attendance/core/provider/bottom_navbar_provider.dart';
-import 'package:attendance/feature/dashboard/pages/test.dart';
+import 'package:attendance/feature/dashboard/pages/dash_board_page.dart';
+import 'package:attendance/feature/ledger/pages/ledger_page.dart';
 import 'package:attendance/feature/profile/page/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,12 +9,9 @@ class NavBarPage extends StatelessWidget {
   const NavBarPage({super.key});
 
   final List<Widget> _pages = const [
-    // HomePage(),
-    // HomePagetest(),
-    AttendanceDashboardPage(),
-    // AttendanceDashboardPage(),
+    DashboardPage(),
     Center(child: Text("💰 Salary Page", style: TextStyle(fontSize: 22))),
-    Center(child: Text("📒 Ledger Page", style: TextStyle(fontSize: 22))),
+    LedgerPage(),
     ProfilePage(),
   ];
 
@@ -22,7 +20,8 @@ class NavBarPage extends StatelessWidget {
     final navProvider = Provider.of<BottomNavProvider>(context);
 
     return Scaffold(
-      body: IndexedStack(index: navProvider.currentIndex, children: _pages),
+      // body: IndexedStack(index: navProvider.currentIndex, children: _pages),
+      body: _pages[navProvider.currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navProvider.currentIndex,
         onTap: navProvider.updateIndex,

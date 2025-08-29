@@ -1,19 +1,26 @@
 import 'package:attendance/core/constants/api_constants.dart';
 import 'package:attendance/core/services/dio_interceptor.dart';
 import 'package:attendance/core/utils/error_handler.dart';
-import 'package:attendance/feature/dashboard/model/empolyee_dashboard_model.dart';
 import 'package:attendance/models/api_response_model.dart';
+import 'package:attendance/models/ledger_model.dart';
 import 'package:dio/dio.dart';
 
-class DashboardRepo {
+class LedgerRepo {
   static final ApiClient _client = ApiClient();
 
-  static Future<ApiResponse<EmployeeDashBoardModel>> getDashboardData() async {
+  static Future<ApiResponse<LedgerModel?>> fetchLedgerData({
+    int? year,
+    int? month,
+  }) async {
     try {
-      final response = await _client.get(path: ApiUrl.dashboard);
+      final params = {"year": year, "month": month};
+      final response = await _client.get(
+        path: ApiUrl.ledger,
+        queryParameters: params,
+      );
 
       if (response.statusCode == 200) {
-        final model = EmployeeDashBoardModel.fromJson(response.data);
+        final model = LedgerModel.fromJson(response.data);
         return ApiResponse.success(model); // returns model on success
       } else {
         final errorMsg = response.data["error"] ?? "Failed to fetch dashboard";

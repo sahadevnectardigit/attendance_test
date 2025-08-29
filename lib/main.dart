@@ -7,14 +7,14 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
- 
+
   final rememberMe = await LocalStorage.getRememberMe();
   final token = await LocalStorage.getAccessToken();
 
   runApp(
     MyApp(
       initialPage: (rememberMe && token != null)
-          ? const NavBarPage()
+          ? NavBarPage()
           : const AttendanceLoginPage(),
     ),
   );

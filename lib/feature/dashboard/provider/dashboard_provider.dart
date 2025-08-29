@@ -2,7 +2,7 @@ import 'package:attendance/feature/dashboard/model/empolyee_dashboard_model.dart
 import 'package:attendance/feature/dashboard/repo/employee_repo.dart';
 import 'package:flutter/material.dart';
 
-class EmployeeDashboardProvider extends ChangeNotifier {
+class DashboardProvider extends ChangeNotifier {
   EmployeeDashBoardModel? dashboard; // model
   String? errorMessage; // string error
 
@@ -13,7 +13,7 @@ class EmployeeDashboardProvider extends ChangeNotifier {
     errorMessage = null;
     notifyListeners();
 
-    final result = await EmployeeDashboardRepo.getDashboardData();
+    final result = await DashboardRepo.getDashboardData();
 
     isLoading = false;
 

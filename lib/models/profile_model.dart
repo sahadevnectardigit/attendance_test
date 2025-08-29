@@ -1,4 +1,4 @@
-class ProfileModel {
+class LedgerModel {
   int? id;
   String? firstName;
   String? middleName;
@@ -17,26 +17,27 @@ class ProfileModel {
   String? permCountry;
   Profile? profile;
 
-  ProfileModel(
-      {this.id,
-      this.firstName,
-      this.middleName,
-      this.lastName,
-      this.dateOfBirthEn,
-      this.dateOfBirthNp,
-      this.tempAddress,
-      this.tempStreet,
-      this.tempDistrict,
-      this.tempZone,
-      this.tempCountry,
-      this.permAddress,
-      this.permStreet,
-      this.permDistrict,
-      this.permZone,
-      this.permCountry,
-      this.profile});
+  LedgerModel({
+    this.id,
+    this.firstName,
+    this.middleName,
+    this.lastName,
+    this.dateOfBirthEn,
+    this.dateOfBirthNp,
+    this.tempAddress,
+    this.tempStreet,
+    this.tempDistrict,
+    this.tempZone,
+    this.tempCountry,
+    this.permAddress,
+    this.permStreet,
+    this.permDistrict,
+    this.permZone,
+    this.permCountry,
+    this.profile,
+  });
 
-  ProfileModel.fromJson(Map<String, dynamic> json) {
+  LedgerModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstName = json['first_name'];
     middleName = json['middle_name'];
@@ -53,30 +54,31 @@ class ProfileModel {
     permDistrict = json['perm_district'];
     permZone = json['perm_zone'];
     permCountry = json['perm_country'];
-    profile =
-        json['profile'] != null ? new Profile.fromJson(json['profile']) : null;
+    profile = json['profile'] != null
+        ? Profile.fromJson(json['profile'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['first_name'] = this.firstName;
-    data['middle_name'] = this.middleName;
-    data['last_name'] = this.lastName;
-    data['date_of_birth_en'] = this.dateOfBirthEn;
-    data['date_of_birth_np'] = this.dateOfBirthNp;
-    data['temp_address'] = this.tempAddress;
-    data['temp_street'] = this.tempStreet;
-    data['temp_district'] = this.tempDistrict;
-    data['temp_zone'] = this.tempZone;
-    data['temp_country'] = this.tempCountry;
-    data['perm_address'] = this.permAddress;
-    data['perm_street'] = this.permStreet;
-    data['perm_district'] = this.permDistrict;
-    data['perm_zone'] = this.permZone;
-    data['perm_country'] = this.permCountry;
-    if (this.profile != null) {
-      data['profile'] = this.profile!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['first_name'] = firstName;
+    data['middle_name'] = middleName;
+    data['last_name'] = lastName;
+    data['date_of_birth_en'] = dateOfBirthEn;
+    data['date_of_birth_np'] = dateOfBirthNp;
+    data['temp_address'] = tempAddress;
+    data['temp_street'] = tempStreet;
+    data['temp_district'] = tempDistrict;
+    data['temp_zone'] = tempZone;
+    data['temp_country'] = tempCountry;
+    data['perm_address'] = permAddress;
+    data['perm_street'] = permStreet;
+    data['perm_district'] = permDistrict;
+    data['perm_zone'] = permZone;
+    data['perm_country'] = permCountry;
+    if (profile != null) {
+      data['profile'] = profile!.toJson();
     }
     return data;
   }
@@ -94,9 +96,9 @@ class Profile {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['image_url'] = this.imageUrl;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['image_url'] = imageUrl;
     return data;
   }
 }

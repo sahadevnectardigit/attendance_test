@@ -16,6 +16,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
       child: Container(
         width: 250,
         color: Color(0xFF4A6CF7),
+
+        // color: Colors.blue.shade50,
         child: Column(
           children: [
             SizedBox(height: 20),
@@ -73,17 +75,42 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ListTile(
               leading: Icon(Icons.logout, color: Colors.white),
               title: Text('Logout', style: TextStyle(color: Colors.white)),
-              onTap: () async {
-                // Clear login state
-                await LocalStorage.clearTokens();
-                await LocalStorage.setRememberMe(false);
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Confirm Logout'),
+                      content: Text('Are you sure you want to logout?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                          child: Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.of(
+                              context,
+                            ).pop(); // Close the dialog first
+                            // Clear login state
+                            await LocalStorage.clearTokens();
+                            await LocalStorage.setRememberMe(false);
 
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AttendanceLoginPage(),
-                  ),
-                  (Route<dynamic> route) => false,
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AttendanceLoginPage(),
+                              ),
+                              (Route<dynamic> route) => false,
+                            );
+                          },
+                          child: Text('Logout'),
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
             ),

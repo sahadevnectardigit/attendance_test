@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:attendance/core/constants/api_constants.dart';
 import 'package:attendance/core/services/dio_interceptor.dart';
 import 'package:attendance/core/utils/error_handler.dart';
@@ -8,12 +10,12 @@ import 'package:dio/dio.dart';
 class ProfileRepo {
   static final ApiClient _client = ApiClient();
 
-  static Future<ApiResponse<ProfileModel>> fetchProfileData() async {
+  static Future<ApiResponse<LedgerModel>> fetchProfileData() async {
     try {
       final response = await _client.get(path: ApiUrl.profile);
 
       if (response.statusCode == 200) {
-        final model = ProfileModel.fromJson(response.data);
+        final model = LedgerModel.fromJson(response.data);
         return ApiResponse.success(model); // returns model on success
       } else {
         final errorMsg = response.data["error"] ?? "Failed to fetch dashboard";
@@ -24,6 +26,41 @@ class ProfileRepo {
       return ApiResponse.failure(
         backendMessage ?? ApiErrorHandler.handleError(e),
       );
+    } catch (e) {
+      return ApiResponse.failure("Unexpected error: $e");
+    }
+  }
+
+  static Future<ApiResponse<bool>> updateProfile({File? imageFile}) async {
+    try {
+      final formData = FormData.fromMap({
+        "image": await MultipartFile.fromFile(
+          imageFile?.path ?? "",
+          filename: imageFile?.path.split('/').last,
+        ),
+      });
+
+      final response = await _client.post(
+        path: ApiUrl.updateProfileImage,
+        data: formData,
+      );
+
+      if (response.statusCode == 200) {
+        await fetchProfileData();
+        return ApiResponse.success(true);
+      } else {
+        final errorData = response.data;
+        final errorMsg = errorData["image"] != null
+            ? errorData["image"][0]
+            : errorData["error"] ?? "Failed to update profile";
+        return ApiResponse.failure(errorMsg);
+      }
+    } on DioException catch (e) {
+      final backendMessage =
+          e.response?.data?["image"]?[0] ??
+          e.response?.data?["error"] ??
+          ApiErrorHandler.handleError(e);
+      return ApiResponse.failure(backendMessage);
     } catch (e) {
       return ApiResponse.failure("Unexpected error: $e");
     }

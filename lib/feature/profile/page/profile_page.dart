@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:attendance/core/extension/snackbar.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -12,6 +16,19 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  File? _selectedImage;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final profileProvider = context.watch<ProfileProvider>();
     final model = profileProvider.profileModel;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -31,7 +49,6 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           IconButton(
             onPressed: () async {
-              // Clear login state
               await LocalStorage.clearTokens();
               await LocalStorage.setRememberMe(false);
 
@@ -41,27 +58,60 @@ class _ProfilePageState extends State<ProfilePage> {
                 (Route<dynamic> route) => false,
               );
             },
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
           ),
         ],
       ),
       body: profileProvider.isLoading
-          ? Center(child: const CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : profileProvider.errorMessage != null
-          ? Text(profileProvider.errorMessage!)
+          ? Center(child: Text(profileProvider.errorMessage!))
           : Center(
               child: Column(
                 children: [
-                  ClipOval(
-                    child: Image.network(
-                      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
+                  GestureDetector(
+                    onTap: () async {
+                      await _pickImage();
+
+                      final success = await profileProvider.updateProfileImagge(
+                        imageFile: _selectedImage,
+                      );
+                      if (success) {
+                        context.showSnackBarMessage(
+                          message: 'Profile upated successfully',
+                          backgroundColor: Colors.green,
+                        );
+                      } else {
+                        context.showSnackBarMessage(
+                          message: profileProvider.errorProfileUpdate
+                              .toString(),
+                          backgroundColor: Colors.green,
+                        );
+                      }
+                    },
+                    child: ClipOval(
+                      child: _selectedImage != null
+                          ? Image.file(
+                              _selectedImage!,
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              model?.profile?.imageUrl?.toString() ??
+                                  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0',
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
-                  Text("${model?.firstName} ${model?.lastName} "),
-                  Text(model?.tempAddress ?? ""),
+                  const SizedBox(height: 12),
+                  Text(
+                    "${model?.firstName ?? "Unknown"} ${model?.lastName ?? ""}",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(model?.tempAddress ?? "Address"),
                 ],
               ),
             ),

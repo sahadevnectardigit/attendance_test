@@ -16,7 +16,7 @@ class AttendanceLoginPage extends StatefulWidget {
 
 class _AttendanceLoginPageState extends State<AttendanceLoginPage> {
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController(text: "reason@gmail.com");
+  final emailController = TextEditingController(text: "sahadev@gmail.com");
   final companyCodeController = TextEditingController(text: "pa111");
   final passwordController = TextEditingController(text: "admin@admin");
   bool rememberMe = false;
@@ -143,7 +143,7 @@ class _AttendanceLoginPageState extends State<AttendanceLoginPage> {
 
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const NavBarPage()),
+        MaterialPageRoute(builder: (context) => NavBarPage()),
         (Route<dynamic> route) => false,
       );
       context.showSnackBarMessage(

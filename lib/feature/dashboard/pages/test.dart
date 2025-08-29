@@ -1,5 +1,8 @@
+import 'package:attendance/core/extension/snackbar.dart';
+import 'package:attendance/core/utils/device_helper.dart';
 import 'package:attendance/feature/dashboard/pages/screens/app_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 
 class AttendanceDashboardPage extends StatefulWidget {
   const AttendanceDashboardPage({super.key});
@@ -10,8 +13,6 @@ class AttendanceDashboardPage extends StatefulWidget {
 }
 
 class _AttendanceDashboardPageState extends State<AttendanceDashboardPage> {
-  final int _currentPageIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,27 +134,30 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage> {
             ),
 
             const SizedBox(height: 20),
-
-            // Swipe to check in button
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  minimumSize: const Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
+              child: SlideAction(
+                height: 65,
+                text: "Swipe to check in",
+                outerColor: Colors.blue,
+                innerColor: Colors.white,
+                sliderButtonIcon: const Icon(
+                  Icons.arrow_right_alt_sharp,
+                  color: Colors.blue,
                 ),
-                icon: const Icon(Icons.arrow_forward, color: Colors.white),
-                label: const Text(
-                  "Swipe to check in",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                onPressed: () {},
+                onSubmit: () async {
+                  final deviceName = await DeviceHelper.getDeviceName();
+
+                  /// Do something here OnSlide
+                  context.showSnackBarMessage(
+                    message: 'Attendance successful on $deviceName ',
+                    backgroundColor: Colors.green,
+                  );
+                  return null;
+                },
               ),
             ),
-
+            // Swipe to check in button
             const SizedBox(height: 30),
 
             // Stats Section

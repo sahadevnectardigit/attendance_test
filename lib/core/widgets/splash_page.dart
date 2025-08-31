@@ -34,7 +34,7 @@ class _SplashPageState extends State<SplashPage> {
       context,
       MaterialPageRoute(
         builder: (_) => (rememberMe && hasValidToken && hasValidRefreshToken)
-            ? const NavBarPage()
+            ?  NavBarPage()
             : const AttendanceLoginPage(),
       ),
     );

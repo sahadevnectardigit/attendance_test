@@ -3,25 +3,23 @@ import 'package:attendance/models/salary_model.dart';
 import 'package:flutter/material.dart';
 
 class SalaryProvider extends ChangeNotifier {
-  SalaryModel? salaryModel; // model
-  String? errorMessage; // string error
-
+  List<SalaryModel>? salaryList;
+  String? errorMessage;
   bool isLoading = false;
 
   Future<void> fetchSalary() async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
+
     final result = await SalaryRepo.fetchSalaryData();
     isLoading = false;
 
     if (result.isSuccess && result.data != null) {
-      salaryModel = result.data;
-      errorMessage = null;
+      salaryList = result.data;
     } else {
-      salaryModel = null;
-      errorMessage =
-          result.message ?? "Failed to load salary data"; // failure → string
+      salaryList = null;
+      errorMessage = result.message ?? "Failed to load salary data";
     }
 
     notifyListeners();

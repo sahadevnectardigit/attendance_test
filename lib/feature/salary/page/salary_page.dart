@@ -1,3 +1,4 @@
+import 'package:attendance/feature/salary/page/salary_details.dart';
 import 'package:attendance/feature/salary/provider/salary_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,146 +14,59 @@ class _SalaryPageState extends State<SalaryPage> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<SalaryProvider>();
-    final data = provider.salaryModel;
+    final data = provider.salaryList;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Salary Slip'), centerTitle: true),
       body: provider.isLoading
           ? const Center(child: CircularProgressIndicator())
-          : data == null
+          : data == null || data.isEmpty
           ? const Center(child: Text("No salary data available"))
-          : SingleChildScrollView(
+          : ListView.separated(
               padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Employee Info
-                  Card(
+              itemCount: data.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final modelData = data[index];
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => SalaryDetails(data: modelData),
+                      ),
+                    );
+                  },
+                  child: Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     elevation: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Employee Details",
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 8),
-                          _infoRow("Name", data.employeeName),
-                          _infoRow("Department", data.department),
-                          _infoRow("Month", data.salaryMonth),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Salary Summary
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Salary Summary",
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 8),
-                          _infoRow("Basic Salary", data.basicSalary),
-                          _infoRow("Allowance", data.dearnessAllowance),
-                          _infoRow("Gross Salary", data.monthlyGross),
-                          _infoRow(
-                            "Total Deductions",
-                            data.totalDeductions.toString(),
-                          ),
-                          const Divider(),
-                          _infoRow(
-                            "Net Salary",
-                            data.netSalaryField,
-                            isHighlight: true,
-                          ),
-                          Text(
-                            "(${data.amountInWords})",
-                            style: const TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Tax Breakdown
-                  if (data.taxBreakdown != null &&
-                      data.taxBreakdown!.isNotEmpty)
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Tax Breakdown",
-                              style: Theme.of(context).textTheme.titleMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 8),
-                            ...data.taxBreakdown!.map(
-                              (tax) => _infoRow(
-                                tax.taxRate ?? "",
-                                "${tax.taxLiability} (on ${tax.taxableAmount})",
-                              ),
-                            ),
-                            const Divider(),
-                            _infoRow(
-                              "Total Tax",
-                              data.totalTax,
-                              isHighlight: true,
-                            ),
-                          ],
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(16),
+                      title: Text(
+                        modelData.salaryMonth ?? "",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 6),
+                          Text("Name: ${modelData.employeeName ?? "-"}"),
+                          Text("Department: ${modelData.department ?? "-"}"),
+                          Text(
+                            "Net Salary: ${modelData.netSalaryField ?? "-"}",
+                          ),
+                        ],
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     ),
-                ],
-              ),
+                  ),
+                );
+              },
             ),
-    );
-  }
-
-  Widget _infoRow(String label, String? value, {bool isHighlight = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
-          Text(
-            value ?? "-",
-            style: TextStyle(
-              fontWeight: isHighlight ? FontWeight.bold : FontWeight.normal,
-              fontSize: isHighlight ? 16 : 14,
-              color: isHighlight ? Colors.green[700] : null,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

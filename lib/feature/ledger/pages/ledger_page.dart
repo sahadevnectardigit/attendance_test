@@ -1,4 +1,5 @@
 import 'package:attendance/core/extension/snackbar.dart';
+import 'package:attendance/core/widgets/loading_widget.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -202,42 +203,50 @@ class _LedgerPageState extends State<LedgerPage> {
                   ),
                   const SizedBox(height: 15),
 
-                  Expanded(
-                    child: ListView.separated(
-                      itemCount: state.ledgerModel?.detailData?.length ?? 0,
-                      itemBuilder: (BuildContext context, int index) {
-                        final detailData =
-                            state.ledgerModel?.detailData?[index];
-                        return Card(
-                          color: Colors.blue.shade200,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                  state.isLoading
+                      ? LoadingWidget()
+                      : Expanded(
+                          child: ListView.separated(
+                            itemCount:
+                                state.ledgerModel?.detailData?.length ?? 0,
+                            itemBuilder: (BuildContext context, int index) {
+                              final detailData =
+                                  state.ledgerModel?.detailData?[index];
+                              return Card(
+                                color: Colors.blue.shade200,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 3,
+                                margin: const EdgeInsets.symmetric(vertical: 6),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _infoRow("Date", detailData?.date),
+                                      _infoRow("Day", detailData?.day),
+                                      _infoRow("Remarks", detailData?.remarks),
+                                      const Divider(height: 16, thickness: 1),
+                                      _infoRow("Time In", detailData?.timeIn),
+                                      _infoRow("Time Out", detailData?.timeOut),
+                                      _infoRow(
+                                        "Worked Hour",
+                                        detailData?.workedHour,
+                                      ),
+                                      _infoRow("OT", detailData?.ot),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                                  return SizedBox(height: 5);
+                                },
                           ),
-                          elevation: 3,
-                          margin: const EdgeInsets.symmetric(vertical: 6),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _infoRow("Date", detailData?.date),
-                                _infoRow("Day", detailData?.day),
-                                _infoRow("Remarks", detailData?.remarks),
-                                const Divider(height: 16, thickness: 1),
-                                _infoRow("Time In", detailData?.timeIn),
-                                _infoRow("Time Out", detailData?.timeOut),
-                                _infoRow("Worked Hour", detailData?.workedHour),
-                                _infoRow("OT", detailData?.ot),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(height: 5);
-                      },
-                    ),
-                  ),
+                        ),
                 ],
               ),
             ),

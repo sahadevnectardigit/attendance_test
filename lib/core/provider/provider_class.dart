@@ -10,7 +10,9 @@ class AppProviders {
   /// Returns a list of all providers in the app
   static List<ChangeNotifierProvider> get providers => [
     ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),
-    ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
+    ChangeNotifierProvider<ProfileProvider>(
+      create: (_) => ProfileProvider()..fetchProfileData(),
+    ),
 
     ChangeNotifierProvider<DashboardProvider>(
       create: (_) => DashboardProvider(),
@@ -19,6 +21,8 @@ class AppProviders {
       create: (_) => BottomNavProvider(),
     ),
     ChangeNotifierProvider<LedgerProvider>(create: (_) => LedgerProvider()),
-    ChangeNotifierProvider<SalaryProvider>(create: (_) => SalaryProvider()..fetchSalary()),
+    ChangeNotifierProvider<SalaryProvider>(
+      create: (_) => SalaryProvider()..fetchSalary(),
+    ),
   ];
 }

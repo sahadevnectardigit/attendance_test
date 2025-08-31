@@ -31,38 +31,12 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProfileProvider>().fetchProfileData();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final profileProvider = context.watch<ProfileProvider>();
     final model = profileProvider.profileModel;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        centerTitle: true,
-        actions: [
-          // IconButton(
-          //   onPressed: () async {
-          //     await LocalStorage.clearTokens();
-          //     await LocalStorage.setRememberMe(false);
-
-          //     Navigator.pushAndRemoveUntil(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => AttendanceLoginPage()),
-          //       (Route<dynamic> route) => false,
-          //     );
-          //   },
-          //   icon: const Icon(Icons.logout),
-          // ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Profile'), centerTitle: true),
       body: profileProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : profileProvider.errorMessage != null
@@ -99,8 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               fit: BoxFit.cover,
                             )
                           : Image.network(
-                              model?.profile?.imageUrl?.toString() ??
-                                  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0',
+                              model?.profile?.imageUrl?.toString() ?? "",
                               height: 100,
                               width: 100,
                               fit: BoxFit.cover,

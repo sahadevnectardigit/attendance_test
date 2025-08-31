@@ -1,28 +1,16 @@
 import 'package:attendance/core/provider/provider_class.dart';
-import 'package:attendance/core/services/local_storage.dart';
-import 'package:attendance/feature/auth/pages/login_page.dart';
-import 'package:attendance/navbar_page.dart';
+import 'package:attendance/core/widgets/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final rememberMe = await LocalStorage.getRememberMe();
-  final token = await LocalStorage.getAccessToken();
-
-  runApp(
-    MyApp(
-      initialPage: (rememberMe && token != null)
-          ? NavBarPage()
-          : const AttendanceLoginPage(),
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final Widget initialPage;
-  const MyApp({super.key, required this.initialPage});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +20,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Attendance Login',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade50),
         ),
-        home: initialPage,
+        home: SplashPage(),
       ),
     );
   }

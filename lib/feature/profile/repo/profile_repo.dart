@@ -10,6 +10,35 @@ import 'package:dio/dio.dart';
 class ProfileRepo {
   static final ApiClient _client = ApiClient();
 
+  static Future<ApiResponse<void>> changePassword({
+    required String password,
+  }) async {
+    try {
+      final response = await _client.post(
+        path: ApiUrl.changePassword,
+        data: {"new_password": password},
+      );
+
+      if (response.statusCode == 200) {
+        return ApiResponse.success(null);
+      } else {
+        final errorList = response.data["new_password"];
+        final errorMsg = (errorList is List && errorList.isNotEmpty)
+            ? errorList.first
+            : "Failed to change password";
+        return ApiResponse.failure(errorMsg);
+      }
+    } on DioException catch (e) {
+      final errorList = e.response?.data?["new_password"];
+      final backendMessage = (errorList is List && errorList.isNotEmpty)
+          ? errorList.first
+          : ApiErrorHandler.handleError(e);
+      return ApiResponse.failure(backendMessage);
+    } catch (e) {
+      return ApiResponse.failure("Unexpected error: $e");
+    }
+  }
+
   static Future<ApiResponse<LedgerModel>> fetchProfileData() async {
     try {
       final response = await _client.get(path: ApiUrl.profile);

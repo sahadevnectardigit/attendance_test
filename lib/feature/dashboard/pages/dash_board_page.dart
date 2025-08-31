@@ -99,7 +99,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(30),
                     child: Image.asset(
-                      'assets/images/no_image.jpg', // replace with your local asset
+                      'assets/images/profile_icon.png',
                       height: 40,
                       width: 40,
                       fit: BoxFit.cover,

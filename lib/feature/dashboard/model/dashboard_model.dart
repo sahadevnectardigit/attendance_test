@@ -1,11 +1,11 @@
-class EmployeeDashBoardModel {
+class DashBoardModel {
   DailyStats? dailyStats;
   DailyStats? monthlyStats;
   String? nepaliMonth;
 
-  EmployeeDashBoardModel({this.dailyStats, this.monthlyStats, this.nepaliMonth});
+  DashBoardModel({this.dailyStats, this.monthlyStats, this.nepaliMonth});
 
-  EmployeeDashBoardModel.fromJson(Map<String, dynamic> json) {
+  DashBoardModel.fromJson(Map<String, dynamic> json) {
     dailyStats = json['daily_stats'] != null
         ? DailyStats.fromJson(json['daily_stats'])
         : null;

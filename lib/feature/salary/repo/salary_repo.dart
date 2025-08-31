@@ -1,19 +1,22 @@
+import 'dart:developer';
+
 import 'package:attendance/core/constants/api_constants.dart';
 import 'package:attendance/core/services/dio_interceptor.dart';
 import 'package:attendance/core/utils/error_handler.dart';
-import 'package:attendance/feature/dashboard/model/dashboard_model.dart';
 import 'package:attendance/models/api_response_model.dart';
+import 'package:attendance/models/salary_model.dart';
 import 'package:dio/dio.dart';
 
-class DashboardRepo {
+class SalaryRepo {
   static final ApiClient _client = ApiClient();
 
-  static Future<ApiResponse<DashBoardModel>> getDashboardData() async {
+  static Future<ApiResponse<SalaryModel>> fetchSalaryData() async {
     try {
-      final response = await _client.get(path: ApiUrl.dashboard);
-
+      final response = await _client.get(path: ApiUrl.employeeSalary);
       if (response.statusCode == 200) {
-        final model = DashBoardModel.fromJson(response.data);
+        final List<dynamic> dataList = response.data;
+        final model = SalaryModel.fromJson(dataList.first);
+
         return ApiResponse.success(model); // returns model on success
       } else {
         final errorMsg = response.data["error"] ?? "Failed to fetch dashboard";

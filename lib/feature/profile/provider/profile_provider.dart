@@ -8,8 +8,29 @@ class ProfileProvider extends ChangeNotifier {
   LedgerModel? profileModel;
   String? errorMessage;
   String? errorProfileUpdate;
+  String? errorChangePassword;
 
   bool isLoading = false;
+
+  Future<bool> changePassword({required String password}) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    final result = await ProfileRepo.changePassword(password: password);
+
+    isLoading = false;
+
+    if (result.isSuccess) {
+      notifyListeners();
+      return true;
+    } else {
+      errorChangePassword =
+          result.message ?? "Failed to change password"; // failure → string
+      notifyListeners();
+      return false;
+    }
+  }
 
   Future<void> fetchProfileData() async {
     isLoading = true;

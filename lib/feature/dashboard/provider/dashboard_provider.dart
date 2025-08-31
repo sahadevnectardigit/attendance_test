@@ -1,9 +1,9 @@
-import 'package:attendance/feature/dashboard/model/empolyee_dashboard_model.dart';
+import 'package:attendance/feature/dashboard/model/dashboard_model.dart';
 import 'package:attendance/feature/dashboard/repo/employee_repo.dart';
 import 'package:flutter/material.dart';
 
 class DashboardProvider extends ChangeNotifier {
-  EmployeeDashBoardModel? dashboard; // model
+  DashBoardModel? dashboard; // model
   String? errorMessage; // string error
 
   bool isLoading = false;

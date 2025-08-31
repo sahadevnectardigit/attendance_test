@@ -75,24 +75,13 @@ class _AttendanceLoginPageState extends State<AttendanceLoginPage> {
                   if (value == null || value.isEmpty) {
                     return "Please enter your password";
                   }
-                  if (value.length < 6) {
-                    return "Password must be at least 6 characters";
-                  }
+                  // if (value.length < 6) {
+                  //   return "Password must be at least 6 characters";
+                  // }
                   return null;
                 },
               ),
-              InkWell(
-                onTap: () {},
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    'Forgot password?',
-                    style: TextStyle(color: Colors.black38),
-                  ),
-                ),
-              ),
 
-              const SizedBox(height: 12),
               Row(
                 children: [
                   Checkbox(

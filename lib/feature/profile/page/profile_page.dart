@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:attendance/core/extension/snackbar.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
+import 'package:attendance/feature/profile/page/change_password.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -47,19 +48,19 @@ class _ProfilePageState extends State<ProfilePage> {
         title: const Text('Profile'),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () async {
-              await LocalStorage.clearTokens();
-              await LocalStorage.setRememberMe(false);
+          // IconButton(
+          //   onPressed: () async {
+          //     await LocalStorage.clearTokens();
+          //     await LocalStorage.setRememberMe(false);
 
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => AttendanceLoginPage()),
-                (Route<dynamic> route) => false,
-              );
-            },
-            icon: const Icon(Icons.logout),
-          ),
+          //     Navigator.pushAndRemoveUntil(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => AttendanceLoginPage()),
+          //       (Route<dynamic> route) => false,
+          //     );
+          //   },
+          //   icon: const Icon(Icons.logout),
+          // ),
         ],
       ),
       body: profileProvider.isLoading
@@ -112,6 +113,35 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: const TextStyle(fontSize: 16),
                   ),
                   Text(model?.tempAddress ?? "Address"),
+                  ListTile(
+                    // leading: Icon(Icons.lock_outline),
+                    title: Text('Change Password'),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChangePasswordScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Logout'),
+                    trailing: Icon(Icons.logout, size: 16),
+                    onTap: () async {
+                      await LocalStorage.clearTokens();
+                      await LocalStorage.setRememberMe(false);
+
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AttendanceLoginPage(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

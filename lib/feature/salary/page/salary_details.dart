@@ -12,120 +12,122 @@ class SalaryDetails extends StatefulWidget {
 class _SalaryDetailsState extends State<SalaryDetails> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('Salary Details'),),
-    body: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Employee Info
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Employee Details",
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 8),
-                          _infoRow("Name", widget.data?.employeeName??""),
-                          _infoRow("Department", widget.data?.department),
-                          _infoRow("Month", widget.data?.salaryMonth),
-                        ],
+    return Scaffold(
+      appBar: AppBar(title: Text('${widget.data?.salaryMonth ?? ""} Salary')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Employee Info
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Employee Details",
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Salary Summary
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Salary Summary",
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 8),
-                          _infoRow("Basic Salary", widget.data?.basicSalary),
-                          _infoRow("Allowance", widget.data?.dearnessAllowance),
-                          _infoRow("Gross Salary", widget.data?.monthlyGross),
-                          _infoRow(
-                            "Total Deductions",
-                            widget.data?.totalDeductions.toString(),
-                          ),
-                          const Divider(),
-                          _infoRow(
-                            "Net Salary",
-                            widget.data?.netSalaryField,
-                            isHighlight: true,
-                          ),
-                          Text(
-                            "(${widget.data?.amountInWords})",
-                            style: const TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Tax Breakdown
-                  if (widget.data?.taxBreakdown != null &&
-                      widget.data!.taxBreakdown!.isNotEmpty)
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Tax Breakdown",
-                              style: Theme.of(context).textTheme.titleMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 8),
-                            ...widget.data!.taxBreakdown!.map(
-                              (tax) => _infoRow(
-                                tax.taxRate ?? "",
-                                "${tax.taxLiability} (on ${tax.taxableAmount})",
-                              ),
-                            ),
-                            const Divider(),
-                            _infoRow(
-                              "Total Tax",
-                              widget.data?.totalTax,
-                              isHighlight: true,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
+                    const SizedBox(height: 8),
+                    _infoRow("Name", widget.data?.employeeName ?? ""),
+                    _infoRow("Department", widget.data?.department),
+                    _infoRow("Month", widget.data?.salaryMonth),
+                  ],
+                ),
               ),
             ),
-    
+            const SizedBox(height: 16),
+
+            // Salary Summary
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Salary Summary",
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _infoRow("Basic Salary", widget.data?.basicSalary),
+                    _infoRow("Allowance", widget.data?.dearnessAllowance),
+                    _infoRow("Gross Salary", widget.data?.monthlyGross),
+                    _infoRow(
+                      "Total Deductions",
+                      widget.data?.totalDeductions.toString(),
+                    ),
+                    const Divider(),
+                    _infoRow(
+                      "Net Salary",
+                      widget.data?.netSalaryField,
+                      isHighlight: true,
+                    ),
+                    Text(
+                      "(${widget.data?.amountInWords})",
+                      style: const TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Tax Breakdown
+            if (widget.data?.taxBreakdown != null &&
+                widget.data!.taxBreakdown!.isNotEmpty)
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Tax Breakdown",
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      ...widget.data!.taxBreakdown!.map(
+                        (tax) => _infoRow(
+                          tax.taxRate ?? "",
+                          "${tax.taxLiability} (on ${tax.taxableAmount})",
+                        ),
+                      ),
+                      const Divider(),
+                      _infoRow(
+                        "Total Tax",
+                        widget.data?.totalTax,
+                        isHighlight: true,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 

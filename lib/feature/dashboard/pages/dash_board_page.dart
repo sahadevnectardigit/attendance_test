@@ -77,9 +77,9 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     final cardWidth = (MediaQuery.of(context).size.width - 48) / 2;
     final dashBoardProvider = context.watch<DashboardProvider>();
-    final data = dashBoardProvider.dashboard;
+    final dashBoardData = dashBoardProvider.dashboard;
     final ledgerProvider = context.watch<LedgerProvider>();
-    final ledgerData = ledgerProvider.ledgerModel;
+    // final ledgerData = ledgerProvider.ledgerModel;
 
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
@@ -128,7 +128,7 @@ class _DashboardPageState extends State<DashboardPage> {
               },
             ),
 
-            const SizedBox(width: 8), // 👈 small gap between image & text
+            const SizedBox(width: 8),
 
             const Text(
               "Hey there!",
@@ -158,22 +158,22 @@ class _DashboardPageState extends State<DashboardPage> {
                   // Date and Time Row
                   InkWell(
                     onTap: () async {
-                      await _pickNepaliDate();
-                      final isSuccess = await ledgerProvider.fetchLedgerData(
-                        year: selectedYear,
-                        month: selectedMonth,
-                      );
-                      if (isSuccess) {
-                        context.showSnackBarMessage(
-                          message: 'Success to load data',
-                          backgroundColor: Colors.green,
-                        );
-                      } else {
-                        context.showSnackBarMessage(
-                          message: ledgerProvider.errorMessage.toString(),
-                          backgroundColor: Colors.red,
-                        );
-                      }
+                      // await _pickNepaliDate();
+                      // final isSuccess = await ledgerProvider.fetchLedgerData(
+                      //   year: selectedYear,
+                      //   month: selectedMonth,
+                      // );
+                      // if (isSuccess) {
+                      //   context.showSnackBarMessage(
+                      //     message: 'Successfully load data',
+                      //     backgroundColor: Colors.green,
+                      //   );
+                      // } else {
+                      //   context.showSnackBarMessage(
+                      //     message: ledgerProvider.errorMessage.toString(),
+                      //     backgroundColor: Colors.red,
+                      //   );
+                      // }
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(
@@ -203,10 +203,9 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                               const SizedBox(width: 6),
                               Text(
-                                // "08 Feb 2020",
                                 selectedStringMonth != null
                                     ? "$selectedStringMonth,$selectedMonth $selectedYear"
-                                    : "Select Date",
+                                    : dashBoardData?.nepaliMonth ?? "N/A",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -217,10 +216,6 @@ class _DashboardPageState extends State<DashboardPage> {
                             children: [
                               Icon(Icons.access_time, color: Colors.blue),
                               SizedBox(width: 6),
-                              // Text(
-                              //   "4:32 PM",
-                              //   style: TextStyle(fontWeight: FontWeight.w600),
-                              // ),
                               Text(
                                 DateFormat(
                                   'h:mm a',
@@ -340,8 +335,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           height: 110,
                           child: buildStatCard(
                             "Present",
-                            // "${data?.monthlyStats?.present ?? 0}",
-                            "${ledgerData?.summary?.present ?? 0}",
+                            "${dashBoardData?.monthlyStats?.present ?? 0}",
+                            // "${ledgerData?.summary?.present ?? 0}",
                             "",
                             Colors.green,
                           ),
@@ -351,9 +346,9 @@ class _DashboardPageState extends State<DashboardPage> {
                           height: 110,
                           child: buildStatCard(
                             "Absent",
-                            // "${data?.monthlyStats?.absent ?? 0}",
-                            "${ledgerData?.summary?.absent ?? 0}",
+                            "${dashBoardData?.monthlyStats?.absent ?? 0}",
 
+                            // "${ledgerData?.summary?.absent ?? 0}",
                             "",
                             Colors.red,
                           ),
@@ -363,9 +358,9 @@ class _DashboardPageState extends State<DashboardPage> {
                           height: 110,
                           child: buildStatCard(
                             "Late in",
-                            // "${data?.monthlyStats?.lateIn ?? 0}",
-                            "${ledgerData?.summary?.lateIn ?? 0}",
+                            "${dashBoardData?.monthlyStats?.lateIn ?? 0}",
 
+                            // "${ledgerData?.summary?.lateIn ?? 0}",
                             "",
                             Colors.orange,
                           ),
@@ -375,8 +370,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           height: 110,
                           child: buildStatCard(
                             "Early Out",
-                            // "${data?.monthlyStats?.earlyOut ?? 0}",
-                            "${ledgerData?.summary?.earlyOut ?? 0}",
+                            "${dashBoardData?.monthlyStats?.earlyOut ?? 0}",
+                            // "${ledgerData?.summary?.earlyOut ?? 0}",
                             "",
                             Colors.purple,
                           ),
@@ -386,9 +381,9 @@ class _DashboardPageState extends State<DashboardPage> {
                           height: 110,
                           child: buildStatCard(
                             "Holidays",
-                            // "${data?.monthlyStats?.holiday ?? 0}",
-                            "${ledgerData?.summary?.holiday ?? 0}",
+                            "${dashBoardData?.monthlyStats?.holiday ?? 0}",
 
+                            // "${ledgerData?.summary?.holiday ?? 0}",
                             "",
                             Colors.purple,
                           ),
@@ -398,9 +393,9 @@ class _DashboardPageState extends State<DashboardPage> {
                           height: 110,
                           child: buildStatCard(
                             "Approved leave",
-                            // "${data?.monthlyStats?.approvedLeave ?? 0}",
-                            "${ledgerData?.summary?.leave ?? 0}",
+                            "${dashBoardData?.monthlyStats?.approvedLeave ?? 0}",
 
+                            // "${ledgerData?.summary?.leave ?? 0}",
                             "",
                             Colors.purple,
                           ),

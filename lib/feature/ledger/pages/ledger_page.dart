@@ -112,12 +112,12 @@ class _LedgerPageState extends State<LedgerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: Colors.blue.shade100,
 
       appBar: AppBar(
         title: const Text("Ledger"),
         centerTitle: true,
-        backgroundColor: Colors.blue.shade50,
+        backgroundColor: Colors.blue.shade100,
       ),
       body: Consumer<LedgerProvider>(
         builder: (context, state, _) {
@@ -209,40 +209,25 @@ class _LedgerPageState extends State<LedgerPage> {
                         final detailData =
                             state.ledgerModel?.detailData?[index];
                         return Card(
-                          color: Colors.blue.shade100,
+                          color: Colors.blue.shade200,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 3,
+                          margin: const EdgeInsets.symmetric(vertical: 6),
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(16.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "Date: ${detailData?.date ?? ""}",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                Text(
-                                  "Day: ${detailData?.day ?? ""}",
-                                  // style: TextStyle(color: Colors.grey),
-                                ),
-                                Text(
-                                  "Remarks: ${detailData?.remarks ?? ""}",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                Text(
-                                  "Time in: ${detailData?.timeIn ?? ""}",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                Text(
-                                  "Time out: ${detailData?.timeOut ?? ""}",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                Text(
-                                  "Worked hour: ${detailData?.workedHour ?? ""}",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                Text(
-                                  "OT: ${detailData?.ot ?? ""}",
-                                  style: TextStyle(fontSize: 16),
-                                ),
+                                _infoRow("Date", detailData?.date),
+                                _infoRow("Day", detailData?.day),
+                                _infoRow("Remarks", detailData?.remarks),
+                                const Divider(height: 16, thickness: 1),
+                                _infoRow("Time In", detailData?.timeIn),
+                                _infoRow("Time Out", detailData?.timeOut),
+                                _infoRow("Worked Hour", detailData?.workedHour),
+                                _infoRow("OT", detailData?.ot),
                               ],
                             ),
                           ),
@@ -258,6 +243,29 @@ class _LedgerPageState extends State<LedgerPage> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _infoRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: Colors.black87,
+            ),
+          ),
+          Text(
+            value ?? "N/A",
+            style: const TextStyle(fontSize: 14, color: Colors.black54),
+          ),
+        ],
       ),
     );
   }

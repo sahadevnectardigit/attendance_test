@@ -18,7 +18,7 @@ class ApiErrorHandler {
           return "Unexpected error: ${e.response?.statusCode}";
       }
     } else {
-      return "Network error: ${e.message}";
+      return "No internet connection"; //${e.message}
     }
   }
 }

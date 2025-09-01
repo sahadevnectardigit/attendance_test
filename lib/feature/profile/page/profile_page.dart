@@ -77,6 +77,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 100,
                               width: 100,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/profile_icon.png', // ✅ fallback
+                                  height: 40,
+                                  width: 40,
+                                  fit: BoxFit.cover,
+                                );
+                              },
                             ),
                     ),
                   ),

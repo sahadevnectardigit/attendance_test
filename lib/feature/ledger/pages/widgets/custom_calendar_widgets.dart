@@ -91,6 +91,7 @@ class CustomCalendarWidget extends StatelessWidget {
           ],
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Month and year header
             Padding(

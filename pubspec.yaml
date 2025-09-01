@@ -44,6 +44,7 @@ dependencies:
   nepali_date_picker: ^7.0.1
   intl: ^0.20.2
   image_picker: ^1.2.0
+  connectivity_plus: ^6.1.5
 
 dev_dependencies:
   flutter_test:

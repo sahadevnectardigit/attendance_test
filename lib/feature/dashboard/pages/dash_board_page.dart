@@ -116,7 +116,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     errorBuilder: (context, error, stackTrace) {
                       // Optional fallback if image fails to load
                       return Image.asset(
-                        'assets/images/default_avatar.png',
+                        'assets/images/profile_icon.png',
                         height: 40,
                         width: 40,
                         fit: BoxFit.cover,
@@ -138,6 +138,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ],
         ),
+
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),
@@ -155,160 +156,60 @@ class _DashboardPageState extends State<DashboardPage> {
             : Column(
                 children: [
                   // Date and Time Row
-                  InkWell(
-                    onTap: () async {
-                      // await _pickNepaliDate();
-                      // final isSuccess = await ledgerProvider.fetchLedgerData(
-                      //   year: selectedYear,
-                      //   month: selectedMonth,
-                      // );
-                      // if (isSuccess) {
-                      //   context.showSnackBarMessage(
-                      //     message: 'Successfully load data',
-                      //     backgroundColor: Colors.green,
-                      //   );
-                      // } else {
-                      //   context.showSnackBarMessage(
-                      //     message: ledgerProvider.errorMessage.toString(),
-                      //     backgroundColor: Colors.red,
-                      //   );
-                      // }
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.calendar_today,
-                                color: Colors.blue,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                selectedStringMonth != null
-                                    ? "$selectedStringMonth,$selectedMonth $selectedYear"
-                                    : dashBoardData?.nepaliMonth ?? "N/A",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(Icons.access_time, color: Colors.blue),
-                              SizedBox(width: 6),
-                              Text(
-                                DateFormat(
-                                  'h:mm a',
-                                ).format(DateTime.now()), // e.g. 4:32 PM
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
                     ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Timer Circle
-                  Center(
-                    child: Column(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: 150,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.blue,
-                            border: Border.all(
-                              color: Colors.blue.shade200,
-                              width: 10,
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.calendar_today,
+                              color: Colors.blue,
                             ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "00h 00m",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
+                            const SizedBox(width: 6),
+                            Text(
+                              selectedStringMonth != null
+                                  ? "$selectedStringMonth,$selectedMonth $selectedYear"
+                                  : dashBoardData?.nepaliMonth ?? "N/A",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          "Checked in at 10:35 AM",
-                          style: TextStyle(color: Colors.black54, fontSize: 13),
-                        ),
-                        const SizedBox(height: 8),
-                        GestureDetector(
-                          onTap: () {},
-                          child: const Text(
-                            "View live location",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.w600,
-                              decoration: TextDecoration.underline,
+                        Row(
+                          children: [
+                            Icon(Icons.access_time, color: Colors.blue),
+                            SizedBox(width: 6),
+                            Text(
+                              DateFormat(
+                                'h:mm a',
+                              ).format(DateTime.now()), // e.g. 4:32 PM
+                              style: TextStyle(fontWeight: FontWeight.w600),
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          "Start your day",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          ],
                         ),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
-                    child: SlideAction(
-                      height: 65,
-                      text: "Swipe to check in",
-                      outerColor: Colors.blue,
-                      innerColor: Colors.white,
-                      sliderButtonIcon: const Icon(
-                        Icons.arrow_right_alt_sharp,
-                        color: Colors.blue,
-                      ),
-                      onSubmit: () async {
-                        final deviceName = await DeviceHelper.getDeviceName();
-
-                        /// Do something here OnSlide
-                        context.showSnackBarMessage(
-                          message: 'Attendance successful on $deviceName ',
-                          backgroundColor: Colors.green,
-                        );
-                        return null;
-                      },
-                    ),
-                  ),
+                
                   // Swipe to check in button
                   const SizedBox(height: 30),
 

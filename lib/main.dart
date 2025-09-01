@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: AppProviders.providers,
       child: MaterialApp(
-        navigatorKey: navigatorKey, // Add this line
+        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'Attendance Login',
         theme: ThemeData(

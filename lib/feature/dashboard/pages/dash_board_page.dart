@@ -1,12 +1,9 @@
-import 'package:attendance/core/extension/snackbar.dart';
-import 'package:attendance/core/utils/device_helper.dart';
-import 'package:attendance/feature/dashboard/pages/screens/app_drawer.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:provider/provider.dart';
-import 'package:slide_to_act/slide_to_act.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -40,53 +37,50 @@ class _DashboardPageState extends State<DashboardPage> {
     "Chaitra",
   ];
 
-  // Future<void> _pickNepaliDate() async {
-  //   final selectedDateTime = await showNepaliDatePicker(
-  //     context: context,
-  //     initialDate: _selectedDate ?? NepaliDateTime.now(),
-  //     firstDate: NepaliDateTime(1970, 2, 5),
-  //     lastDate: NepaliDateTime.now(),
-  //     initialDatePickerMode: DatePickerMode.day,
-  //   );
+  // Step 1: Predefine the keys you want and their colors
+  final List<String> categories = [
+    "Present",
+    "Absent",
+    "LateIn",
+    "EarlyOut",
+    "Holiday",
+    "Approved Leave",
+    "Weekend",
+    "Official Visit",
+  ];
 
-  //   if (selectedDateTime != null) {
-  //     setState(() {
-  //       _selectedDate = selectedDateTime;
-  //       selectedYear = selectedDateTime.year;
-  //       selectedMonth = selectedDateTime.month;
-  //       selectedDay = selectedDateTime.day;
-  //       selectedStringMonth = nepaliMonths[selectedMonth! - 1]; // 👈 map here
-  //     });
-
-  //     // Print or send request here
-  //     final requestPayload = {"year": selectedYear, "month": selectedMonth};
-
-  //     print("Request Payload: $requestPayload");
-  //   }
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     context.read<DashboardProvider>().fetchDashboard();
-  //     context.read<ProfileProvider>().fetchProfileData();
-  //   });
-  // }
+  final List<Color> categoryColors = [
+    Colors.green, // Present
+    Colors.red, // Absent
+    Colors.orange, // LateIn
+    Colors.purple, // EarlyOut
+    Colors.blue, // Holiday
+    Colors.teal, // Approved Leave
+    Colors.grey, // Weekend
+    Colors.brown, // Official Visit
+  ];
 
   @override
   Widget build(BuildContext context) {
     final cardWidth = (MediaQuery.of(context).size.width - 48) / 2;
     final dashBoardProvider = context.watch<DashboardProvider>();
     final dashBoardData = dashBoardProvider.dashboard;
+    // ✅ For Pie Chart
+    // final Map<String, double> months =
+    //     dashBoardData?.monthlyStats?.toChartData() ?? {};
+    // Step 2: Convert API data into a fixed map
+    final Map<String, double> months = {
+      for (var key in categories)
+        key: dashBoardData?.monthlyStats?.toChartData()[key] ?? 0.0,
+    };
 
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
         backgroundColor: Colors.blue.shade50,
         elevation: 0,
-        titleSpacing: 0,
 
+        // titleSpacing: 0,
         title: Row(
           children: [
             Consumer<ProfileProvider>(
@@ -146,7 +140,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ],
       ),
-      drawer: CustomDrawer(),
+      // drawer: CustomDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 20),
         child: dashBoardProvider.isLoading
@@ -209,7 +203,55 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
 
-                
+                  ///Pie Chart
+                  PieChart(
+                    dataMap: months,
+                    colorList: categoryColors, // colors match keys
+                    chartRadius: MediaQuery.sizeOf(context).width * 0.7,
+                    legendOptions: LegendOptions(
+                      showLegends: true,
+                      legendPosition: LegendPosition.bottom,
+                      showLegendsInRow: true, // horizontal layout
+                      legendShape: BoxShape.circle,
+                      legendTextStyle: const TextStyle(fontSize: 10),
+                    ),
+                    chartValuesOptions: const ChartValuesOptions(
+                      showChartValues: true,
+                      showChartValuesInPercentage: true,
+                      decimalPlaces: 0,
+                      chartValueStyle: TextStyle(
+                        fontSize: 10,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  // Center(
+                  //   child: PieChart(
+                  //     dataMap: months,
+                  //     chartRadius: MediaQuery.sizeOf(context).width * 0.7,
+                  //     legendOptions: LegendOptions(
+                  //       showLegends: true,
+                  //       legendPosition: LegendPosition.bottom,
+                  //       showLegendsInRow: true, // horizontal layout
+                  //       legendShape: BoxShape.circle,
+                  //       legendTextStyle: TextStyle(
+                  //         fontSize: 12, // smaller legend text
+                  //       ),
+                  //     ),
+                  //     chartValuesOptions: ChartValuesOptions(
+                  //       showChartValues: true,
+                  //       showChartValuesInPercentage: true,
+                  //       decimalPlaces: 0,
+                  //       chartValueStyle: TextStyle(
+                  //         fontSize: 10, // bigger numbers on pie
+                  //         color: Colors.black,
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+
                   // Swipe to check in button
                   const SizedBox(height: 30),
 

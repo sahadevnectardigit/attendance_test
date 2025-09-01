@@ -1,75 +1,115 @@
 class DashBoardModel {
-  DailyStats? dailyStats;
-  DailyStats? monthlyStats;
-  String? nepaliMonth;
+  final DailyStats dailyStats;
+  final MonthlyStats? monthlyStats;
+  final String nepaliMonth;
 
-  DashBoardModel({this.dailyStats, this.monthlyStats, this.nepaliMonth});
+  DashBoardModel({
+    required this.dailyStats,
+    this.monthlyStats,
+    required this.nepaliMonth,
+  });
 
-  DashBoardModel.fromJson(Map<String, dynamic> json) {
-    dailyStats = json['daily_stats'] != null
-        ? DailyStats.fromJson(json['daily_stats'])
-        : null;
-    monthlyStats = json['monthly_stats'] != null
-        ? DailyStats.fromJson(json['monthly_stats'])
-        : null;
-    nepaliMonth = json['nepali_month'];
+  factory DashBoardModel.fromJson(Map<String, dynamic> json) {
+    return DashBoardModel(
+      dailyStats: DailyStats.fromJson(json['daily_stats']),
+      monthlyStats: MonthlyStats.fromJson(json['monthly_stats']),
+      nepaliMonth: json['nepali_month'] ?? '',
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (dailyStats != null) {
-      data['daily_stats'] = dailyStats!.toJson();
-    }
-    if (monthlyStats != null) {
-      data['monthly_stats'] = monthlyStats!.toJson();
-    }
-    data['nepali_month'] = nepaliMonth;
-    return data;
+    return {
+      'daily_stats': dailyStats.toJson(),
+      'monthly_stats': monthlyStats?.toJson(),
+      'nepali_month': nepaliMonth,
+    };
   }
 }
 
 class DailyStats {
-  int? present;
-  int? absent;
-  int? lateIn;
-  int? earlyOut;
-  int? holiday;
-  int? approvedLeave;
-  int? weekend;
-  int? officialVisit;
+  final int present;
+  final int absent;
+  final int lateIn;
+  final int earlyOut;
+  final int holiday;
+  final int approvedLeave;
+  final int weekend;
+  final int officialVisit;
 
   DailyStats({
-    this.present,
-    this.absent,
-    this.lateIn,
-    this.earlyOut,
-    this.holiday,
-    this.approvedLeave,
-    this.weekend,
-    this.officialVisit,
+    required this.present,
+    required this.absent,
+    required this.lateIn,
+    required this.earlyOut,
+    required this.holiday,
+    required this.approvedLeave,
+    required this.weekend,
+    required this.officialVisit,
   });
 
-  DailyStats.fromJson(Map<String, dynamic> json) {
-    present = json['Present'];
-    absent = json['Absent'];
-    lateIn = json['LateIn'];
-    earlyOut = json['EarlyOut'];
-    holiday = json['Holiday'];
-    approvedLeave = json['Approved Leave'];
-    weekend = json['Weekend'];
-    officialVisit = json['Official Visit'];
+  factory DailyStats.fromJson(Map<String, dynamic> json) {
+    return DailyStats(
+      present: json['Present'] ?? 0,
+      absent: json['Absent'] ?? 0,
+      lateIn: json['LateIn'] ?? 0,
+      earlyOut: json['EarlyOut'] ?? 0,
+      holiday: json['Holiday'] ?? 0,
+      approvedLeave: json['Approved Leave'] ?? 0,
+      weekend: json['Weekend'] ?? 0,
+      officialVisit: json['Official Visit'] ?? 0,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['Present'] = present;
-    data['Absent'] = absent;
-    data['LateIn'] = lateIn;
-    data['EarlyOut'] = earlyOut;
-    data['Holiday'] = holiday;
-    data['Approved Leave'] = approvedLeave;
-    data['Weekend'] = weekend;
-    data['Official Visit'] = officialVisit;
-    return data;
+    return {
+      'Present': present,
+      'Absent': absent,
+      'LateIn': lateIn,
+      'EarlyOut': earlyOut,
+      'Holiday': holiday,
+      'Approved Leave': approvedLeave,
+      'Weekend': weekend,
+      'Official Visit': officialVisit,
+    };
+  }
+
+  /// Convert to map for chart usage
+  Map<String, double> toChartData() {
+    return {
+      'Present': present.toDouble(),
+      'Absent': absent.toDouble(),
+      'LateIn': lateIn.toDouble(),
+      'EarlyOut': earlyOut.toDouble(),
+      'Holiday': holiday.toDouble(),
+      'Approved Leave': approvedLeave.toDouble(),
+      'Weekend': weekend.toDouble(),
+      'Official Visit': officialVisit.toDouble(),
+    };
+  }
+}
+
+class MonthlyStats extends DailyStats {
+  MonthlyStats({
+    required super.present,
+    required super.absent,
+    required super.lateIn,
+    required super.earlyOut,
+    required super.holiday,
+    required super.approvedLeave,
+    required super.weekend,
+    required super.officialVisit,
+  });
+
+  factory MonthlyStats.fromJson(Map<String, dynamic> json) {
+    return MonthlyStats(
+      present: json['Present'] ?? 0,
+      absent: json['Absent'] ?? 0,
+      lateIn: json['LateIn'] ?? 0,
+      earlyOut: json['EarlyOut'] ?? 0,
+      holiday: json['Holiday'] ?? 0,
+      approvedLeave: json['Approved Leave'] ?? 0,
+      weekend: json['Weekend'] ?? 0,
+      officialVisit: json['Official Visit'] ?? 0,
+    );
   }
 }

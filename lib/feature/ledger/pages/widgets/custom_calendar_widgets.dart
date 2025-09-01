@@ -149,13 +149,19 @@ class CustomCalendarWidget extends StatelessWidget {
                       String? status = ledgerProvider.getAttendanceStatus(
                         formattedDate,
                       );
+                      String? day = ledgerProvider.getAttendanceDay(
+                        formattedDate,
+                      );
 
                       // Determine color and icon based on status
                       Color bgColor = Colors.transparent;
                       Color textColor = Colors.black;
                       IconData? icon;
 
-                      if (status != null) {
+                      // First, check for Saturday
+                      if (day != null && day.toLowerCase().contains('sat')) {
+                        bgColor = Colors.red.shade100;
+                      } else if (status != null) {
                         if (status.toLowerCase().contains('present')) {
                           bgColor = Colors.green.shade100;
                           textColor = Colors.green.shade900;

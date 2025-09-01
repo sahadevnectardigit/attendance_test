@@ -44,22 +44,36 @@ class LedgerProvider extends ChangeNotifier {
     return null;
   }
 
+  ///Helper method to get attendance day name for a specific date
+  String? getAttendanceDay(String date) {
+    if (ledgerModel?.detailData == null) return null;
+
+    for (var detail in ledgerModel!.detailData!) {
+      if (detail.date == date) {
+        return detail.day;
+      }
+    }
+
+    return null;
+  }
+
   // Get all dates from the API response
   List<String> getAllDates() {
     if (ledgerModel?.detailData == null) return [];
     return ledgerModel!.detailData!.map((detail) => detail.date).toList();
   }
 }
+
 extension LedgerProviderExtension on LedgerProvider {
   String getDayName(String date) {
     if (ledgerModel?.detailData == null) return '';
-    
+
     for (var detail in ledgerModel!.detailData!) {
       if (detail.date == date) {
         return detail.day;
       }
     }
-    
+
     return '';
   }
 }

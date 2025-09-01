@@ -2,7 +2,7 @@ import 'package:attendance/core/provider/bottom_navbar_provider.dart';
 import 'package:attendance/feature/dashboard/pages/dash_board_page.dart';
 import 'package:attendance/feature/profile/page/profile_page.dart';
 import 'package:attendance/feature/salary/page/salary_page.dart';
-import 'package:attendance/testing_for_calendar/test_calendar.dart';
+import 'package:attendance/feature/ledger/pages/ledger_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,10 +11,10 @@ class NavBarPage extends StatelessWidget {
 
   final List<Widget> _pages = [
     DashboardPage(),
-    // Center(child: Text("💰 Salary Page", style: TextStyle(fontSize: 22))),
     SalaryPage(),
     // LedgerPage(),
-    AttendanceCalendarScreen(),
+    // AttendanceCalendarScreen(),
+    LedgerPage(),
     ProfilePage(),
   ];
 

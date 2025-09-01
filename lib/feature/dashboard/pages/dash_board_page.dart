@@ -2,11 +2,9 @@ import 'package:attendance/core/extension/snackbar.dart';
 import 'package:attendance/core/utils/device_helper.dart';
 import 'package:attendance/feature/dashboard/pages/screens/app_drawer.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
-import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
@@ -18,11 +16,14 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  NepaliDateTime? _selectedDate;
+  // NepaliDateTime? _selectedDate;
   int? selectedYear;
   int? selectedMonth;
   String? selectedStringMonth;
   int? selectedDay;
+  // selectedYear = NepaliDateTime.now().year;
+  //   selectedMonth = NepaliDateTime.now().month;
+  //   selectedStringMonth = nepaliMonths[NepaliDateTime.now().month];
 
   final List<String> nepaliMonths = [
     "Baisakh",
@@ -39,30 +40,30 @@ class _DashboardPageState extends State<DashboardPage> {
     "Chaitra",
   ];
 
-  Future<void> _pickNepaliDate() async {
-    final selectedDateTime = await showNepaliDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? NepaliDateTime.now(),
-      firstDate: NepaliDateTime(1970, 2, 5),
-      lastDate: NepaliDateTime.now(),
-      initialDatePickerMode: DatePickerMode.day,
-    );
+  // Future<void> _pickNepaliDate() async {
+  //   final selectedDateTime = await showNepaliDatePicker(
+  //     context: context,
+  //     initialDate: _selectedDate ?? NepaliDateTime.now(),
+  //     firstDate: NepaliDateTime(1970, 2, 5),
+  //     lastDate: NepaliDateTime.now(),
+  //     initialDatePickerMode: DatePickerMode.day,
+  //   );
 
-    if (selectedDateTime != null) {
-      setState(() {
-        _selectedDate = selectedDateTime;
-        selectedYear = selectedDateTime.year;
-        selectedMonth = selectedDateTime.month;
-        selectedDay = selectedDateTime.day;
-        selectedStringMonth = nepaliMonths[selectedMonth! - 1]; // 👈 map here
-      });
+  //   if (selectedDateTime != null) {
+  //     setState(() {
+  //       _selectedDate = selectedDateTime;
+  //       selectedYear = selectedDateTime.year;
+  //       selectedMonth = selectedDateTime.month;
+  //       selectedDay = selectedDateTime.day;
+  //       selectedStringMonth = nepaliMonths[selectedMonth! - 1]; // 👈 map here
+  //     });
 
-      // Print or send request here
-      final requestPayload = {"year": selectedYear, "month": selectedMonth};
+  //     // Print or send request here
+  //     final requestPayload = {"year": selectedYear, "month": selectedMonth};
 
-      print("Request Payload: $requestPayload");
-    }
-  }
+  //     print("Request Payload: $requestPayload");
+  //   }
+  // }
 
   @override
   void initState() {
@@ -78,15 +79,13 @@ class _DashboardPageState extends State<DashboardPage> {
     final cardWidth = (MediaQuery.of(context).size.width - 48) / 2;
     final dashBoardProvider = context.watch<DashboardProvider>();
     final dashBoardData = dashBoardProvider.dashboard;
-    final ledgerProvider = context.watch<LedgerProvider>();
-    // final ledgerData = ledgerProvider.ledgerModel;
 
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
         backgroundColor: Colors.blue.shade50,
         elevation: 0,
-        titleSpacing: 0, // 👈 this removes the default gap
+        titleSpacing: 0,
 
         title: Row(
           children: [
@@ -149,10 +148,10 @@ class _DashboardPageState extends State<DashboardPage> {
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 20),
-        child: ledgerProvider.isLoading
+        child: dashBoardProvider.isLoading
             ? Center(child: const CircularProgressIndicator())
-            : ledgerProvider.errorMessage != null
-            ? Text(ledgerProvider.errorMessage!)
+            : dashBoardProvider.errorMessage != null
+            ? Text(dashBoardProvider.errorMessage!)
             : Column(
                 children: [
                   // Date and Time Row

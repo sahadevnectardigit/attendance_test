@@ -15,14 +15,19 @@ class AppProviders {
     ),
 
     ChangeNotifierProvider<DashboardProvider>(
-      create: (_) => DashboardProvider(),
+      create: (_) => DashboardProvider()..fetchDashboard(),
     ),
     ChangeNotifierProvider<BottomNavProvider>(
       create: (_) => BottomNavProvider(),
     ),
-    ChangeNotifierProvider<LedgerProvider>(create: (_) => LedgerProvider()),
+    // ChangeNotifierProvider<LedgerProvider>(create: (_) => LedgerProvider()),
     ChangeNotifierProvider<SalaryProvider>(
       create: (_) => SalaryProvider()..fetchSalary(),
+    ),
+
+    ///Test provider for calendar
+    ChangeNotifierProvider<LedgerProvider>(
+      create: (_) => LedgerProvider()..fetchLedgerData(),
     ),
   ];
 }

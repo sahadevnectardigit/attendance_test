@@ -1,7 +1,7 @@
-import 'package:attendance/navbar_page.dart';
-import 'package:flutter/material.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
+import 'package:attendance/navbar_page.dart';
+import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -35,7 +35,7 @@ class _SplashPageState extends State<SplashPage> {
       MaterialPageRoute(
         builder: (_) => (rememberMe && hasValidToken && hasValidRefreshToken)
             ?  NavBarPage()
-            : const AttendanceLoginPage(),
+            : const LoginPage(),
       ),
     );
   }

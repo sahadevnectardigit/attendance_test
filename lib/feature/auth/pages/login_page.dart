@@ -7,14 +7,14 @@ import 'package:attendance/navbar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AttendanceLoginPage extends StatefulWidget {
-  const AttendanceLoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<AttendanceLoginPage> createState() => _AttendanceLoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _AttendanceLoginPageState extends State<AttendanceLoginPage> {
+class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController(text: "sahadev@gmail.com");
   final companyCodeController = TextEditingController(text: "pa111");

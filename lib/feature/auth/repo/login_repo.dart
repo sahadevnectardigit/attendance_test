@@ -1,12 +1,12 @@
 import 'package:attendance/core/constants/api_constants.dart';
-import 'package:attendance/core/services/dio_interceptor.dart';
+import 'package:attendance/core/services/auth_api_client.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/core/utils/error_handler.dart';
 import 'package:attendance/models/api_response_model.dart';
 import 'package:dio/dio.dart';
 
 class LoginRepo {
-  static final ApiClient _client = ApiClient();
+  static final AuthApiClient _authClient = AuthApiClient();
 
   static Future<ApiResponse<void>> login({
     required String email,
@@ -20,7 +20,10 @@ class LoginRepo {
         "company_code": companyCode,
       };
 
-      final response = await _client.post(path: ApiUrl.login, data: loginData);
+      final response = await _authClient.post(
+        path: ApiUrl.login,
+        data: loginData,
+      );
 
       final data = response.data;
 

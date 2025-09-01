@@ -101,7 +101,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => AttendanceLoginPage(),
+                                builder: (context) => LoginPage(),
                               ),
                               (Route<dynamic> route) => false,
                             );
@@ -113,7 +113,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   },
                 );
               },
-           
             ),
           ],
         ),

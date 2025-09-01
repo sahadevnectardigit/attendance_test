@@ -1,3 +1,6 @@
+// Better queue management with Completer (Enhanced version)
+import 'dart:async';
+
 import 'package:attendance/core/constants/api_constants.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
@@ -5,15 +8,17 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class ApiClient {
-  static final ApiClient _instance = ApiClient._internal();
-  factory ApiClient() => _instance;
+class MainApiClient {
+  static final MainApiClient _instance = MainApiClient._internal();
+  factory MainApiClient() => _instance;
 
   late Dio dio;
   bool _isRefreshing = false;
-  final List<RequestOptions> _requestsQueue = [];
+  final List<QueuedRequest> _requestQueue = [];
 
-  ApiClient._internal() {
+  static GlobalKey<NavigatorState>? navigatorKey;
+
+  MainApiClient._internal() {
     dio = Dio(
       BaseOptions(
         baseUrl: ApiUrl.tattendance,
@@ -26,12 +31,6 @@ class ApiClient {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          // Skip adding token for auth endpoints
-          if (options.path.contains('login') ||
-              options.path.contains('refresh')) {
-            return handler.next(options);
-          }
-
           final token = await LocalStorage.getAccessToken();
           if (token != null) {
             options.headers["Authorization"] = "Bearer $token";
@@ -39,58 +38,42 @@ class ApiClient {
           return handler.next(options);
         },
         onError: (DioException e, handler) async {
-          // Only handle 401 errors for non-auth endpoints
-          if (e.response?.statusCode == 401 &&
-              !e.requestOptions.path.contains('login') &&
-              !e.requestOptions.path.contains('refresh')) {
-            // Add request to queue if we're already refreshing
+          if (e.response?.statusCode == 401) {
             if (_isRefreshing) {
-              _requestsQueue.add(e.requestOptions);
-              return handler.next(e);
+              // Add to queue and wait
+              final completer = Completer<Response>();
+              _requestQueue.add(QueuedRequest(e.requestOptions, completer));
+
+              try {
+                final response = await completer.future;
+                return handler.resolve(response);
+              } catch (error) {
+                return handler.next(e);
+              }
             }
 
             _isRefreshing = true;
             final refreshed = await _refreshToken();
 
             if (refreshed) {
-              // Retry the original request
-              final retryRequest = e.requestOptions;
-              final newToken = await LocalStorage.getAccessToken();
-              retryRequest.headers["Authorization"] = "Bearer $newToken";
-
               try {
-                final response = await dio.fetch(retryRequest);
-                _isRefreshing = false;
+                final newToken = await LocalStorage.getAccessToken();
+                e.requestOptions.headers["Authorization"] = "Bearer $newToken";
+                final response = await dio.fetch(e.requestOptions);
 
-                // Process any queued requests
-                _processQueue();
+                _isRefreshing = false;
+                await _processQueue();
 
                 return handler.resolve(response);
               } catch (retryError) {
                 _isRefreshing = false;
-                // Convert Object to DioException if needed
-                if (retryError is DioException) {
-                  _clearQueueWithError(retryError);
-                } else {
-                  // Create a DioException from the error
-                  _clearQueueWithError(
-                    DioException(
-                      requestOptions: e.requestOptions,
-                      error: retryError,
-                      message: retryError.toString(),
-                    ),
-                  );
-                }
+                _clearQueueWithError();
                 return handler.next(e);
               }
             } else {
-              // Refresh failed → logout and clear queue
               _isRefreshing = false;
-              await LocalStorage.clearTokens();
-              _clearQueueWithError(e);
-
-              // Navigate to login page
-              _navigateToLogin();
+              await _handleLogout();
+              _clearQueueWithError();
               return handler.next(e);
             }
           }
@@ -100,51 +83,46 @@ class ApiClient {
     );
   }
 
-  void _processQueue() async {
-    if (_requestsQueue.isEmpty) return;
-
+  Future<void> _processQueue() async {
     final newToken = await LocalStorage.getAccessToken();
-    final failedRequests = <RequestOptions>[];
 
-    for (final requestOptions in _requestsQueue) {
+    for (final queuedRequest in _requestQueue) {
       try {
-        requestOptions.headers["Authorization"] = "Bearer $newToken";
-        await dio.fetch(requestOptions);
+        queuedRequest.requestOptions.headers["Authorization"] =
+            "Bearer $newToken";
+        final response = await dio.fetch(queuedRequest.requestOptions);
+        queuedRequest.completer.complete(response);
       } catch (e) {
-        failedRequests.add(requestOptions);
-        if (kDebugMode) {
-          print("Failed to retry queued request: $e");
-        }
+        queuedRequest.completer.completeError(e);
       }
     }
 
-    _requestsQueue.clear();
-    // Add failed requests back to queue or handle as needed
-    if (failedRequests.isNotEmpty) {
-      _requestsQueue.addAll(failedRequests);
-    }
+    _requestQueue.clear();
   }
 
-  void _clearQueueWithError(DioException error) {
-    for (final request in _requestsQueue) {
-      // You might want to notify listeners about failed requests
+  void _clearQueueWithError() {
+    for (final queuedRequest in _requestQueue) {
+      queuedRequest.completer.completeError(
+        DioException(
+          requestOptions: queuedRequest.requestOptions,
+          message: 'Authentication failed',
+        ),
+      );
     }
-    _requestsQueue.clear();
+    _requestQueue.clear();
   }
 
-  void _navigateToLogin() {
-    // Use a global key or event bus to navigate to login
-    // This is a simplified approach - you might need to adjust based on your app structure
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final navigatorKey = GlobalKey<NavigatorState>();
-      navigatorKey.currentState?.pushAndRemoveUntil(
+  Future<void> _handleLogout() async {
+    await LocalStorage.clearTokens();
+
+    if (navigatorKey?.currentState != null) {
+      navigatorKey!.currentState!.pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const LoginPage()),
         (route) => false,
       );
-    });
+    }
   }
 
-  /// Enhanced refresh token logic
   static Future<bool> _refreshToken() async {
     final refreshToken = await LocalStorage.getRefreshToken();
     if (refreshToken == null) return false;
@@ -172,12 +150,6 @@ class ApiClient {
           return true;
         }
       }
-    } on DioException catch (e) {
-      if (kDebugMode) {
-        print(
-          "Refresh token failed: ${e.response?.statusCode} - ${e.response?.data}",
-        );
-      }
     } catch (e) {
       if (kDebugMode) {
         print("Refresh token failed: $e");
@@ -186,7 +158,7 @@ class ApiClient {
     return false;
   }
 
-  /// GET
+  // HTTP Methods
   Future<Response> get({
     required String path,
     Map<String, dynamic>? queryParameters,
@@ -194,7 +166,6 @@ class ApiClient {
     return await dio.get(path, queryParameters: queryParameters);
   }
 
-  /// POST
   Future<Response> post({
     required String path,
     dynamic data,
@@ -203,7 +174,6 @@ class ApiClient {
     return await dio.post(path, data: data, queryParameters: queryParameters);
   }
 
-  /// PUT
   Future<Response> put({
     required String path,
     dynamic data,
@@ -212,7 +182,6 @@ class ApiClient {
     return await dio.put(path, data: data, queryParameters: queryParameters);
   }
 
-  /// DELETE
   Future<Response> delete({
     required String path,
     dynamic data,
@@ -220,4 +189,11 @@ class ApiClient {
   }) async {
     return await dio.delete(path, data: data, queryParameters: queryParameters);
   }
+}
+
+class QueuedRequest {
+  final RequestOptions requestOptions;
+  final Completer<Response> completer;
+
+  QueuedRequest(this.requestOptions, this.completer);
 }

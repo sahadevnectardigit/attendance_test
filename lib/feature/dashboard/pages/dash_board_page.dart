@@ -65,14 +65,14 @@ class _DashboardPageState extends State<DashboardPage> {
   //   }
   // }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<DashboardProvider>().fetchDashboard();
-      context.read<ProfileProvider>().fetchProfileData();
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     context.read<DashboardProvider>().fetchDashboard();
+  //     context.read<ProfileProvider>().fetchProfileData();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

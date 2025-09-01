@@ -63,12 +63,14 @@ class ProfileProvider extends ChangeNotifier {
     isLoading = false;
 
     if (result.isSuccess && result.data != null) {
+      fetchProfileData();
       errorMessage = null;
       notifyListeners();
       return true;
     } else {
       errorProfileUpdate =
           result.message ?? "Failed to update profile"; // failure → string
+      fetchProfileData();
       notifyListeners();
       return false;
     }

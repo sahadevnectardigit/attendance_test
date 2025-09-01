@@ -132,12 +132,12 @@ class _LedgerPageState extends State<LedgerPage> {
     selectedStringMonth = nepaliMonths[NepaliDateTime.now().month];
 
     // Fetch initial data
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<LedgerProvider>().fetchLedgerData(
-        year: selectedYear,
-        month: selectedMonth,
-      );
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<LedgerProvider>().fetchLedgerData(
+    //     year: selectedYear,
+    //     month: selectedMonth,
+    //   );
+    // });
   }
 
   @override

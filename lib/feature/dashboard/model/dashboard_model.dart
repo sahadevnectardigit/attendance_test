@@ -74,18 +74,18 @@ class DailyStats {
   }
 
   /// Convert to map for chart usage
-  Map<String, double> toChartData() {
-    return {
-      'Present': present.toDouble(),
-      'Absent': absent.toDouble(),
-      'LateIn': lateIn.toDouble(),
-      'EarlyOut': earlyOut.toDouble(),
-      'Holiday': holiday.toDouble(),
-      'Approved Leave': approvedLeave.toDouble(),
-      'Weekend': weekend.toDouble(),
-      'Official Visit': officialVisit.toDouble(),
-    };
-  }
+  // Map<String, double> toChartData() {
+  //   return {
+  //     'Present': present.toDouble(),
+  //     'Absent': absent.toDouble(),
+  //     'LateIn': lateIn.toDouble(),
+  //     'EarlyOut': earlyOut.toDouble(),
+  //     'Holiday': holiday.toDouble(),
+  //     'Approved Leave': approvedLeave.toDouble(),
+  //     'Weekend': weekend.toDouble(),
+  //     'Official Visit': officialVisit.toDouble(),
+  //   };
+  // }
 }
 
 class MonthlyStats extends DailyStats {
@@ -111,5 +111,18 @@ class MonthlyStats extends DailyStats {
       weekend: json['Weekend'] ?? 0,
       officialVisit: json['Official Visit'] ?? 0,
     );
+  }
+
+  Map<String, double> toChartData() {
+    return {
+      'Present': present.toDouble(),
+      'Absent': absent.toDouble(),
+      'LateIn': lateIn.toDouble(),
+      'EarlyOut': earlyOut.toDouble(),
+      'Holiday': holiday.toDouble(),
+      'Approved Leave': approvedLeave.toDouble(),
+      'Weekend': weekend.toDouble(),
+      'Official Visit': officialVisit.toDouble(),
+    };
   }
 }

@@ -176,10 +176,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       children: [
                         Row(
                           children: [
-                            const Icon(
-                              Icons.calendar_today,
-                              color: Colors.blue,
-                            ),
+                            // const Icon(
+                            //   Icons.calendar_today,
+                            //   color: Colors.blue,
+                            // ),
                             const SizedBox(width: 6),
                             Text(
                               selectedStringMonth != null
@@ -193,7 +193,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         Row(
                           children: [
-                            Icon(Icons.access_time, color: Colors.blue),
+                            // Icon(Icons.access_time, color: Colors.blue),
                             SizedBox(width: 6),
                             Text(
                               DateFormat(

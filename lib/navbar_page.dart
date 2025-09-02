@@ -23,8 +23,8 @@ class NavBarPage extends StatelessWidget {
     final navProvider = Provider.of<BottomNavProvider>(context);
 
     return Scaffold(
-      // body: IndexedStack(index: navProvider.currentIndex, children: _pages),
-      body: _pages[navProvider.currentIndex],
+      body: IndexedStack(index: navProvider.currentIndex, children: _pages),
+      // body: _pages[navProvider.currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navProvider.currentIndex,
         onTap: navProvider.updateIndex,

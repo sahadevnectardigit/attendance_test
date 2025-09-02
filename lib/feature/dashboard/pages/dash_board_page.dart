@@ -1,3 +1,4 @@
+import 'package:attendance/core/widgets/dashboard_shimmer.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,14 +16,10 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  // NepaliDateTime? _selectedDate;
   int? selectedYear;
   int? selectedMonth;
   String? selectedStringMonth;
   int? selectedDay;
-  // selectedYear = NepaliDateTime.now().year;
-  //   selectedMonth = NepaliDateTime.now().month;
-  //   selectedStringMonth = nepaliMonths[NepaliDateTime.now().month];
 
   final List<String> nepaliMonths = [
     "Baisakh",
@@ -67,6 +64,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final cardWidth = (MediaQuery.of(context).size.width - 48) / 2;
     final dashBoardProvider = context.watch<DashboardProvider>();
     final dashBoardData = dashBoardProvider.dashboard;
+    final profilePro = context.read<ProfileProvider>();
     // ✅ For Pie Chart
     // final Map<String, double> months =
     //     dashBoardData?.monthlyStats?.toChartData() ?? {};
@@ -76,82 +74,82 @@ class _DashboardPageState extends State<DashboardPage> {
         key: dashBoardData?.monthlyStats?.toChartData()[key] ?? 0.0,
     };
 
-    return Scaffold(
-      backgroundColor: Colors.blue.shade50,
-      appBar: AppBar(
-        backgroundColor: Colors.blue.shade50,
-        elevation: 0,
+    return dashBoardProvider.isLoading
+        ? DashboardShimmer()
+        : dashBoardProvider.errorMessage != null
+        ? Text(dashBoardProvider.errorMessage!)
+        : Scaffold(
+            backgroundColor: Colors.blue.shade50,
+            appBar: AppBar(
+              backgroundColor: Colors.blue.shade50,
+              elevation: 0,
 
-        // titleSpacing: 0,
-        title: Row(
-          children: [
-            Consumer<ProfileProvider>(
-              builder: (context, data, _) {
-                final imageUrl = data.profileModel?.profile?.imageUrl;
+              // titleSpacing: 0,
+              title: Row(
+                children: [
+                  Consumer<ProfileProvider>(
+                    builder: (context, data, _) {
+                      final imageUrl = data.profileModel?.profile?.imageUrl;
 
-                if (imageUrl == null || imageUrl.isEmpty) {
-                  // Return a placeholder or default avatar
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: Image.asset(
-                      'assets/images/profile_icon.png',
-                      height: 40,
-                      width: 40,
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                }
+                      if (imageUrl == null || imageUrl.isEmpty) {
+                        // Return a placeholder or default avatar
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Image.asset(
+                            'assets/images/profile_icon.png',
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      }
 
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    height: 40,
-                    width: 40,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => const SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: Center(child: CupertinoActivityIndicator()),
-                    ),
-                    errorWidget: (context, url, error) => Image.asset(
-                      'assets/images/profile_icon.png',
-                      height: 40,
-                      width: 40,
-                      fit: BoxFit.cover,
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          height: 40,
+                          width: 40,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => const SizedBox(
+                            height: 40,
+                            width: 40,
+                            child: Center(child: CupertinoActivityIndicator()),
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/images/profile_icon.png',
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+
+                  const SizedBox(width: 8),
+
+                  Text(
+                    "Hey ${profilePro.profileModel?.firstName ?? "there!"}",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                );
-              },
-            ),
-
-            const SizedBox(width: 8),
-
-            const Text(
-              "Hey there!",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
+                ],
               ),
-            ),
-          ],
-        ),
 
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 12),
-            child: Icon(Icons.notifications_none, color: Colors.black),
-          ),
-        ],
-      ),
-      // drawer: CustomDrawer(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: dashBoardProvider.isLoading
-            ? Center(child: const CircularProgressIndicator())
-            : dashBoardProvider.errorMessage != null
-            ? Text(dashBoardProvider.errorMessage!)
-            : Column(
+              actions: const [
+                Padding(
+                  padding: EdgeInsets.only(right: 12),
+                  child: Icon(Icons.notifications_none, color: Colors.black),
+                ),
+              ],
+            ),
+            // drawer: CustomDrawer(),
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Column(
                 children: [
                   // Date and Time Row
                   Container(
@@ -230,33 +228,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                   ),
-                  // Center(
-                  //   child: PieChart(
-                  //     dataMap: months,
-                  //     chartRadius: MediaQuery.sizeOf(context).width * 0.7,
-                  //     legendOptions: LegendOptions(
-                  //       showLegends: true,
-                  //       legendPosition: LegendPosition.bottom,
-                  //       showLegendsInRow: true, // horizontal layout
-                  //       legendShape: BoxShape.circle,
-                  //       legendTextStyle: TextStyle(
-                  //         fontSize: 12, // smaller legend text
-                  //       ),
-                  //     ),
-                  //     chartValuesOptions: ChartValuesOptions(
-                  //       showChartValues: true,
-                  //       showChartValuesInPercentage: true,
-                  //       decimalPlaces: 0,
-                  //       chartValueStyle: TextStyle(
-                  //         fontSize: 10, // bigger numbers on pie
-                  //         color: Colors.black,
-                  //         fontWeight: FontWeight.bold,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
 
-                  // Swipe to check in button
                   const SizedBox(height: 30),
 
                   // Stats Section
@@ -282,7 +254,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: buildStatCard(
                             "Present",
                             "${dashBoardData?.monthlyStats?.present ?? 0}",
-                            // "${ledgerData?.summary?.present ?? 0}",
                             "",
                             Colors.green,
                           ),
@@ -293,8 +264,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: buildStatCard(
                             "Absent",
                             "${dashBoardData?.monthlyStats?.absent ?? 0}",
-
-                            // "${ledgerData?.summary?.absent ?? 0}",
                             "",
                             Colors.red,
                           ),
@@ -305,8 +274,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: buildStatCard(
                             "Late in",
                             "${dashBoardData?.monthlyStats?.lateIn ?? 0}",
-
-                            // "${ledgerData?.summary?.lateIn ?? 0}",
                             "",
                             Colors.orange,
                           ),
@@ -317,7 +284,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: buildStatCard(
                             "Early Out",
                             "${dashBoardData?.monthlyStats?.earlyOut ?? 0}",
-                            // "${ledgerData?.summary?.earlyOut ?? 0}",
                             "",
                             Colors.purple,
                           ),
@@ -328,8 +294,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: buildStatCard(
                             "Holidays",
                             "${dashBoardData?.monthlyStats?.holiday ?? 0}",
-
-                            // "${ledgerData?.summary?.holiday ?? 0}",
                             "",
                             Colors.purple,
                           ),
@@ -340,8 +304,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: buildStatCard(
                             "Approved leave",
                             "${dashBoardData?.monthlyStats?.approvedLeave ?? 0}",
-
-                            // "${ledgerData?.summary?.leave ?? 0}",
                             "",
                             Colors.purple,
                           ),
@@ -351,8 +313,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ],
               ),
-      ),
-    );
+            ),
+          );
   }
 
   Widget buildStatCard(

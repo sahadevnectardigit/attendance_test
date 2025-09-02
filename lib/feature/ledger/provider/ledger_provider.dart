@@ -78,34 +78,4 @@ extension LedgerProviderExtension on LedgerProvider {
   }
 }
 
-//!Old one
-// class LedgerProvider extends ChangeNotifier {
-//   LedgerModelTesting? ledgerModel; // model
-//   String? errorMessage; // string error
 
-//   bool isLoading = false;
-
-//   Future<bool> fetchLedgerData({int? year, int? month}) async {
-//     isLoading = true;
-//     errorMessage = null;
-//     notifyListeners();
-
-//     final result = await LedgerRepo.fetchLedgerData(month: month, year: year);
-
-//     isLoading = false;
-
-//     if (result.isSuccess && result.data != null) {
-//       ledgerModel = result.data;
-//       notifyListeners();
-//       errorMessage = null;
-//       return true;
-//     } else {
-//       ledgerModel = null;
-//       errorMessage =
-//           result.message ?? "Failed to ledger data"; // failure → string
-
-//       notifyListeners();
-//       return false;
-//     }
-//   }
-// }

@@ -53,41 +53,64 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                       if (success) {
                         context.showSnackBarMessage(
-                          message: 'Profile upated successfully',
+                          message: 'Profile updated successfully',
                           backgroundColor: Colors.green,
                         );
                       } else {
                         context.showSnackBarMessage(
                           message: profileProvider.errorProfileUpdate
                               .toString(),
-                          backgroundColor: Colors.green,
+                          backgroundColor: Colors.red,
                         );
                       }
                     },
-                    child: ClipOval(
-                      child: _selectedImage != null
-                          ? Image.file(
-                              _selectedImage!,
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.network(
-                              model?.profile?.imageUrl?.toString() ?? "",
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  'assets/images/profile_icon.png', // ✅ fallback
-                                  height: 40,
-                                  width: 40,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ClipOval(
+                          child: _selectedImage != null
+                              ? Image.file(
+                                  _selectedImage!,
+                                  height: 100,
+                                  width: 100,
                                   fit: BoxFit.cover,
-                                );
-                              },
+                                )
+                              : Image.network(
+                                  model?.profile?.imageUrl?.toString() ?? "",
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      'assets/images/profile_icon.png', // ✅ fallback
+                                      height: 100,
+                                      width: 100,
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                ),
+                        ),
+                        // Camera Icon overlay (bottom-right)
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black54,
                             ),
+                            child: Icon(
+                              Icons.add_photo_alternate,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
                   const SizedBox(height: 12),
                   Text(
                     "${model?.firstName ?? "Unknown"} ${model?.lastName ?? ""}",

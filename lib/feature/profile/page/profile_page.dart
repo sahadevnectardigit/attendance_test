@@ -5,6 +5,8 @@ import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
 import 'package:attendance/feature/profile/page/change_password.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -75,19 +77,26 @@ class _ProfilePageState extends State<ProfilePage> {
                                   width: 100,
                                   fit: BoxFit.cover,
                                 )
-                              : Image.network(
-                                  model?.profile?.imageUrl?.toString() ?? "",
+                              : CachedNetworkImage(
+                                  imageUrl:
+                                      model?.profile?.imageUrl?.toString() ??
+                                      "",
                                   height: 100,
                                   width: 100,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(
-                                      'assets/images/profile_icon.png', // ✅ fallback
-                                      height: 100,
-                                      width: 100,
-                                      fit: BoxFit.cover,
-                                    );
-                                  },
+                                  placeholder: (context, url) => const SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: Center(
+                                      child: CupertinoActivityIndicator(),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Image.asset(
+                                    'assets/images/profile_icon.png', // ✅ fallback image
+                                    height: 100,
+                                    width: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                         ),
                         // Camera Icon overlay (bottom-right)

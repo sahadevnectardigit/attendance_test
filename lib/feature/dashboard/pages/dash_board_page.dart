@@ -1,5 +1,7 @@
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -102,20 +104,22 @@ class _DashboardPageState extends State<DashboardPage> {
 
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(30),
-                  child: Image.network(
-                    imageUrl,
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
                     height: 40,
                     width: 40,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      // Optional fallback if image fails to load
-                      return Image.asset(
-                        'assets/images/profile_icon.png',
-                        height: 40,
-                        width: 40,
-                        fit: BoxFit.cover,
-                      );
-                    },
+                    placeholder: (context, url) => const SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: Center(child: CupertinoActivityIndicator()),
+                    ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/images/profile_icon.png',
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 );
               },

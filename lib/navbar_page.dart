@@ -16,6 +16,7 @@ class NavBarPage extends StatelessWidget {
     // AttendanceCalendarScreen(),
     LedgerPage(),
     ProfilePage(),
+    // DateConverterPage(),
   ];
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:attendance/core/constants/api_constants.dart';
 import 'package:attendance/core/services/auth_api_client.dart';
 import 'package:attendance/core/services/local_storage.dart';
@@ -26,7 +28,7 @@ class LoginRepo {
       );
 
       final data = response.data;
-
+      log("Token: ${data['access_token']}");
       if (response.statusCode == 200) {
         await LocalStorage.saveTokens(
           accessToken: data['access_token'] ?? "",

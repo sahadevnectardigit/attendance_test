@@ -1,4 +1,5 @@
 import 'package:attendance/core/widgets/dashboard_shimmer.dart';
+import 'package:attendance/feature/dashboard/pages/screens/app_drawer.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -77,14 +78,14 @@ class _DashboardPageState extends State<DashboardPage> {
     return dashBoardProvider.isLoading
         ? DashboardShimmer()
         : dashBoardProvider.errorMessage != null
-        ? Text(dashBoardProvider.errorMessage!)
+        ? Center(child: Text(dashBoardProvider.errorMessage!))
         : Scaffold(
             backgroundColor: Colors.blue.shade50,
             appBar: AppBar(
               backgroundColor: Colors.blue.shade50,
               elevation: 0,
 
-              // titleSpacing: 0,
+              titleSpacing: 0,
               title: Row(
                 children: [
                   Consumer<ProfileProvider>(
@@ -103,7 +104,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         );
                       }
-
+                      // return Text('image');
                       return ClipRRect(
                         borderRadius: BorderRadius.circular(30),
                         child: CachedNetworkImage(
@@ -146,7 +147,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ],
             ),
-            // drawer: CustomDrawer(),
+            drawer: AppDrawer(),
             body: SingleChildScrollView(
               padding: const EdgeInsets.only(bottom: 20),
               child: Column(

@@ -1,6 +1,7 @@
 import 'package:attendance/core/provider/bottom_navbar_provider.dart';
 import 'package:attendance/core/provider/internet_checker.dart';
 import 'package:attendance/feature/auth/provider/login_provider.dart';
+import 'package:attendance/feature/dashboard/provider/application_provider.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
@@ -21,12 +22,14 @@ class AppProviders {
     ChangeNotifierProvider<ProfileProvider>(
       create: (_) => ProfileProvider()..fetchProfileData(),
     ),
+    // ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
     ChangeNotifierProvider<BottomNavProvider>(
       create: (_) => BottomNavProvider(),
     ),
-    ChangeNotifierProvider<SalaryProvider>(
-      create: (_) => SalaryProvider()..fetchSalary(),
-    ),
+    // ChangeNotifierProvider<SalaryProvider>(
+    //   create: (_) => SalaryProvider()..fetchSalary(),
+    // ),
+    ChangeNotifierProvider<SalaryProvider>(create: (_) => SalaryProvider()),
 
     ChangeNotifierProvider<LedgerProvider>(
       create: (_) => LedgerProvider()
@@ -34,6 +37,9 @@ class AppProviders {
           month: NepaliDateTime.now().month,
           year: NepaliDateTime.now().year,
         ),
+    ),
+    ChangeNotifierProvider<ApplicationProvider>(
+      create: (_) => ApplicationProvider()..fetchOfficialVisitData(),
     ),
   ];
 }

@@ -5,7 +5,7 @@ import 'package:attendance/models/profile_model.dart';
 import 'package:flutter/material.dart';
 
 class ProfileProvider extends ChangeNotifier {
-  LedgerModel? profileModel;
+  ProfileModel? profileModel;
   String? errorMessage;
   String? errorProfileUpdate;
   String? errorChangePassword;

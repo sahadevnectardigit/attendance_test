@@ -47,6 +47,7 @@ dependencies:
   connectivity_plus: ^6.1.5
   pie_chart: ^5.4.0
   shimmer: ^3.0.0
+  nepali_utils: ^3.0.8
 
 dev_dependencies:
   flutter_test:

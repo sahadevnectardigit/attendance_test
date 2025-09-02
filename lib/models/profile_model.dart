@@ -1,4 +1,4 @@
-class LedgerModel {
+class ProfileModel {
   int? id;
   String? firstName;
   String? middleName;
@@ -17,7 +17,7 @@ class LedgerModel {
   String? permCountry;
   Profile? profile;
 
-  LedgerModel({
+  ProfileModel({
     this.id,
     this.firstName,
     this.middleName,
@@ -37,7 +37,7 @@ class LedgerModel {
     this.profile,
   });
 
-  LedgerModel.fromJson(Map<String, dynamic> json) {
+  ProfileModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstName = json['first_name'];
     middleName = json['middle_name'];

@@ -77,7 +77,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   width: 100,
                                   fit: BoxFit.cover,
                                 )
-                              : CachedNetworkImage(
+                              :
+                                // Text('data'),
+                                CachedNetworkImage(
                                   imageUrl:
                                       model?.profile?.imageUrl?.toString() ??
                                       "",

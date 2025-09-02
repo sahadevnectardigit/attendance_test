@@ -39,12 +39,12 @@ class ProfileRepo {
     }
   }
 
-  static Future<ApiResponse<LedgerModel>> fetchProfileData() async {
+  static Future<ApiResponse<ProfileModel>> fetchProfileData() async {
     try {
       final response = await _client.get(path: ApiUrl.profile);
 
       if (response.statusCode == 200) {
-        final model = LedgerModel.fromJson(response.data);
+        final model = ProfileModel.fromJson(response.data);
         return ApiResponse.success(model); // returns model on success
       } else {
         final errorMsg = response.data["error"] ?? "Failed to fetch dashboard";

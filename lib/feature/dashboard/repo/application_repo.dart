@@ -9,8 +9,37 @@ import 'package:dio/dio.dart';
 class ApplicationRepo {
   static final MainApiClient _client = MainApiClient();
 
+  static Future<ApiResponse<bool>> postLateInEarlyOut({
+    required Map<String, dynamic> applicationData,
+  }) async {
+    try {
+      final response = await _client.post(
+        path: ApiUrl.lateInEarlyOut,
+        data: applicationData,
+      );
+
+      if (response.statusCode == 201) {
+        return ApiResponse.success(true);
+      } else {
+        final errorList = response.data["detail"];
+        final errorMsg = (errorList is List && errorList.isNotEmpty)
+            ? errorList.first
+            : "Failed to post official visit";
+        return ApiResponse.failure(errorMsg);
+      }
+    } on DioException catch (e) {
+      final errorList = e.response?.data?["detail"];
+      final backendMessage = (errorList is List && errorList.isNotEmpty)
+          ? errorList.first
+          : ApiErrorHandler.handleError(e);
+      return ApiResponse.failure(backendMessage);
+    } catch (e) {
+      return ApiResponse.failure("Unexpected error: $e");
+    }
+  }
+
   static Future<ApiResponse<bool>> postOfficialVisit({
-    required Map<String,dynamic> applicationData,
+    required Map<String, dynamic> applicationData,
   }) async {
     try {
       final response = await _client.post(
@@ -37,7 +66,6 @@ class ApplicationRepo {
       return ApiResponse.failure("Unexpected error: $e");
     }
   }
-
 
   static Future<ApiResponse<ApproveRecommendModel>>
   fetchApproveRecommendedData() async {
@@ -106,5 +134,4 @@ class ApplicationRepo {
   //     return ApiResponse.failure("Unexpected error: $e");
   //   }
   // }
-
 }

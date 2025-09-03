@@ -1,3 +1,6 @@
+import 'package:attendance/core/services/local_storage.dart';
+import 'package:attendance/feature/auth/pages/login_page.dart';
+import 'package:attendance/feature/dashboard/pages/latein_lateout_page.dart';
 import 'package:attendance/feature/dashboard/pages/official_application_page.dart';
 import 'package:flutter/material.dart';
 
@@ -44,26 +47,29 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.airplane_ticket),
-            title: Text("Leave Application"),
+            title: Text("Latein lateout Application"),
             onTap: () {
-              Navigator.pushNamed(context, '/leave_application');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.home_work),
-            title: Text("Work From Home"),
-            onTap: () {
-              Navigator.pushNamed(context, '/work_from_home');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.swap_horiz),
-            title: Text("Shift Change"),
-            onTap: () {
-              Navigator.pushNamed(context, '/shift_change');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LateInLateOutPage()),
+              );
             },
           ),
 
+          // ListTile(
+          //   leading: Icon(Icons.home_work),
+          //   title: Text("Work From Home"),
+          //   onTap: () {
+          //     Navigator.pushNamed(context, '/work_from_home');
+          //   },
+          // ),
+          // ListTile(
+          //   leading: Icon(Icons.swap_horiz),
+          //   title: Text("Shift Change"),
+          //   onTap: () {
+          //     Navigator.pushNamed(context, '/shift_change');
+          //   },
+          // ),
           Spacer(),
           Divider(),
 
@@ -71,9 +77,41 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.logout, color: Colors.red),
             title: Text("Logout", style: TextStyle(color: Colors.red)),
-            onTap: () {
-              // TODO: handle logout
-              Navigator.pushReplacementNamed(context, '/login');
+            onTap: () async {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Confirm Logout'),
+                    content: Text('Are you sure you want to logout?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop(); // Close the dialog first
+                          // Clear login state
+                          await LocalStorage.clearTokens();
+                          await LocalStorage.setRememberMe(false);
+
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
+                        child: Text('Logout'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],

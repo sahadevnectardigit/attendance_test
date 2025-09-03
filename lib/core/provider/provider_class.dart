@@ -22,14 +22,12 @@ class AppProviders {
     ChangeNotifierProvider<ProfileProvider>(
       create: (_) => ProfileProvider()..fetchProfileData(),
     ),
-    // ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
     ChangeNotifierProvider<BottomNavProvider>(
       create: (_) => BottomNavProvider(),
     ),
-    // ChangeNotifierProvider<SalaryProvider>(
-    //   create: (_) => SalaryProvider()..fetchSalary(),
-    // ),
-    ChangeNotifierProvider<SalaryProvider>(create: (_) => SalaryProvider()),
+    ChangeNotifierProvider<SalaryProvider>(
+      create: (_) => SalaryProvider()..fetchSalary(),
+    ),
 
     ChangeNotifierProvider<LedgerProvider>(
       create: (_) => LedgerProvider()
@@ -39,9 +37,7 @@ class AppProviders {
         ),
     ),
     ChangeNotifierProvider<ApplicationProvider>(
-      create: (_) => ApplicationProvider()
-        ..fetchOfficialVisitData()
-        ..fetchApproveData(),
+      create: (_) => ApplicationProvider(),
     ),
   ];
 }

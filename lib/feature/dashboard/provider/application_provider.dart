@@ -18,6 +18,34 @@ class ApplicationProvider extends ChangeNotifier {
   bool isLoadingPostLateIn = false;
   String? errorLateInPostMessage = '';
 
+  bool isLoadingLeaveApp = false;
+  String? errorLeaveMessage = '';
+
+  Future<bool> createLeaveApplication({
+    required Map<String, dynamic> applicationData,
+  }) async {
+    isLoadingLeaveApp = true;
+    errorLeaveMessage = null;
+    notifyListeners();
+
+    final result = await ApplicationRepo.createLeaveApplication(
+      applicationData: applicationData,
+    );
+
+    isLoadingLeaveApp = false;
+
+    if (result.isSuccess) {
+      notifyListeners();
+      return true;
+    } else {
+      errorLeaveMessage =
+          result.message ??
+          "Failed to post leave application"; // failure → string
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<bool> postLateInEarlyOut({
     required Map<String, dynamic> applicationData,
   }) async {

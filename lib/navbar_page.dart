@@ -12,11 +12,8 @@ class NavBarPage extends StatelessWidget {
   final List<Widget> _pages = [
     DashboardPage(),
     SalaryPage(),
-    // LedgerPage(),
-    // AttendanceCalendarScreen(),
     LedgerPage(),
     ProfilePage(),
-    // DateConverterPage(),
   ];
 
   @override
@@ -24,23 +21,62 @@ class NavBarPage extends StatelessWidget {
     final navProvider = Provider.of<BottomNavProvider>(context);
 
     return Scaffold(
-      body: IndexedStack(index: navProvider.currentIndex, children: _pages),
-      // body: _pages[navProvider.currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navProvider.currentIndex,
-        onTap: navProvider.updateIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.attach_money),
-            label: "Salary",
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF2ecc71), Color(0xFF27ae60)], // Green gradient
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: "Ledger"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
+        ),
+        child: IndexedStack(index: navProvider.currentIndex, children: _pages),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF27ae60), Color(0xFF1e8449)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          // borderRadius: const BorderRadius.only(
+          //   topLeft: Radius.circular(20),
+          //   topRight: Radius.circular(20),
+          // ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          // borderRadius: const BorderRadius.only(
+          //   topLeft: Radius.circular(20),
+          //   topRight: Radius.circular(20),
+          // ),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            currentIndex: navProvider.currentIndex,
+            onTap: navProvider.updateIndex,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.white70,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.attach_money),
+                label: "Salary",
+              ),
+              BottomNavigationBarItem(icon: Icon(Icons.book), label: "Ledger"),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: "Profile",
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

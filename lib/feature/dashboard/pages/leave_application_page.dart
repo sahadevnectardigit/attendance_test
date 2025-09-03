@@ -7,19 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
 
-class OfficialApplicationPage extends StatefulWidget {
-  const OfficialApplicationPage({super.key});
+class LeaveApplicationPage extends StatefulWidget {
+  const LeaveApplicationPage({super.key});
 
   @override
-  State<OfficialApplicationPage> createState() =>
-      _OfficialApplicationPageState();
+  State<LeaveApplicationPage> createState() => _LeaveApplicationPageState();
 }
 
-class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
+class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
   final _formKey = GlobalKey<FormState>();
 
   // Controllers
-  final _placeController = TextEditingController();
+
   final _remarkController = TextEditingController();
   final _allowanceController = TextEditingController();
 
@@ -51,7 +50,6 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
 
   @override
   void dispose() {
-    _placeController.dispose();
     _remarkController.dispose();
     _allowanceController.dispose();
     super.dispose();
@@ -117,7 +115,6 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
 
   void _clearForm() {
     setState(() {
-      // _formKey.currentState?.reset();
       _officialVisit = null;
       _approverId = null;
       _recommenderId = null;
@@ -126,9 +123,9 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
       _fromDateNepali = null;
       _toDateNepali = null;
       _halfDay = false;
-      _placeController.clear();
+
       _remarkController.clear();
-      _allowanceController.clear();
+
       _fromDateEnglish = null;
       _toDateEnglish = null;
       _fromDateNepaliStr = null;
@@ -154,11 +151,11 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
       "recommended_by": _recommenderId,
       "half_day": _halfDay,
       "remarks": _remarkController.text.trim(),
-      "place": _placeController.text.trim(),
-      "allowance_claimed": double.tryParse(_allowanceController.text) ?? 0,
+      // "place": _placeController.text.trim(),
+      // "allowance": double.tryParse(_allowanceController.text) ?? 0,
     };
     log("Applicaion data: $applicationData");
-    final isSuccess = await applicationPro.postOfficialVisit(
+    final isSuccess = await applicationPro.createLeaveApplication(
       applicationData: applicationData,
     );
 
@@ -181,7 +178,7 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Official Application"),
+        title: const Text("Leave Application"),
         backgroundColor: Colors.blue.shade700,
         foregroundColor: Colors.white,
         elevation: 2,
@@ -458,44 +455,40 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
                       const SizedBox(height: 20),
 
                       // Place of Visit
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextFormField(
-                          controller: _placeController,
-                          decoration: InputDecoration(
-                            labelText: "Place of Visit",
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(16),
-                          ),
-                          validator: (value) => value?.isEmpty == true
-                              ? 'Please enter place of visit'
-                              : null,
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
+                      // Card(
+                      //   elevation: 2,
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      //   child: TextFormField(
+                      //     controller: _placeController,
+                      //     decoration: InputDecoration(
+                      //       labelText: "Place of Visit",
+                      //       border: InputBorder.none,
+                      //       contentPadding: const EdgeInsets.all(16),
+                      //     ),
+                      //     validator: (value) => value?.isEmpty == true
+                      //         ? 'Please enter place of visit'
+                      //         : null,
+                      //   ),
+                      // ),
 
                       // Allowance Claimed
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextFormField(
-                          controller: _allowanceController,
-                          decoration: InputDecoration(
-                            labelText: "Allowance Claimed",
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(16),
-                          ),
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
+                      // Card(
+                      //   elevation: 2,
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      //   child: TextFormField(
+                      //     controller: _allowanceController,
+                      //     decoration: InputDecoration(
+                      //       labelText: "Allowance Claimed",
+                      //       border: InputBorder.none,
+                      //       contentPadding: const EdgeInsets.all(16),
+                      //     ),
+                      //     keyboardType: TextInputType.number,
+                      //   ),
+                      // ),
 
                       // Half Day Switch
                       Card(
@@ -537,7 +530,7 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: applicationPro.isLoadingPostOfficial
+                              onPressed: applicationPro.isLoadingLeaveApp
                                   ? null
                                   : () => _handleForm(),
                               style: ElevatedButton.styleFrom(
@@ -583,7 +576,7 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
                     ],
                   ),
                   // Loading overlay
-                  if (applicationPro.isLoadingPostOfficial) LoadingWidget(),
+                  if (applicationPro.isLoadingLeaveApp) LoadingWidget(),
                 ],
               );
             },

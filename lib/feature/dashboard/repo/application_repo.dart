@@ -9,6 +9,35 @@ import 'package:dio/dio.dart';
 class ApplicationRepo {
   static final MainApiClient _client = MainApiClient();
 
+  static Future<ApiResponse<bool>> createLeaveApplication({
+    required Map<String, dynamic> applicationData,
+  }) async {
+    try {
+      final response = await _client.post(
+        path: ApiUrl.createLeaveApplication,
+        data: applicationData,
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return ApiResponse.success(true);
+      } else {
+        final errorList = response.data["detail"];
+        final errorMsg = (errorList is List && errorList.isNotEmpty)
+            ? errorList.first
+            : "Failed to post leave application";
+        return ApiResponse.failure(errorMsg);
+      }
+    } on DioException catch (e) {
+      final errorList = e.response?.data?["detail"];
+      final backendMessage = (errorList is List && errorList.isNotEmpty)
+          ? errorList.first
+          : ApiErrorHandler.handleError(e);
+      return ApiResponse.failure(backendMessage);
+    } catch (e) {
+      return ApiResponse.failure("Unexpected error: $e");
+    }
+  }
+
   static Future<ApiResponse<bool>> postLateInEarlyOut({
     required Map<String, dynamic> applicationData,
   }) async {
@@ -18,7 +47,7 @@ class ApplicationRepo {
         data: applicationData,
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         return ApiResponse.success(true);
       } else {
         final errorList = response.data["detail"];
@@ -47,7 +76,7 @@ class ApplicationRepo {
         data: applicationData,
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         return ApiResponse.success(true);
       } else {
         final errorList = response.data["detail"];

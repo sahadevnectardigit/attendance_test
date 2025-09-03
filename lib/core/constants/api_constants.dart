@@ -12,6 +12,7 @@ class ApiUrl {
   static const String employeeSalary = "$palpajun/api/employee-salary/";
 
   ///application
+  static const String getLeavesDropDown = "$palpajun/api/leaves";
   static const String getOfficialVisitDropDown =
       "$palpajun/api/official-visit/";
   static const String createLeaveApplication =
@@ -21,4 +22,12 @@ class ApiUrl {
       "$palpajun/api/lateIn-earlyOut-applications/create/";
   static const String createOfficialVisitApplication =
       "$palpajun/api/official-visit-applications/create/";
+
+  ///getApplications status api
+  static const String getLeaveApplications =
+      "$palpajun//api/leave-applications/";
+  static const String getOfficialVisitApplications =
+      "$palpajun/official-visit-applications/";
+  static const String getLateInEaryOutApplications =
+      "$palpajun/lateIn-earlyOut-applications/";
 }

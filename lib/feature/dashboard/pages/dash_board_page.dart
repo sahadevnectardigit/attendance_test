@@ -50,15 +50,20 @@ class _DashboardPageState extends State<DashboardPage> {
   ];
 
   final List<Color> categoryColors = [
-    Colors.green, // Present
-    Colors.red, // Absent
-    Colors.orange, // LateIn
-    Colors.purple, // EarlyOut
-    Colors.blue, // Holiday
-    Colors.teal, // Approved Leave
-    Colors.grey, // Weekend
-    Colors.brown, // Official Visit
+    Color(0xFF4CAF50), // Present - Green
+    Color(0xFFF44336), // Absent - Red
+    Color(0xFFFF9800), // LateIn - Orange
+    Color(0xFF9C27B0), // EarlyOut - Purple
+    Color(0xFF2196F3), // Holiday - Blue
+    Color(0xFF009688), // Approved Leave - Teal
+    Color(0xFF607D8B), // Weekend - Grey
+    Color(0xFF795548), // Official Visit - Brown
   ];
+
+  // Green gradient colors
+  final List<Color> greenGradient = [Color(0xFF4CAF50), Color(0xFF2E7D32)];
+
+  final List<Color> lightGreenGradient = [Color(0xFFE8F5E9), Color(0xFFC8E6C9)];
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +71,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final dashBoardProvider = context.watch<DashboardProvider>();
     final dashBoardData = dashBoardProvider.dashboard;
     final profilePro = context.read<ProfileProvider>();
-    // ✅ For Pie Chart
-    // final Map<String, double> months =
-    //     dashBoardData?.monthlyStats?.toChartData() ?? {};
-    // Step 2: Convert API data into a fixed map
+
     final Map<String, double> months = {
       for (var key in categories)
         key: dashBoardData?.monthlyStats?.toChartData()[key] ?? 0.0,
@@ -80,11 +82,11 @@ class _DashboardPageState extends State<DashboardPage> {
         : dashBoardProvider.errorMessage != null
         ? Center(child: Text(dashBoardProvider.errorMessage!))
         : Scaffold(
-            backgroundColor: Colors.blue.shade50,
+            backgroundColor: Color(0xFFF1F8E9),
             appBar: AppBar(
-              backgroundColor: Colors.blue.shade50,
+              backgroundColor: Colors.transparent,
               elevation: 0,
-
+              iconTheme: IconThemeData(color: Color(0xFF2E7D32)),
               titleSpacing: 0,
               title: Row(
                 children: [
@@ -94,57 +96,92 @@ class _DashboardPageState extends State<DashboardPage> {
 
                       if (imageUrl == null || imageUrl.isEmpty) {
                         // Return a placeholder or default avatar
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(30),
-                          child: Image.asset(
-                            'assets/images/profile_icon.png',
-                            height: 40,
-                            width: 40,
-                            fit: BoxFit.cover,
+                        return Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: greenGradient,
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 20,
+                            child: Icon(Icons.person, color: Colors.white),
                           ),
                         );
                       }
                       // return Text('image');
                       return ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(20),
                         child: CachedNetworkImage(
                           imageUrl: imageUrl,
                           height: 40,
                           width: 40,
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => const SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: Center(child: CupertinoActivityIndicator()),
+                          placeholder: (context, url) => Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: greenGradient,
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: CupertinoActivityIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                          errorWidget: (context, url, error) => Image.asset(
-                            'assets/images/profile_icon.png',
-                            height: 40,
-                            width: 40,
-                            fit: BoxFit.cover,
+                          errorWidget: (context, url, error) => Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: greenGradient,
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(Icons.person, color: Colors.white),
                           ),
                         ),
                       );
                     },
                   ),
 
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 12),
 
                   Text(
                     "Hey ${profilePro.profileModel?.firstName ?? "there!"}",
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style: TextStyle(
+                      color: Color(0xFF2E7D32),
                       fontWeight: FontWeight.w600,
+                      fontSize: 18,
                     ),
                   ),
                 ],
               ),
 
-              actions: const [
-                Padding(
-                  padding: EdgeInsets.only(right: 12),
-                  child: Icon(Icons.notifications_none, color: Colors.black),
-                ),
+              actions: [
+                // Padding(
+                //   padding: EdgeInsets.only(right: 16),
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       gradient: LinearGradient(
+                //         colors: greenGradient,
+                //         begin: Alignment.topLeft,
+                //         end: Alignment.bottomRight,
+                //       ),
+                //       shape: BoxShape.circle,
+                //     ),
+                //     child: IconButton(
+                //       icon: Icon(Icons.notifications_none, color: Colors.white),
+                //       onPressed: () {},
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             drawer: AppDrawer(),
@@ -156,17 +193,21 @@ class _DashboardPageState extends State<DashboardPage> {
                   Container(
                     margin: const EdgeInsets.symmetric(
                       horizontal: 16,
-                      vertical: 8,
+                      vertical: 16,
                     ),
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        colors: greenGradient,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
+                          color: Colors.green.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
                         ),
                       ],
                     ),
@@ -175,16 +216,18 @@ class _DashboardPageState extends State<DashboardPage> {
                       children: [
                         Row(
                           children: [
-                            // const Icon(
-                            //   Icons.calendar_today,
-                            //   color: Colors.blue,
-                            // ),
-                            const SizedBox(width: 6),
+                            Icon(
+                              Icons.calendar_today,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
                             Text(
                               selectedStringMonth != null
                                   ? "$selectedStringMonth,$selectedMonth $selectedYear"
                                   : dashBoardData?.nepaliMonth ?? "N/A",
-                              style: const TextStyle(
+                              style: TextStyle(
+                                color: Colors.white,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -192,13 +235,20 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         Row(
                           children: [
-                            // Icon(Icons.access_time, color: Colors.blue),
-                            SizedBox(width: 6),
+                            Icon(
+                              Icons.access_time,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                            SizedBox(width: 8),
                             Text(
                               DateFormat(
                                 'h:mm a',
                               ).format(DateTime.now()), // e.g. 4:32 PM
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ],
                         ),
@@ -207,107 +257,129 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
 
                   ///Pie Chart
-                  PieChart(
-                    dataMap: months,
-                    colorList: categoryColors, // colors match keys
-                    chartRadius: MediaQuery.sizeOf(context).width * 0.7,
-                    legendOptions: LegendOptions(
-                      showLegends: true,
-                      legendPosition: LegendPosition.bottom,
-                      showLegendsInRow: true, // horizontal layout
-                      legendShape: BoxShape.circle,
-                      legendTextStyle: const TextStyle(fontSize: 10),
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    margin: EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.green.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
                     ),
-                    chartValuesOptions: const ChartValuesOptions(
-                      showChartValues: true,
-                      showChartValuesInPercentage: true,
-                      decimalPlaces: 0,
-                      chartValueStyle: TextStyle(
-                        fontSize: 10,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                    child: PieChart(
+                      dataMap: months,
+                      colorList: categoryColors, // colors match keys
+                      chartRadius: MediaQuery.sizeOf(context).width * 0.5,
+                      legendOptions: LegendOptions(
+                        showLegends: true,
+                        legendPosition: LegendPosition.bottom,
+                        showLegendsInRow: true, // horizontal layout
+                        legendShape: BoxShape.circle,
+                        legendTextStyle: TextStyle(
+                          fontSize: 10,
+                          color: Color(0xFF2E7D32),
+                        ),
                       ),
+                      chartValuesOptions: ChartValuesOptions(
+                        showChartValues: true,
+                        showChartValuesInPercentage: true,
+                        decimalPlaces: 0,
+                        chartValueStyle: TextStyle(
+                          fontSize: 10,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        chartValueBackgroundColor: Colors.green[800],
+                      ),
+                      chartType: ChartType.ring,
                     ),
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 24),
 
                   // Stats Section
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
-                      vertical: 20,
+                      vertical: 24,
                     ),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFFE8F5E9), Color(0xFFF1F8E9)],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(24),
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
                       ),
                     ),
-                    child: Wrap(
-                      spacing: 10, // Horizontal space between items
-                      runSpacing: 10, // Vertical space between rows
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          width: cardWidth,
-                          height: 110,
-                          child: buildStatCard(
-                            "Present",
-                            "${dashBoardData?.monthlyStats?.present ?? 0}",
-                            "",
-                            Colors.green,
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16),
+                          child: Text(
+                            "Monthly Statistics",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF2E7D32),
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          width: cardWidth,
-                          height: 110,
-                          child: buildStatCard(
-                            "Absent",
-                            "${dashBoardData?.monthlyStats?.absent ?? 0}",
-                            "",
-                            Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          width: cardWidth,
-                          height: 110,
-                          child: buildStatCard(
-                            "Late in",
-                            "${dashBoardData?.monthlyStats?.lateIn ?? 0}",
-                            "",
-                            Colors.orange,
-                          ),
-                        ),
-                        SizedBox(
-                          width: cardWidth,
-                          height: 110,
-                          child: buildStatCard(
-                            "Early Out",
-                            "${dashBoardData?.monthlyStats?.earlyOut ?? 0}",
-                            "",
-                            Colors.purple,
-                          ),
-                        ),
-                        SizedBox(
-                          width: cardWidth,
-                          height: 110,
-                          child: buildStatCard(
-                            "Holidays",
-                            "${dashBoardData?.monthlyStats?.holiday ?? 0}",
-                            "",
-                            Colors.purple,
-                          ),
-                        ),
-                        SizedBox(
-                          width: cardWidth,
-                          height: 110,
-                          child: buildStatCard(
-                            "Approved leave",
-                            "${dashBoardData?.monthlyStats?.approvedLeave ?? 0}",
-                            "",
-                            Colors.purple,
-                          ),
+                        Wrap(
+                          spacing: 10, // Horizontal space between items
+                          runSpacing: 10, // Vertical space between rows
+                          children: [
+                            buildStatCard(
+                              cardWidth,
+                              "Present",
+                              "${dashBoardData?.monthlyStats?.present ?? 0}",
+                              "",
+                              Color(0xFF4CAF50),
+                            ),
+                            buildStatCard(
+                              cardWidth,
+                              "Absent",
+                              "${dashBoardData?.monthlyStats?.absent ?? 0}",
+                              "",
+                              Color(0xFFF44336),
+                            ),
+                            buildStatCard(
+                              cardWidth,
+                              "Late in",
+                              "${dashBoardData?.monthlyStats?.lateIn ?? 0}",
+                              "",
+                              Color(0xFFFF9800),
+                            ),
+                            buildStatCard(
+                              cardWidth,
+                              "Early Out",
+                              "${dashBoardData?.monthlyStats?.earlyOut ?? 0}",
+                              "",
+                              Color(0xFF9C27B0),
+                            ),
+                            buildStatCard(
+                              cardWidth,
+                              "Holidays",
+                              "${dashBoardData?.monthlyStats?.holiday ?? 0}",
+                              "",
+                              Color(0xFF2196F3),
+                            ),
+                            buildStatCard(
+                              cardWidth,
+                              "Approved leave",
+                              "${dashBoardData?.monthlyStats?.approvedLeave ?? 0}",
+                              "",
+                              Color(0xFF009688),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -319,16 +391,25 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget buildStatCard(
+    double width,
     String title,
     String value,
     String subText,
     Color color,
   ) {
     return Container(
+      width: width,
+      height: 110,
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.black12, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.green.withOpacity(0.1),
+            blurRadius: 8,
+            offset: Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -341,14 +422,19 @@ class _DashboardPageState extends State<DashboardPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(height: 4),
           Text(
             title,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF2E7D32),
+            ),
           ),
           if (subText.isNotEmpty)
             Text(
               subText,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
                 color: Colors.black54,
                 fontWeight: FontWeight.w400,

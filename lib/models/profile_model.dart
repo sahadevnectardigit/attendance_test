@@ -15,6 +15,8 @@ class ProfileModel {
   String? permDistrict;
   String? permZone;
   String? permCountry;
+  String? username;
+  String? phone;
   Profile? profile;
 
   ProfileModel({
@@ -35,6 +37,8 @@ class ProfileModel {
     this.permZone,
     this.permCountry,
     this.profile,
+    this.username,
+    this.phone,
   });
 
   ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -54,6 +58,8 @@ class ProfileModel {
     permDistrict = json['perm_district'];
     permZone = json['perm_zone'];
     permCountry = json['perm_country'];
+    username = json['username'];
+    phone = json['phone'];
     profile = json['profile'] != null
         ? Profile.fromJson(json['profile'])
         : null;

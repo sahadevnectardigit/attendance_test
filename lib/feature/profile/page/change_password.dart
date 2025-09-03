@@ -13,13 +13,21 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
+  // Green theme colors
+  final List<Color> greenGradient = [Color(0xFF4CAF50), Color(0xFF2E7D32)];
+
+  final List<Color> lightGreenGradient = [Color(0xFFE8F5E9), Color(0xFFC8E6C9)];
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     passwordController.clear();
+    confirmPasswordController.clear();
   }
 
   @override
@@ -27,55 +35,234 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final profileProvider = context.watch<ProfileProvider>();
 
     return Scaffold(
-      appBar: AppBar(title: Text('Change password')),
-      body: Form(
-        key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              SizedBox(height: 15),
-              AppTextFormField(
-                controller: passwordController,
-                label: "New Password",
-                hint: "Enter new password",
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.length < 8) {
-                    return 'Password must contain at least 8 character';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (!formKey.currentState!.validate()) return;
+      backgroundColor: Color(0xFFF1F8E9),
+      appBar: AppBar(
+        title: Text(
+          'Change Password',
+          style: TextStyle(
+            color: Color(0xFF2E7D32),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Color(0xFF2E7D32)),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: lightGreenGradient,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Form(
+          key: formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Text(
+                      'Create a new secure password',
+                      style: TextStyle(fontSize: 16, color: Color(0xFF2E7D32)),
+                    ),
+                  ),
 
-                  final isSuccess = await profileProvider.changePassword(
-                    password: passwordController.text.trim(),
-                  );
-                  if (isSuccess) {
-                    context.showSnackBarMessage(
-                      message: "Password changed successfully",
-                      backgroundColor: Colors.green,
-                    );
-                  } else {
-                    context.showSnackBarMessage(
-                      message: profileProvider.errorChangePassword.toString(),
-                      backgroundColor: Colors.red,
-                    );
-                  }
-                },
-                child: profileProvider.isLoading
-                    ? const SizedBox(
-                        width: 25,
-                        height: 25,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Text('Change Password'),
+                  // New Password Field
+                  AppTextFormField(
+                    controller: passwordController,
+                    label: "New Password",
+                    hint: "Enter new password",
+                    obscureText: _obscurePassword,
+                    keyboardType: TextInputType.visiblePassword,
+                    prefixIcon: Icons.lock_outline,
+                    suffixIcon: _obscurePassword
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    onSuffixIconPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a password';
+                      } else if (value.length < 8) {
+                        return 'Password must contain at least 8 characters';
+                      }
+                      return null;
+                    },
+                  ),
+
+                  SizedBox(height: 15),
+
+                  // Confirm Password Field
+                  AppTextFormField(
+                    controller: confirmPasswordController,
+                    label: "Confirm Password",
+                    hint: "Confirm your new password",
+                    obscureText: _obscureConfirmPassword,
+                    keyboardType: TextInputType.visiblePassword,
+                    prefixIcon: Icons.lock_outline,
+                    suffixIcon: _obscureConfirmPassword
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    onSuffixIconPressed: () {
+                      setState(() {
+                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please confirm your password';
+                      } else if (value != passwordController.text) {
+                        return 'Passwords do not match';
+                      }
+                      return null;
+                    },
+                  ),
+
+                  SizedBox(height: 10),
+
+                  // Password requirements
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Password requirements:',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF2E7D32),
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          '• At least 8 characters long',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF2E7D32).withOpacity(0.7),
+                          ),
+                        ),
+                        Text(
+                          '• Include uppercase and lowercase letters',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF2E7D32).withOpacity(0.7),
+                          ),
+                        ),
+                        Text(
+                          '• Include numbers or special characters',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF2E7D32).withOpacity(0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 30),
+
+                  // Change Password Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: profileProvider.isLoading
+                          ? null
+                          : () async {
+                              if (!formKey.currentState!.validate()) return;
+
+                              final isSuccess = await profileProvider
+                                  .changePassword(
+                                    password: passwordController.text.trim(),
+                                  );
+
+                              if (isSuccess) {
+                                context.showSnackBarMessage(
+                                  message: "Password changed successfully",
+                                  backgroundColor: Color(0xFF4CAF50),
+                                );
+                                Navigator.pop(context);
+                              } else {
+                                context.showSnackBarMessage(
+                                  message: profileProvider.errorChangePassword
+                                      .toString(),
+                                  backgroundColor: Color(0xFFF44336),
+                                );
+                              }
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF4CAF50),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 4,
+                        shadowColor: Colors.green.withOpacity(0.3),
+                      ),
+                      child: profileProvider.isLoading
+                          ? const SizedBox(
+                              width: 25,
+                              height: 25,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              'Change Password',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+                  ),
+
+                  SizedBox(height: 20),
+
+                  // Security tip
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE8F5E9),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Color(0xFF4CAF50).withOpacity(0.3),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.security,
+                          color: Color(0xFF4CAF50),
+                          size: 20,
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Use a strong, unique password that you don\'t use for other accounts',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF2E7D32),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

@@ -33,6 +33,11 @@ class _LedgerPageState extends State<LedgerPage> {
     "Chaitra",
   ];
 
+  // Green theme colors
+  final List<Color> greenGradient = [Color(0xFF4CAF50), Color(0xFF2E7D32)];
+
+  final List<Color> lightGreenGradient = [Color(0xFFE8F5E9), Color(0xFFC8E6C9)];
+
   Future<void> _pickYearMonthDialog() async {
     int tempYear = NepaliDateTime.now().year;
     int tempMonth = NepaliDateTime.now().month;
@@ -45,78 +50,164 @@ class _LedgerPageState extends State<LedgerPage> {
       builder: (ctx) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
+            return Dialog(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(20),
               ),
-              title: const Text("Select Year & Month"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Year Dropdown
-                  DropdownButton<int>(
-                    value: tempYear,
-                    isExpanded: true,
-                    items: List.generate(endYear - startYear + 1, (index) {
-                      int year = startYear + index;
-                      return DropdownMenuItem(
-                        value: year,
-                        child: Text("$year"),
-                      );
-                    }),
-                    onChanged: (val) {
-                      if (val != null) {
-                        setState(() {
-                          tempYear = val;
-                        });
-                      }
-                    },
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: LinearGradient(
+                    colors: lightGreenGradient,
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
-                  const SizedBox(height: 12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.green.withOpacity(0.3),
+                      blurRadius: 15,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Select Year & Month",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2E7D32),
+                      ),
+                    ),
+                    SizedBox(height: 20),
 
-                  // Month Dropdown
-                  DropdownButton<int>(
-                    value: tempMonth,
-                    isExpanded: true,
-                    items: List.generate(12, (index) {
-                      return DropdownMenuItem(
-                        value: index + 1,
-                        child: Text(nepaliMonths[index]),
-                      );
-                    }),
-                    onChanged: (val) {
-                      if (val != null) {
-                        setState(() {
-                          tempMonth = val;
-                        });
-                      }
-                    },
-                  ),
-                ],
+                    // Year Dropdown
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.green.shade300),
+                      ),
+                      child: DropdownButton<int>(
+                        value: tempYear,
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Color(0xFF2E7D32),
+                        ),
+                        items: List.generate(endYear - startYear + 1, (index) {
+                          int year = startYear + index;
+                          return DropdownMenuItem(
+                            value: year,
+                            child: Text(
+                              "$year",
+                              style: TextStyle(color: Color(0xFF2E7D32)),
+                            ),
+                          );
+                        }),
+                        onChanged: (val) {
+                          if (val != null) {
+                            setState(() {
+                              tempYear = val;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 15),
+
+                    // Month Dropdown
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.green.shade300),
+                      ),
+                      child: DropdownButton<int>(
+                        value: tempMonth,
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Color(0xFF2E7D32),
+                        ),
+                        items: List.generate(12, (index) {
+                          return DropdownMenuItem(
+                            value: index + 1,
+                            child: Text(
+                              nepaliMonths[index],
+                              style: TextStyle(color: Color(0xFF2E7D32)),
+                            ),
+                          );
+                        }),
+                        onChanged: (val) {
+                          if (val != null) {
+                            setState(() {
+                              tempMonth = val;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 20),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.grey.shade600,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                          ),
+                          child: Text("Cancel"),
+                          onPressed: () => Navigator.pop(ctx),
+                        ),
+                        SizedBox(width: 10),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF4CAF50),
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text("OK"),
+                          onPressed: () {
+                            setState(() {
+                              selectedYear = tempYear;
+                              selectedMonth = tempMonth;
+                              selectedStringMonth = nepaliMonths[tempMonth - 1];
+                            });
+                            Navigator.pop(ctx);
+
+                            // Fetch data for the selected month
+                            context.read<LedgerProvider>().fetchLedgerData(
+                              year: selectedYear,
+                              month: selectedMonth,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              actions: [
-                TextButton(
-                  child: const Text("Cancel"),
-                  onPressed: () => Navigator.pop(ctx),
-                ),
-                ElevatedButton(
-                  child: const Text("OK"),
-                  onPressed: () {
-                    setState(() {
-                      selectedYear = tempYear;
-                      selectedMonth = tempMonth;
-                      selectedStringMonth = nepaliMonths[tempMonth - 1];
-                    });
-                    Navigator.pop(ctx);
-
-                    // Fetch data for the selected month
-                    context.read<LedgerProvider>().fetchLedgerData(
-                      year: selectedYear,
-                      month: selectedMonth,
-                    );
-                  },
-                ),
-              ],
             );
           },
         );
@@ -130,42 +221,51 @@ class _LedgerPageState extends State<LedgerPage> {
 
     selectedYear = NepaliDateTime.now().year;
     selectedMonth = NepaliDateTime.now().month;
-    selectedStringMonth = nepaliMonths[NepaliDateTime.now().month];
+    selectedStringMonth = nepaliMonths[NepaliDateTime.now().month - 1];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade100,
+      backgroundColor: Color(0xFFF1F8E9),
       appBar: AppBar(
-        title: const Text("Attendance Ledger"),
+        title: Text(
+          "Attendance Ledger",
+          style: TextStyle(
+            color: Color(0xFF2E7D32),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
-        backgroundColor: Colors.blue.shade100,
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        iconTheme: IconThemeData(color: Color(0xFF2E7D32)),
       ),
       body: Consumer<LedgerProvider>(
         builder: (context, state, _) {
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: Column(
               children: [
                 // Date selection card
                 InkWell(
                   onTap: _pickYearMonthDialog,
+                  borderRadius: BorderRadius.circular(16),
                   child: Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 8,
-                    ),
-                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.white,
-                      boxShadow: const [
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        colors: greenGradient,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
                         BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
+                          color: Colors.green.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
                         ),
                       ],
                     ),
@@ -174,29 +274,28 @@ class _LedgerPageState extends State<LedgerPage> {
                       children: [
                         Row(
                           children: [
-                            const Icon(
-                              Icons.calendar_today,
-                              color: Colors.blue,
-                            ),
-                            const SizedBox(width: 6),
+                            Icon(Icons.calendar_today, color: Colors.white),
+                            SizedBox(width: 10),
                             Text(
                               selectedStringMonth != null
                                   ? "$selectedStringMonth $selectedYear"
                                   : "Select Year & Month",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w600,
+                                color: Colors.white,
                               ),
                             ),
                           ],
                         ),
                         Row(
                           children: [
-                            const Icon(Icons.access_time, color: Colors.blue),
-                            const SizedBox(width: 6),
+                            Icon(Icons.access_time, color: Colors.white),
+                            SizedBox(width: 10),
                             Text(
                               DateFormat('h:mm a').format(DateTime.now()),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w600,
+                                color: Colors.white,
                               ),
                             ),
                           ],
@@ -206,17 +305,23 @@ class _LedgerPageState extends State<LedgerPage> {
                   ),
                 ),
 
-                const SizedBox(height: 15),
+                SizedBox(height: 15),
 
                 // Summary statistics
                 if (state.ledgerModel?.summaryData != null)
                   _buildSummaryCard(state.ledgerModel!.summaryData!),
-                const SizedBox(height: 15),
+                SizedBox(height: 15),
 
                 // Calendar view
                 Expanded(
                   child: state.isLoading
-                      ? Center(child: CircularProgressIndicator())
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Color(0xFF4CAF50),
+                            ),
+                          ),
+                        )
                       : CustomCalendarWidget(
                           year: selectedYear!,
                           month: selectedMonth!,
@@ -235,25 +340,41 @@ class _LedgerPageState extends State<LedgerPage> {
 
   Widget _buildSummaryCard(SummaryData summary) {
     return Container(
-      padding: EdgeInsets.all(12),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 5, offset: Offset(0, 3)),
+          BoxShadow(
+            color: Colors.green.withOpacity(0.1),
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildSummaryItem("Total", summary.total.toString(), Colors.blue),
+          _buildSummaryItem(
+            "Total",
+            summary.total.toString(),
+            Color(0xFF2196F3),
+          ),
           _buildSummaryItem(
             "Present",
             summary.present.toString(),
-            Colors.green,
+            Color(0xFF4CAF50),
           ),
-          _buildSummaryItem("Absent", summary.absent.toString(), Colors.red),
-          _buildSummaryItem("Leave", summary.leave.toString(), Colors.orange),
+          _buildSummaryItem(
+            "Absent",
+            summary.absent.toString(),
+            Color(0xFFF44336),
+          ),
+          _buildSummaryItem(
+            "Leave",
+            summary.leave.toString(),
+            Color(0xFFFF9800),
+          ),
         ],
       ),
     );
@@ -262,18 +383,29 @@ class _LedgerPageState extends State<LedgerPage> {
   Widget _buildSummaryItem(String label, String value, Color color) {
     return Column(
       children: [
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: color,
+        Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
           ),
         ),
-        SizedBox(height: 4),
+        SizedBox(height: 6),
         Text(
           label,
-          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+          style: TextStyle(
+            fontSize: 12,
+            color: Color(0xFF2E7D32),
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );

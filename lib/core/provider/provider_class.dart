@@ -39,7 +39,9 @@ class AppProviders {
         ),
     ),
     ChangeNotifierProvider<ApplicationProvider>(
-      create: (_) => ApplicationProvider()..fetchOfficialVisitData(),
+      create: (_) => ApplicationProvider()
+        ..fetchOfficialVisitData()
+        ..fetchApproveData(),
     ),
   ];
 }

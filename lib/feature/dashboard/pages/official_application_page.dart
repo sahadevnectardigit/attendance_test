@@ -1,4 +1,7 @@
+import 'package:attendance/core/extension/snackbar.dart';
+import 'package:attendance/core/widgets/loading_widget.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
@@ -13,26 +16,45 @@ class OfficialApplicationPage extends StatefulWidget {
 
 class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
   final _formKey = GlobalKey<FormState>();
-  //application
-  int? _officialVisit;
 
-  // String? _officialVisit;
+  // Controllers
+  final _placeController = TextEditingController();
+  final _remarkController = TextEditingController();
+  final _allowanceController = TextEditingController();
+
+  // Form values
+  int? _officialVisit;
+  int? _approverId;
+  int? _recommenderId;
   DateTime? _fromDate;
   DateTime? _toDate;
   NepaliDateTime? _fromDateNepali;
   NepaliDateTime? _toDateNepali;
-  String? _approver;
-  String? _recommender;
-  String? _place;
-  String? _remarks;
-  double _allowance = 0;
   bool _halfDay = false;
 
-  // Variables to store dates in both formats for API
+  // API date formats
   String? _fromDateEnglish;
   String? _toDateEnglish;
   String? _fromDateNepaliStr;
   String? _toDateNepaliStr;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ApplicationProvider>()
+        ..fetchOfficialVisitData()
+        ..fetchApproveData();
+    });
+  }
+
+  @override
+  void dispose() {
+    _placeController.dispose();
+    _remarkController.dispose();
+    _allowanceController.dispose();
+    super.dispose();
+  }
 
   Future<void> _pickDate(bool isFrom) async {
     final date = await showDatePicker(
@@ -47,32 +69,16 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
         if (isFrom) {
           _fromDate = date;
           _fromDateNepali = NepaliDateTime.fromDateTime(date);
-          // Store formatted dates for API
           _fromDateEnglish = _formatEnglishDate(date);
           _fromDateNepaliStr = _formatNepaliDate(_fromDateNepali!);
         } else {
           _toDate = date;
           _toDateNepali = NepaliDateTime.fromDateTime(date);
-          // Store formatted dates for API
           _toDateEnglish = _formatEnglishDate(date);
           _toDateNepaliStr = _formatNepaliDate(_toDateNepali!);
         }
       });
-
-      // Print for debugging (remove in production)
-      print(
-        'From Date - English: $_fromDateEnglish, Nepali: $_fromDateNepaliStr',
-      );
-      print('To Date - English: $_toDateEnglish, Nepali: $_toDateNepaliStr');
     }
-  }
-
-  String _formatEnglishDate(DateTime date) {
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-  }
-
-  String _formatNepaliDate(NepaliDateTime date) {
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
   Future<void> _pickNepaliDate(bool isFrom) async {
@@ -88,213 +94,486 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
         if (isFrom) {
           _fromDateNepali = date;
           _fromDate = date.toDateTime();
-          // Store formatted dates for API
           _fromDateEnglish = _formatEnglishDate(_fromDate!);
           _fromDateNepaliStr = _formatNepaliDate(date);
         } else {
           _toDateNepali = date;
           _toDate = date.toDateTime();
-          // Store formatted dates for API
           _toDateEnglish = _formatEnglishDate(_toDate!);
           _toDateNepaliStr = _formatNepaliDate(date);
         }
       });
-
-      // Print for debugging (remove in production)
-      print(
-        'From Date - English: $_fromDateEnglish, Nepali: $_fromDateNepaliStr',
-      );
-      print('To Date - English: $_toDateEnglish, Nepali: $_toDateNepaliStr');
     }
   }
 
-  void _saveForm() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
-      // Prepare data for API with both date formats
-      final applicationData = {
-        'officialVisit': _officialVisit,
-        'fromDateEnglish': _fromDateEnglish,
-        'toDateEnglish': _toDateEnglish,
-        'fromDateNepali': _fromDateNepaliStr,
-        'toDateNepali': _toDateNepaliStr,
-        'place': _place,
-        'allowance': _allowance,
-        'halfDay': _halfDay,
-        'remarks': _remarks,
-      };
-
-      print('Application Data: $applicationData'); // Debug print
-
-      // TODO: Call API to submit data with both date formats
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Application Submitted')));
-    }
+  String _formatEnglishDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ApplicationProvider>().fetchOfficialVisitData();
+  String _formatNepaliDate(NepaliDateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
+  void _clearForm() {
+    setState(() {
+      _formKey.currentState?.reset();
+      _officialVisit = null;
+      _approverId = null;
+      _recommenderId = null;
+      _fromDate = null;
+      _toDate = null;
+      _fromDateNepali = null;
+      _toDateNepali = null;
+      _halfDay = false;
+      _placeController.clear();
+      _remarkController.clear();
+      _allowanceController.clear();
+      _fromDateEnglish = null;
+      _toDateEnglish = null;
+      _fromDateNepaliStr = null;
+      _toDateNepaliStr = null;
     });
+  }
+
+  Future<void> _saveForm() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final applicationPro = Provider.of<ApplicationProvider>(
+      context,
+      listen: false,
+    );
+
+    final applicationData = {
+      "name_id": _officialVisit,
+      "from_date_en": _fromDateEnglish,
+      "to_date_en": _toDateEnglish,
+      "from_date_np": _fromDateNepaliStr,
+      "to_date_np": _toDateNepaliStr,
+      "approved_by": _approverId,
+      "recommended_by": _recommenderId,
+      "half_day": _halfDay,
+      "remarks": _remarkController.text.trim(),
+      "place": _placeController.text.trim(),
+      "allowance": double.tryParse(_allowanceController.text) ?? 0,
+    };
+
+    final isSuccess = await applicationPro.postOfficialVisit(
+      applicationData: applicationData,
+    );
+
+    if (isSuccess) {
+      _clearForm();
+      // Navigator.pop(context);
+      context.showSnackBarMessage(
+        message: 'Application Submitted successfully',
+        backgroundColor: Colors.green,
+      );
+    } else {
+      context.showSnackBarMessage(
+        message: 'Application failed to post',
+        backgroundColor: Colors.red,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final officialVisitPro = context.watch<ApplicationProvider>();
-    final officiVistData = officialVisitPro.officialVisitModelList;
+    final applicationPro = context.watch<ApplicationProvider>();
+    final officiVistData = applicationPro.officialVisitModelList;
+    final approveData = applicationPro.approveRecommendModel;
+
     return Scaffold(
-      appBar: AppBar(title: Text("Official Application")),
+      appBar: AppBar(
+        title: const Text("Official Application"),
+        backgroundColor: Colors.blue.shade700,
+        foregroundColor: Colors.white,
+        elevation: 2,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: ListView(
+          child: Stack(
             children: [
-              DropdownButtonFormField<int>(
-                decoration: const InputDecoration(labelText: "Official Visit"),
-                items: officiVistData
-                    ?.map(
-                      (e) => DropdownMenuItem(
-                        value: e.id, // store ID
-                        child: Text(e.name), // display Name
+              ListView(
+                children: [
+                  // Official Visit Dropdown
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: DropdownButtonFormField<int>(
+                        decoration: InputDecoration(
+                          labelText: "Official Visit",
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                        ),
+                        items: officiVistData
+                            ?.map(
+                              (e) => DropdownMenuItem(
+                                value: e.id,
+                                child: Text(e.name),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (val) {
+                          setState(() => _officialVisit = val);
+                        },
+                        validator: (value) => value == null
+                            ? 'Please select official visit type'
+                            : null,
                       ),
-                    )
-                    .toList(),
-                onChanged: (val) {
-                  setState(() => _officialVisit = val);
-                },
-                validator: (value) =>
-                    value == null ? 'Please select official visit type' : null,
-              ),
+                    ),
+                  ),
 
-              SizedBox(height: 16),
-              Text('From Date:', style: TextStyle(fontWeight: FontWeight.bold)),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: "English Date",
-                        suffixIcon: Icon(Icons.calendar_today),
+                  const SizedBox(height: 16),
+
+                  // Approver and Recommender in a row
+                  Row(
+                    children: [
+                      // Approver Dropdown
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: DropdownButtonFormField<int>(
+                              decoration: InputDecoration(
+                                labelText: "Approve By",
+                                border: InputBorder.none,
+                                filled: true,
+                                fillColor: Colors.grey.shade50,
+                              ),
+                              items: approveData?.approvedBy
+                                  .map(
+                                    (e) => DropdownMenuItem(
+                                      value: e.id,
+                                      child: Text(e.firstName),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() => _approverId = val);
+                              },
+                              validator: (value) => value == null
+                                  ? 'Please select approver'
+                                  : null,
+                            ),
+                          ),
+                        ),
                       ),
-                      onTap: () => _pickDate(true),
-                      controller: TextEditingController(
-                        text: _fromDate == null
-                            ? ''
-                            : _fromDate!.toLocal().toString().split(' ')[0],
+
+                      const SizedBox(width: 12),
+
+                      // Recommender Dropdown
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: DropdownButtonFormField<int>(
+                              decoration: InputDecoration(
+                                labelText: "Recommend By",
+                                border: InputBorder.none,
+                                filled: true,
+                                fillColor: Colors.grey.shade50,
+                              ),
+                              items: approveData?.recommendedBy
+                                  .map(
+                                    (e) => DropdownMenuItem(
+                                      value: e.id,
+                                      child: Text(e.firstName),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() => _recommenderId = val);
+                              },
+                              validator: (value) => value == null
+                                  ? 'Please select recommender'
+                                  : null,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // From Date Section
+                  Text(
+                    'From Date:',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: "English Date",
+                              suffixIcon: const Icon(Icons.calendar_today),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
+                              ),
+                            ),
+                            onTap: () => _pickDate(true),
+                            controller: TextEditingController(
+                              text: _fromDate == null
+                                  ? ''
+                                  : _fromDate!.toLocal().toString().split(
+                                      ' ',
+                                    )[0],
+                            ),
+                            validator: (value) => value?.isEmpty == true
+                                ? 'Please select from date'
+                                : null,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: "Nepali Date",
+                              suffixIcon: const Icon(Icons.calendar_today),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
+                              ),
+                            ),
+                            onTap: () => _pickNepaliDate(true),
+                            controller: TextEditingController(
+                              text: _fromDateNepali == null
+                                  ? ''
+                                  : '${_fromDateNepali!.year}-${_fromDateNepali!.month.toString().padLeft(2, '0')}-${_fromDateNepali!.day.toString().padLeft(2, '0')}',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // To Date Section
+                  Text(
+                    'To Date:',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: "English Date",
+                              suffixIcon: const Icon(Icons.calendar_today),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
+                              ),
+                            ),
+                            onTap: () => _pickDate(false),
+                            controller: TextEditingController(
+                              text: _toDate == null
+                                  ? ''
+                                  : _toDate!.toLocal().toString().split(' ')[0],
+                            ),
+                            validator: (value) => value?.isEmpty == true
+                                ? 'Please select to date'
+                                : null,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: "Nepali Date",
+                              suffixIcon: const Icon(Icons.calendar_today),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
+                              ),
+                            ),
+                            onTap: () => _pickNepaliDate(false),
+                            controller: TextEditingController(
+                              text: _toDateNepali == null
+                                  ? ''
+                                  : '${_toDateNepali!.year}-${_toDateNepali!.month.toString().padLeft(2, '0')}-${_toDateNepali!.day.toString().padLeft(2, '0')}',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Place of Visit
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextFormField(
+                      controller: _placeController,
+                      decoration: InputDecoration(
+                        labelText: "Place of Visit",
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(16),
                       ),
                       validator: (value) => value?.isEmpty == true
-                          ? 'Please select from date'
+                          ? 'Please enter place of visit'
                           : null,
                     ),
                   ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: "Nepali Date",
-                        suffixIcon: Icon(Icons.calendar_today),
-                      ),
-                      onTap: () => _pickNepaliDate(true),
-                      controller: TextEditingController(
-                        text: _fromDateNepali == null
-                            ? ''
-                            : '${_fromDateNepali!.year}-${_fromDateNepali!.month.toString().padLeft(2, '0')}-${_fromDateNepali!.day.toString().padLeft(2, '0')}',
-                      ),
+
+                  const SizedBox(height: 16),
+
+                  // Allowance Claimed
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
+                    child: TextFormField(
+                      controller: _allowanceController,
+                      decoration: InputDecoration(
+                        labelText: "Allowance Claimed",
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(16),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Half Day Switch
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: SwitchListTile(
+                      value: _halfDay,
+                      onChanged: (val) => setState(() => _halfDay = val),
+                      title: const Text("Half Day?"),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Remarks
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextFormField(
+                      textInputAction: TextInputAction.done,
+                      controller: _remarkController,
+                      decoration: InputDecoration(
+                        labelText: "Remarks",
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(16),
+                      ),
+                      maxLines: 3,
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: applicationPro.isLoading
+                              ? null
+                              : () => _saveForm(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade700,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child:
+                              //  applicationPro.isLoading
+                              //     ? const CupertinoActivityIndicator()
+                              //     : const
+                              Text("Submit"),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            side: BorderSide(color: Colors.blue.shade700),
+                          ),
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(color: Colors.blue.shade700),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              SizedBox(height: 16),
-              Text('To Date:', style: TextStyle(fontWeight: FontWeight.bold)),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: "English Date",
-                        suffixIcon: Icon(Icons.calendar_today),
-                      ),
-                      onTap: () => _pickDate(false),
-                      controller: TextEditingController(
-                        text: _toDate == null
-                            ? ''
-                            : _toDate!.toLocal().toString().split(' ')[0],
-                      ),
-                      validator: (value) => value?.isEmpty == true
-                          ? 'Please select to date'
-                          : null,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: "Nepali Date",
-                        suffixIcon: Icon(Icons.calendar_today),
-                      ),
-                      onTap: () => _pickNepaliDate(false),
-                      controller: TextEditingController(
-                        text: _toDateNepali == null
-                            ? ''
-                            : '${_toDateNepali!.year}-${_toDateNepali!.month.toString().padLeft(2, '0')}-${_toDateNepali!.day.toString().padLeft(2, '0')}',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Place of Visit"),
-                onSaved: (val) => _place = val,
-                validator: (value) => value?.isEmpty == true
-                    ? 'Please enter place of visit'
-                    : null,
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Allowance Claimed"),
-                keyboardType: TextInputType.number,
-                onSaved: (val) => _allowance = double.tryParse(val ?? "0") ?? 0,
-              ),
-              SwitchListTile(
-                value: _halfDay,
-                onChanged: (val) => setState(() => _halfDay = val),
-                title: Text("Half Day?"),
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Remarks"),
-                maxLines: 3,
-                onSaved: (val) => _remarks = val,
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _saveForm,
-                      child: Text("Save"),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                      ),
-                      onPressed: _saveForm,
-                      child: Text("Save & Continue"),
-                    ),
-                  ),
-                ],
-              ),
+              // Loading overlay
+              if (applicationPro.isLoading) LoadingWidget(),
             ],
           ),
         ),

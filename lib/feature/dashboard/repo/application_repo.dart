@@ -9,10 +9,40 @@ import 'package:dio/dio.dart';
 class ApplicationRepo {
   static final MainApiClient _client = MainApiClient();
 
+  static Future<ApiResponse<bool>> postOfficialVisit({
+    required Map<String,dynamic> applicationData,
+  }) async {
+    try {
+      final response = await _client.post(
+        path: ApiUrl.createOfficialVisitApplication,
+        data: applicationData,
+      );
+
+      if (response.statusCode == 201) {
+        return ApiResponse.success(true);
+      } else {
+        final errorList = response.data["detail"];
+        final errorMsg = (errorList is List && errorList.isNotEmpty)
+            ? errorList.first
+            : "Failed to post official visit";
+        return ApiResponse.failure(errorMsg);
+      }
+    } on DioException catch (e) {
+      final errorList = e.response?.data?["detail"];
+      final backendMessage = (errorList is List && errorList.isNotEmpty)
+          ? errorList.first
+          : ApiErrorHandler.handleError(e);
+      return ApiResponse.failure(backendMessage);
+    } catch (e) {
+      return ApiResponse.failure("Unexpected error: $e");
+    }
+  }
+
+
   static Future<ApiResponse<ApproveRecommendModel>>
   fetchApproveRecommendedData() async {
     try {
-      final response = await _client.get(path: ApiUrl.getOfficialVisitDropDown);
+      final response = await _client.get(path: ApiUrl.getApprover);
 
       if (response.statusCode == 200) {
         final model = ApproveRecommendModel.fromJson(response.data);
@@ -56,24 +86,25 @@ class ApplicationRepo {
     }
   }
 
-  static Future<ApiResponse<bool>> postApplication() async {
-    try {
-      final data = {};
-      final response = await _client.post(path: ApiUrl.dashboard, data: data);
+  // static Future<ApiResponse<bool>> postApplication() async {
+  //   try {
+  //     final data = {};
+  //     final response = await _client.post(path: ApiUrl.dashboard, data: data);
 
-      if (response.statusCode == 200) {
-        return ApiResponse.success(true);
-      } else {
-        final errorMsg = response.data["error"] ?? "Failed to post application";
-        return ApiResponse.failure(errorMsg); // returns string on failure
-      }
-    } on DioException catch (e) {
-      final backendMessage = e.response?.data?["error"];
-      return ApiResponse.failure(
-        backendMessage ?? ApiErrorHandler.handleError(e),
-      );
-    } catch (e) {
-      return ApiResponse.failure("Unexpected error: $e");
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       return ApiResponse.success(true);
+  //     } else {
+  //       final errorMsg = response.data["error"] ?? "Failed to post application";
+  //       return ApiResponse.failure(errorMsg); // returns string on failure
+  //     }
+  //   } on DioException catch (e) {
+  //     final backendMessage = e.response?.data?["error"];
+  //     return ApiResponse.failure(
+  //       backendMessage ?? ApiErrorHandler.handleError(e),
+  //     );
+  //   } catch (e) {
+  //     return ApiResponse.failure("Unexpected error: $e");
+  //   }
+  // }
+
 }

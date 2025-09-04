@@ -163,18 +163,7 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
 
     if (isSuccess) {
       _clearForm();
-      // Navigator.pop(context);
-      // context.showSnackBarMessage(
-      //   message: 'Application Submitted successfully',
-      //   backgroundColor: Colors.green,
-      // );
     }
-    // else {
-    //   context.showSnackBarMessage(
-    //     message: 'Application failed to post',
-    //     backgroundColor: Colors.red,
-    //   );
-    // }
   }
 
   @override
@@ -192,8 +181,8 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
           key: _formKey,
           child: Consumer<ApplicationProvider>(
             builder: (context, applicationPro, child) {
-              final officiVistData = applicationPro.officialVisitModelList;
-              final approveData = applicationPro.approveRecommendModel;
+              final officiVistData = applicationPro.fetchOfficialState.data;
+              final approveData = applicationPro.fetchApproveState.data;
               return ListView(
                 children: [
                   // Official Visit Dropdown
@@ -213,7 +202,7 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
                           fillColor: Colors.grey.shade50,
                         ),
                         items: officiVistData
-                            .map(
+                            ?.map(
                               (e) => DropdownMenuItem(
                                 value: e.id,
                                 child: Text(e.name),

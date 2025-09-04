@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-import 'package:attendance/core/extension/snackbar.dart';
-import 'package:attendance/core/widgets/loading_widget.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
@@ -23,7 +21,7 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
   final _allowanceController = TextEditingController();
 
   // Form values
-  int? _officialVisit;
+  int? _leaveType;
   int? _approverId;
   int? _recommenderId;
   DateTime? _fromDate;
@@ -44,7 +42,8 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ApplicationProvider>()
         ..fetchOfficialVisitData()
-        ..fetchApproveData();
+        ..fetchApproveData()
+        ..fetchLeaveTypeData();
     });
   }
 
@@ -115,7 +114,7 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
 
   void _clearForm() {
     setState(() {
-      _officialVisit = null;
+      _leaveType = null;
       _approverId = null;
       _recommenderId = null;
       _fromDate = null;
@@ -142,7 +141,7 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
     );
 
     final applicationData = {
-      "name_id": _officialVisit,
+      "name_id": _leaveType,
       "from_date_en": _fromDateEnglish,
       "to_date_en": _toDateEnglish,
       "from_date_np": _fromDateNepaliStr,
@@ -156,21 +155,12 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
     };
     log("Applicaion data: $applicationData");
     final isSuccess = await applicationPro.createLeaveApplication(
+      context: context,
       applicationData: applicationData,
     );
 
     if (isSuccess) {
       _clearForm();
-      // Navigator.pop(context);
-      context.showSnackBarMessage(
-        message: 'Application Submitted successfully',
-        backgroundColor: Colors.green,
-      );
-    } else {
-      context.showSnackBarMessage(
-        message: 'Application failed to post',
-        backgroundColor: Colors.red,
-      );
     }
   }
 
@@ -189,8 +179,8 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
           key: _formKey,
           child: Consumer<ApplicationProvider>(
             builder: (context, applicationPro, child) {
-              final officiVistData = applicationPro.officialVisitModelList;
-              final approveData = applicationPro.approveRecommendModel;
+              final leaveTypeData = applicationPro.fetchLeaveTypeState.data;
+              final approveData = applicationPro.fetchApproveState.data;
               return Stack(
                 children: [
                   ListView(
@@ -204,15 +194,16 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: DropdownButtonFormField<int>(
-                            value: _officialVisit,
+                            initialValue: _leaveType,
+
                             decoration: InputDecoration(
-                              labelText: "Official Visit",
+                              labelText: "Leave Type",
                               border: InputBorder.none,
                               filled: true,
                               fillColor: Colors.grey.shade50,
                             ),
-                            items: officiVistData
-                                .map(
+                            items: leaveTypeData
+                                ?.map(
                                   (e) => DropdownMenuItem(
                                     value: e.id,
                                     child: Text(e.name),
@@ -220,7 +211,7 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
                                 )
                                 .toList(),
                             onChanged: (val) {
-                              setState(() => _officialVisit = val);
+                              setState(() => _leaveType = val);
                             },
                             validator: (value) => value == null
                                 ? 'Please select official visit type'
@@ -244,7 +235,7 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: DropdownButtonFormField<int>(
-                                  value: _approverId,
+                                  initialValue: _approverId,
                                   decoration: InputDecoration(
                                     labelText: "Approve By",
                                     border: InputBorder.none,
@@ -282,7 +273,7 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: DropdownButtonFormField<int>(
-                                  value: _recommenderId,
+                                  initialValue: _recommenderId,
                                   decoration: InputDecoration(
                                     labelText: "Recommend By",
                                     border: InputBorder.none,
@@ -530,9 +521,7 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: applicationPro.isLoadingLeaveApp
-                                  ? null
-                                  : () => _handleForm(),
+                              onPressed: () => _handleForm(),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue.shade700,
                                 foregroundColor: Colors.white,
@@ -543,11 +532,7 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              child:
-                                  //  applicationPro.isLoading
-                                  //     ? const CupertinoActivityIndicator()
-                                  //     : const
-                                  Text("Submit"),
+                              child: Text("Submit"),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -576,7 +561,6 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
                     ],
                   ),
                   // Loading overlay
-                  if (applicationPro.isLoadingLeaveApp) LoadingWidget(),
                 ],
               );
             },

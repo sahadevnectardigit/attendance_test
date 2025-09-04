@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:attendance/core/extension/snackbar.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
 import 'package:attendance/feature/profile/page/change_password.dart';
@@ -72,14 +71,14 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     final profileProvider = context.watch<ProfileProvider>();
-    final model = profileProvider.profileModel;
+    final model = profileProvider.fetchProfileState.data;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      body: profileProvider.isLoading
+      body: profileProvider.fetchProfileState.isLoading
           ? _buildLoadingState()
-          : profileProvider.errorMessage != null
-          ? _buildErrorState(profileProvider.errorMessage!)
+          : profileProvider.fetchProfileState.error != null
+          ? _buildErrorState(profileProvider.fetchProfileState.error!)
           : _buildProfileContent(context, profileProvider, model),
     );
   }
@@ -589,9 +588,11 @@ class _ProfilePageState extends State<ProfilePage>
             children: [
               Icon(Icons.photo_camera, color: Colors.blue.shade600),
               SizedBox(width: 8),
-              Text(
-                'Update Profile Picture',
-                style: TextStyle(fontWeight: FontWeight.w600),
+              FittedBox(
+                child: Text(
+                  'Update Profile ',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
               ),
             ],
           ),
@@ -613,21 +614,7 @@ class _ProfilePageState extends State<ProfilePage>
               onPressed: () async {
                 Navigator.of(context).pop();
 
-                final success = await profileProvider.updateProfileImagge(
-                  imageFile: _selectedImage,
-                );
-
-                if (success) {
-                  context.showSnackBarMessage(
-                    message: 'Profile updated successfully',
-                    backgroundColor: Colors.green,
-                  );
-                } else {
-                  context.showSnackBarMessage(
-                    message: profileProvider.errorProfileUpdate.toString(),
-                    backgroundColor: Colors.red,
-                  );
-                }
+                await profileProvider.updateProfile(imageFile: _selectedImage);
 
                 setState(() {
                   _selectedImage = null;

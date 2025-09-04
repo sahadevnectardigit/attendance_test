@@ -1,162 +1,254 @@
+import 'package:attendance/core/constants/api_constants.dart';
+import 'package:attendance/core/services/custom_snackbar.dart';
+import 'package:attendance/core/services/main_api_client.dart';
+import 'package:attendance/core/utils/error_handler.dart';
 import 'package:attendance/feature/dashboard/model/approve_recommended_model.dart';
 import 'package:attendance/feature/dashboard/model/officail_visit_model.dart';
-import 'package:attendance/feature/dashboard/repo/application_repo.dart';
+import 'package:attendance/models/api_state.dart';
+import 'package:attendance/models/leave_type_model.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class ApplicationProvider extends ChangeNotifier {
-  ApproveRecommendModel? approveRecommendModel;
-  bool isApproveLoading = false;
-  String? errorApprove = '';
+  static final MainApiClient _client = MainApiClient();
 
-  List<OfficialVisitModel> officialVisitModelList = [];
-  bool isOfficialLoading = false;
-  String? errorMessageOfficial = "";
-
-  bool isLoadingPostOfficial = false;
-  String? errorOfficialPostMessage = '';
-
-  bool isLoadingPostLateIn = false;
-  String? errorLateInPostMessage = '';
-
-  bool isLoadingLeaveApp = false;
-  String? errorLeaveMessage = '';
+  ApiState<List<LeaveTypeModel>> fetchLeaveTypeState = const ApiState.initial();
+  ApiState<ApproveRecommendModel> fetchApproveState = const ApiState.initial();
+  ApiState<List<OfficialVisitModel>> fetchOfficialState =
+      const ApiState.initial();
+  ApiState<void> postOfficialAppState = const ApiState.initial();
+  ApiState<void> postLeaveAppState = const ApiState.initial();
+  ApiState<void> postLateInAppState = const ApiState.initial();
 
   Future<bool> createLeaveApplication({
+    required BuildContext context,
     required Map<String, dynamic> applicationData,
   }) async {
-    isLoadingLeaveApp = true;
-    errorLeaveMessage = null;
+    context.loaderOverlay.show();
+
+    postLeaveAppState = const ApiState.loading();
     notifyListeners();
 
-    final result = await ApplicationRepo.createLeaveApplication(
-      applicationData: applicationData,
-    );
+    try {
+      final response = await _client.post(
+        path: ApiUrl.createLeaveApplication,
+        data: applicationData,
+      );
 
-    isLoadingLeaveApp = false;
+      if (response.statusCode == 201) {
+        CustomSnackbar.success("Application created successfully!");
+        notifyListeners();
+        return true; // API succeeded
+      } else {
+        postLeaveAppState = const ApiState.error("Failed to create aplication");
+        CustomSnackbar.error(postLeaveAppState.error.toString());
 
-    if (result.isSuccess) {
-      notifyListeners();
-      return true;
-    } else {
-      errorLeaveMessage =
-          result.message ??
-          "Failed to post leave application"; // failure → string
+        notifyListeners();
+        return false; // API failed
+      }
+    } on DioException catch (e) {
+      postLeaveAppState = ApiState.error(ApiErrorHandler.handleError(e));
+      CustomSnackbar.error(postLeaveAppState.error.toString());
+
       notifyListeners();
       return false;
+    } catch (e) {
+      postLeaveAppState = ApiState.error("Unexpected error: $e");
+      CustomSnackbar.error(postLeaveAppState.error.toString());
+
+      notifyListeners();
+      return false;
+    } finally {
+      if (context.loaderOverlay.visible) {
+        context.loaderOverlay.hide();
+      }
     }
   }
 
   Future<bool> postLateInEarlyOut({
+    required BuildContext context,
     required Map<String, dynamic> applicationData,
   }) async {
-    isLoadingPostLateIn = true;
-    errorLateInPostMessage = null;
+    context.loaderOverlay.show();
+    postLateInAppState = const ApiState.loading();
     notifyListeners();
 
-    final result = await ApplicationRepo.postLateInEarlyOut(
-      applicationData: applicationData,
-    );
+    try {
+      final response = await _client.post(
+        path: ApiUrl.lateInEarlyOut,
+        data: applicationData,
+      );
 
-    isLoadingPostLateIn = false;
+      if (response.statusCode == 201) {
+        CustomSnackbar.success("Application created successfully!");
+        notifyListeners();
+        return true; // API succeeded
+      } else {
+        postLateInAppState = const ApiState.error(
+          "Failed to create application",
+        );
+        CustomSnackbar.error(postLateInAppState.error.toString());
 
-    if (result.isSuccess) {
-      notifyListeners();
-      return true;
-    } else {
-      errorLateInPostMessage =
-          result.message ?? "Failed to post official visit"; // failure → string
+        notifyListeners();
+        return false; // API failed
+      }
+    } on DioException catch (e) {
+      postLateInAppState = ApiState.error(ApiErrorHandler.handleError(e));
+      CustomSnackbar.error(postLateInAppState.error.toString());
+
       notifyListeners();
       return false;
+    } catch (e) {
+      postLeaveAppState = ApiState.error("Unexpected error: $e");
+      CustomSnackbar.error(postLateInAppState.error.toString());
+
+      notifyListeners();
+      return false;
+    } finally {
+      if (context.loaderOverlay.visible) {
+        context.loaderOverlay.hide();
+      }
     }
   }
 
   Future<bool> postOfficialVisit({
-      required BuildContext? context,
+    required BuildContext context,
     required Map<String, dynamic> applicationData,
   }) async {
-    isLoadingPostOfficial = true;
-    errorOfficialPostMessage = null;
+    context.loaderOverlay.show();
+
+    postOfficialAppState = const ApiState.loading();
     notifyListeners();
 
-    final result = await ApplicationRepo.postOfficialVisit(
-      applicationData: applicationData,
-      context: context
-    );
+    try {
+      final response = await _client.post(
+        path: ApiUrl.createOfficialVisitApplication,
+        data: applicationData,
+      );
 
-    isLoadingPostOfficial = false;
+      if (response.statusCode == 201) {
+        CustomSnackbar.success("Application created successfully!");
+        notifyListeners();
+        return true; // API succeeded
+      } else {
+        postOfficialAppState = const ApiState.error(
+          "Failed to create aplication",
+        );
+        CustomSnackbar.error(postOfficialAppState.error.toString());
 
-    if (result.isSuccess) {
-      notifyListeners();
-      return true;
-    } else {
-      errorOfficialPostMessage =
-          result.message ?? "Failed to post official visit"; // failure → string
+        notifyListeners();
+        return false; // API failed
+      }
+    } on DioException catch (e) {
+      postOfficialAppState = ApiState.error(ApiErrorHandler.handleError(e));
+      CustomSnackbar.error(postOfficialAppState.error.toString());
+
       notifyListeners();
       return false;
+    } catch (e) {
+      postOfficialAppState = ApiState.error("Unexpected error: $e");
+      CustomSnackbar.error(postOfficialAppState.error.toString());
+
+      notifyListeners();
+      return false;
+    } finally {
+      if (context.loaderOverlay.visible) {
+        context.loaderOverlay.hide();
+      }
+    }
+  }
+
+  Future<void> fetchOfficialVisitData() async {
+    fetchOfficialState = const ApiState.loading();
+    notifyListeners();
+
+    try {
+      final response = await _client.get(path: ApiUrl.getOfficialVisitDropDown);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        final modelList = data
+            .map((item) => OfficialVisitModel.fromJson(item))
+            .toList();
+        fetchOfficialState = ApiState.success(modelList);
+        notifyListeners();
+      } else {
+        fetchOfficialState = const ApiState.error(
+          "Failed to fetch official type data",
+        );
+        CustomSnackbar.error(fetchOfficialState.error.toString());
+        notifyListeners();
+      }
+    } on DioException catch (e) {
+      fetchOfficialState = ApiState.error(ApiErrorHandler.handleError(e));
+      CustomSnackbar.error(fetchOfficialState.error.toString());
+      notifyListeners();
+    } catch (e) {
+      fetchOfficialState = ApiState.error("Unexpected error: $e");
+      CustomSnackbar.error(fetchOfficialState.error.toString());
+      notifyListeners();
     }
   }
 
   Future<void> fetchApproveData() async {
-    isApproveLoading = true;
-    errorApprove = null;
+    fetchApproveState = const ApiState.loading();
     notifyListeners();
 
-    final result = await ApplicationRepo.fetchApproveRecommendedData();
+    try {
+      final response = await _client.get(path: ApiUrl.getApprover);
 
-    isApproveLoading = false;
-
-    if (result.isSuccess && result.data != null) {
-      approveRecommendModel = result.data;
-      errorApprove = null;
-    } else {
-      approveRecommendModel = null;
-      errorApprove =
-          result.message ?? "Failed to load data"; // failure → string
+      if (response.statusCode == 200) {
+        final model = ApproveRecommendModel.fromJson(response.data);
+        fetchApproveState = ApiState.success(model);
+        notifyListeners();
+      } else {
+        fetchApproveState = const ApiState.error(
+          "Failed to fetch approve type data",
+        );
+        CustomSnackbar.error(fetchApproveState.error.toString());
+        notifyListeners();
+      }
+    } on DioException catch (e) {
+      fetchApproveState = ApiState.error(ApiErrorHandler.handleError(e));
+      CustomSnackbar.error(fetchApproveState.error.toString());
+      notifyListeners();
+    } catch (e) {
+      fetchApproveState = ApiState.error("Unexpected error: $e");
+      CustomSnackbar.error(fetchApproveState.error.toString());
+      notifyListeners();
     }
-
-    notifyListeners();
   }
 
-  Future<void> fetchOfficialVisitData() async {
-    isOfficialLoading = true;
-    errorMessageOfficial = null;
+  Future<void> fetchLeaveTypeData() async {
+    fetchLeaveTypeState = const ApiState.loading();
     notifyListeners();
 
-    final result = await ApplicationRepo.fetchOfficialVisitData();
+    try {
+      final response = await _client.get(path: ApiUrl.getLeavesDropDown);
 
-    isOfficialLoading = false;
-
-    if (result.isSuccess && result.data != null) {
-      officialVisitModelList = result.data!;
-
-      errorMessageOfficial = null;
-    } else {
-      officialVisitModelList = [];
-      errorMessageOfficial =
-          result.message ?? "Failed to load data"; // failure → string
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        final modelList = data
+            .map((item) => LeaveTypeModel.fromJson(item))
+            .toList();
+        fetchLeaveTypeState = ApiState.success(modelList);
+        notifyListeners();
+      } else {
+        fetchLeaveTypeState = const ApiState.error(
+          "Failed to fetch leave type data",
+        );
+        CustomSnackbar.error(fetchLeaveTypeState.error.toString());
+        notifyListeners();
+      }
+    } on DioException catch (e) {
+      fetchLeaveTypeState = ApiState.error(ApiErrorHandler.handleError(e));
+      CustomSnackbar.error(fetchLeaveTypeState.error.toString());
+      notifyListeners();
+    } catch (e) {
+      fetchLeaveTypeState = ApiState.error("Unexpected error: $e");
+      CustomSnackbar.error(fetchLeaveTypeState.error.toString());
+      notifyListeners();
     }
-
-    notifyListeners();
   }
-
-  // Future<bool> postApplication() async {
-  //   isLoading = true;
-  //   errorMessage = null;
-  //   notifyListeners();
-
-  //   final result = await ProfileRepo.updateProfile(imageFile: imageFile);
-
-  //   isLoading = false;
-
-  //   if (result.isSuccess && result.data != null) {
-
-  //     notifyListeners();
-  //     return true;
-  //   } else {
-  //     errorMessage =
-  //         result.message ?? "Failed to post application"; // failure → string
-  //         notifyListeners();
-  //     return false;
-  //   }
-  // }
 }

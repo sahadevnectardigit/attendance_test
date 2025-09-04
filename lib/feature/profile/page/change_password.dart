@@ -176,7 +176,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: profileProvider.isLoading
+                      onPressed: profileProvider.changePasswordState.isLoading
                           ? null
                           : () async {
                               if (!formKey.currentState!.validate()) return;
@@ -194,7 +194,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 Navigator.pop(context);
                               } else {
                                 context.showSnackBarMessage(
-                                  message: profileProvider.errorChangePassword
+                                  message: profileProvider
+                                      .changePasswordState
+                                      .error
                                       .toString(),
                                   backgroundColor: Color(0xFFF44336),
                                 );
@@ -209,7 +211,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         elevation: 4,
                         shadowColor: Colors.green.withOpacity(0.3),
                       ),
-                      child: profileProvider.isLoading
+                      child: profileProvider.changePasswordState.isLoading
                           ? const SizedBox(
                               width: 25,
                               height: 25,

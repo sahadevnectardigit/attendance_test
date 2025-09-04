@@ -61,7 +61,8 @@ class AppDrawer extends StatelessWidget {
                 children: [
                   Consumer<ProfileProvider>(
                     builder: (context, data, _) {
-                      final imageUrl = data.profileModel?.profile?.imageUrl;
+                      final imageUrl =
+                          data.fetchProfileState.data?.profile?.imageUrl;
 
                       if (imageUrl == null || imageUrl.isEmpty) {
                         // Default placeholder avatar with green theme

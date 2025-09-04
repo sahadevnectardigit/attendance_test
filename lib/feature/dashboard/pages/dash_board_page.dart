@@ -92,7 +92,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: [
                   Consumer<ProfileProvider>(
                     builder: (context, data, _) {
-                      final imageUrl = data.profileModel?.profile?.imageUrl;
+                      final imageUrl = data.fetchProfileState.data?.profile?.imageUrl;
 
                       if (imageUrl == null || imageUrl.isEmpty) {
                         // Return a placeholder or default avatar
@@ -154,7 +154,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   const SizedBox(width: 12),
 
                   Text(
-                    "Hey ${profilePro.profileModel?.firstName ?? "there!"}",
+                    "Hey ${profilePro.fetchProfileState.data?.firstName ?? "there!"}",
                     style: TextStyle(
                       color: Color(0xFF2E7D32),
                       fontWeight: FontWeight.w600,

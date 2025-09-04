@@ -1,7 +1,7 @@
 import 'package:attendance/core/constants/api_constants.dart';
 import 'package:attendance/core/services/main_api_client.dart';
 import 'package:attendance/core/utils/error_handler.dart';
-import 'package:attendance/models/api_response_model.dart';
+import 'package:attendance/models/api_state.dart';
 import 'package:attendance/models/ledger_model.dart';
 import 'package:dio/dio.dart';
 

@@ -1,78 +1,122 @@
 import 'dart:io';
 
-import 'package:attendance/feature/profile/repo/profile_repo.dart';
+import 'package:attendance/core/services/custom_snackbar.dart';
+import 'package:attendance/core/services/main_api_client.dart';
+import 'package:attendance/core/utils/error_handler.dart';
 import 'package:attendance/models/profile_model.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/constants/api_constants.dart';
+import '../../../models/api_state.dart';
+
 class ProfileProvider extends ChangeNotifier {
-  ProfileModel? profileModel;
-  String? errorMessage;
-  String? errorProfileUpdate;
-  String? errorChangePassword;
+  static final MainApiClient _client = MainApiClient();
 
-  bool isLoading = false;
+  ApiState<void> changePasswordState = const ApiState.initial();
+  ApiState<ProfileModel> fetchProfileState = const ApiState.initial();
+  ApiState<void> updateProfileState = const ApiState.initial();
 
-  Future<bool> changePassword({required String password}) async {
-    isLoading = true;
-    errorMessage = null;
+  Future<bool> updateProfile({File? imageFile}) async {
+    updateProfileState = const ApiState.loading();
     notifyListeners();
 
-    final result = await ProfileRepo.changePassword(password: password);
+    try {
+      final formData = FormData.fromMap({
+        "image": await MultipartFile.fromFile(
+          imageFile?.path ?? "",
+          filename: imageFile?.path.split('/').last,
+        ),
+      });
 
-    isLoading = false;
+      final response = await _client.post(
+        path: ApiUrl.updateProfileImage,
+        data: formData,
+      );
+      if (response.statusCode == 200) {
+        CustomSnackbar.success(" Profile Updated successfully");
+        updateProfileState = const ApiState.success(null);
+        fetchProfileData();
+        notifyListeners();
+        return true; // API succeeded
+      } else {
+        updateProfileState = const ApiState.error(
+          "Failed to change profile image",
+        );
+        CustomSnackbar.error(updateProfileState.error.toString());
 
-    if (result.isSuccess) {
+        notifyListeners();
+        return false; // API failed
+      }
+    } on DioException catch (e) {
+      updateProfileState = ApiState.error(ApiErrorHandler.handleError(e));
+      CustomSnackbar.error(updateProfileState.error.toString());
+
       notifyListeners();
-      return true;
-    } else {
-      errorChangePassword =
-          result.message ?? "Failed to change password"; // failure → string
+      return false;
+    } catch (e) {
+      updateProfileState = ApiState.error("Unexpected error: $e");
+      CustomSnackbar.error(updateProfileState.error.toString());
+
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> changePassword({required String password}) async {
+    changePasswordState = const ApiState.loading();
+    notifyListeners();
+
+    try {
+      final response = await _client.post(
+        path: ApiUrl.changePassword,
+        data: {"new_password": password},
+      );
+
+      if (response.statusCode == 200) {
+        changePasswordState = const ApiState.success(null);
+        notifyListeners();
+        return true; // API succeeded
+      } else {
+        changePasswordState = const ApiState.error("Failed to change password");
+        notifyListeners();
+        return false; // API failed
+      }
+    } on DioException catch (e) {
+      changePasswordState = ApiState.error(ApiErrorHandler.handleError(e));
+      notifyListeners();
+      return false;
+    } catch (e) {
+      changePasswordState = ApiState.error("Unexpected error: $e");
       notifyListeners();
       return false;
     }
   }
 
   Future<void> fetchProfileData() async {
-    isLoading = true;
-    errorMessage = null;
+    fetchProfileState = const ApiState.loading();
     notifyListeners();
 
-    final result = await ProfileRepo.fetchProfileData();
+    try {
+      final response = await _client.get(path: ApiUrl.profile);
 
-    isLoading = false;
-
-    if (result.isSuccess && result.data != null) {
-      profileModel = result.data;
-      errorMessage = null;
-    } else {
-      profileModel = null;
-      errorMessage =
-          result.message ?? "Failed to load profile"; // failure → string
-    }
-
-    notifyListeners();
-  }
-
-  Future<bool> updateProfileImagge({File? imageFile}) async {
-    isLoading = true;
-    errorMessage = null;
-    notifyListeners();
-
-    final result = await ProfileRepo.updateProfile(imageFile: imageFile);
-
-    isLoading = false;
-
-    if (result.isSuccess && result.data != null) {
-      fetchProfileData();
-      errorMessage = null;
+      if (response.statusCode == 200) {
+        final model = ProfileModel.fromJson(response.data);
+        fetchProfileState = ApiState.success(model);
+        notifyListeners();
+      } else {
+        fetchProfileState = const ApiState.error(
+          "Failed to fetch profile data",
+        );
+        notifyListeners();
+      }
+    } on DioException catch (e) {
+      fetchProfileState = ApiState.error(ApiErrorHandler.handleError(e));
       notifyListeners();
-      return true;
-    } else {
-      errorProfileUpdate =
-          result.message ?? "Failed to update profile"; // failure → string
-      fetchProfileData();
+    } catch (e) {
+      fetchProfileState = ApiState.error("Unexpected error: $e");
       notifyListeners();
-      return false;
     }
   }
+
 }

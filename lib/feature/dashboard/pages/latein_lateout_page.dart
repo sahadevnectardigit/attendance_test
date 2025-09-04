@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-import 'package:attendance/core/extension/snackbar.dart';
-import 'package:attendance/core/widgets/loading_widget.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as nepali_picker;
@@ -126,21 +124,12 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
         "remarks": remarkController.text.trim(),
       };
       final isSuccess = await applicationPro.postLateInEarlyOut(
+        context: context,
         applicationData: applicationData,
       );
 
       if (isSuccess) {
         _clearForm();
-        // Navigator.pop(context);
-        context.showSnackBarMessage(
-          message: 'Application Submitted successfully',
-          backgroundColor: Colors.green,
-        );
-      } else {
-        context.showSnackBarMessage(
-          message: 'Application failed to post',
-          backgroundColor: Colors.red,
-        );
       }
       log('Application Data: $applicationData');
     }
@@ -168,7 +157,7 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
           key: _formKey,
           child: Consumer<ApplicationProvider>(
             builder: (context, applicationPro, child) {
-              final approveData = applicationPro.approveRecommendModel;
+              final approveData = applicationPro.fetchApproveState.data;
               return Stack(
                 children: [
                   ListView(
@@ -188,7 +177,7 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
                               filled: true,
                               fillColor: Colors.grey.shade50,
                             ),
-                            value: lateInLateOut,
+                            initialValue: lateInLateOut,
                             items: lateOptions
                                 .map(
                                   (e) => DropdownMenuItem(
@@ -317,7 +306,7 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
                               filled: true,
                               fillColor: Colors.grey.shade50,
                             ),
-                            value: approver,
+                            initialValue: approver,
                             items: approveData?.approvedBy
                                 .map(
                                   (e) => DropdownMenuItem(
@@ -350,7 +339,7 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
                               filled: true,
                               fillColor: Colors.grey.shade50,
                             ),
-                            value: recommender,
+                            initialValue: recommender,
                             items: approveData?.recommendedBy
                                 .map(
                                   (e) => DropdownMenuItem(
@@ -413,9 +402,7 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
 
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: applicationPro.isLoadingPostLateIn
-                                  ? null
-                                  : () => _handleFrom(),
+                              onPressed: () => _handleFrom(),
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 16,
@@ -432,8 +419,6 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
                       ),
                     ],
                   ),
-                  // Loading overlay
-                  if (applicationPro.isLoadingPostLateIn) LoadingWidget(),
                 ],
               );
             },

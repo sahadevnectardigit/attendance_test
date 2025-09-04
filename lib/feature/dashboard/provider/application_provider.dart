@@ -71,6 +71,7 @@ class ApplicationProvider extends ChangeNotifier {
   }
 
   Future<bool> postOfficialVisit({
+      required BuildContext? context,
     required Map<String, dynamic> applicationData,
   }) async {
     isLoadingPostOfficial = true;
@@ -79,6 +80,7 @@ class ApplicationProvider extends ChangeNotifier {
 
     final result = await ApplicationRepo.postOfficialVisit(
       applicationData: applicationData,
+      context: context
     );
 
     isLoadingPostOfficial = false;

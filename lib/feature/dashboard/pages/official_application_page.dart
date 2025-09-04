@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-import 'package:attendance/core/extension/snackbar.dart';
-import 'package:attendance/core/widgets/loading_widget.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
@@ -159,22 +157,24 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
     };
     log("Applicaion data: $applicationData");
     final isSuccess = await applicationPro.postOfficialVisit(
+      context: context,
       applicationData: applicationData,
     );
 
     if (isSuccess) {
       _clearForm();
       // Navigator.pop(context);
-      context.showSnackBarMessage(
-        message: 'Application Submitted successfully',
-        backgroundColor: Colors.green,
-      );
-    } else {
-      context.showSnackBarMessage(
-        message: 'Application failed to post',
-        backgroundColor: Colors.red,
-      );
+      // context.showSnackBarMessage(
+      //   message: 'Application Submitted successfully',
+      //   backgroundColor: Colors.green,
+      // );
     }
+    // else {
+    //   context.showSnackBarMessage(
+    //     message: 'Application failed to post',
+    //     backgroundColor: Colors.red,
+    //   );
+    // }
   }
 
   @override
@@ -194,396 +194,382 @@ class _OfficialApplicationPageState extends State<OfficialApplicationPage> {
             builder: (context, applicationPro, child) {
               final officiVistData = applicationPro.officialVisitModelList;
               final approveData = applicationPro.approveRecommendModel;
-              return Stack(
+              return ListView(
                 children: [
-                  ListView(
-                    children: [
-                      // Official Visit Dropdown
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                  // Official Visit Dropdown
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: DropdownButtonFormField<int>(
+                        initialValue: _officialVisit,
+                        decoration: InputDecoration(
+                          labelText: "Official Visit",
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: DropdownButtonFormField<int>(
-                            value: _officialVisit,
-                            decoration: InputDecoration(
-                              labelText: "Official Visit",
-                              border: InputBorder.none,
-                              filled: true,
-                              fillColor: Colors.grey.shade50,
+                        items: officiVistData
+                            .map(
+                              (e) => DropdownMenuItem(
+                                value: e.id,
+                                child: Text(e.name),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (val) {
+                          setState(() => _officialVisit = val);
+                        },
+                        validator: (value) => value == null
+                            ? 'Please select official visit type'
+                            : null,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Approver and Recommender in a row
+                  Row(
+                    children: [
+                      // Approver Dropdown
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: DropdownButtonFormField<int>(
+                              initialValue: _approverId,
+                              decoration: InputDecoration(
+                                labelText: "Approve By",
+                                border: InputBorder.none,
+                                filled: true,
+                                fillColor: Colors.grey.shade50,
+                              ),
+                              items: approveData?.approvedBy
+                                  .map(
+                                    (e) => DropdownMenuItem(
+                                      value: e.id,
+                                      child: Text(e.firstName),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() => _approverId = val);
+                              },
+                              validator: (value) => value == null
+                                  ? 'Please select approver'
+                                  : null,
                             ),
-                            items: officiVistData
-                                .map(
-                                  (e) => DropdownMenuItem(
-                                    value: e.id,
-                                    child: Text(e.name),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (val) {
-                              setState(() => _officialVisit = val);
-                            },
-                            validator: (value) => value == null
-                                ? 'Please select official visit type'
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 12),
+
+                      // Recommender Dropdown
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: DropdownButtonFormField<int>(
+                              initialValue: _recommenderId,
+                              decoration: InputDecoration(
+                                labelText: "Recommend By",
+                                border: InputBorder.none,
+                                filled: true,
+                                fillColor: Colors.grey.shade50,
+                              ),
+                              items: approveData?.recommendedBy
+                                  .map(
+                                    (e) => DropdownMenuItem(
+                                      value: e.id,
+                                      child: Text(e.firstName),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() => _recommenderId = val);
+                              },
+                              validator: (value) => value == null
+                                  ? 'Please select recommender'
+                                  : null,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // From Date Section
+                  Text(
+                    'From Date:',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: "English Date",
+                              suffixIcon: const Icon(Icons.calendar_today),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
+                              ),
+                            ),
+                            onTap: () => _pickDate(true),
+                            controller: TextEditingController(
+                              text: _fromDate == null
+                                  ? ''
+                                  : _fromDate!.toLocal().toString().split(
+                                      ' ',
+                                    )[0],
+                            ),
+                            validator: (value) => value?.isEmpty == true
+                                ? 'Please select from date'
                                 : null,
                           ),
                         ),
                       ),
-
-                      const SizedBox(height: 16),
-
-                      // Approver and Recommender in a row
-                      Row(
-                        children: [
-                          // Approver Dropdown
-                          Expanded(
-                            child: Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: DropdownButtonFormField<int>(
-                                  value: _approverId,
-                                  decoration: InputDecoration(
-                                    labelText: "Approve By",
-                                    border: InputBorder.none,
-                                    filled: true,
-                                    fillColor: Colors.grey.shade50,
-                                  ),
-                                  items: approveData?.approvedBy
-                                      .map(
-                                        (e) => DropdownMenuItem(
-                                          value: e.id,
-                                          child: Text(e.firstName),
-                                        ),
-                                      )
-                                      .toList(),
-                                  onChanged: (val) {
-                                    setState(() => _approverId = val);
-                                  },
-                                  validator: (value) => value == null
-                                      ? 'Please select approver'
-                                      : null,
-                                ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: "Nepali Date",
+                              suffixIcon: const Icon(Icons.calendar_today),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
                               ),
                             ),
-                          ),
-
-                          const SizedBox(width: 12),
-
-                          // Recommender Dropdown
-                          Expanded(
-                            child: Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: DropdownButtonFormField<int>(
-                                  value: _recommenderId,
-                                  decoration: InputDecoration(
-                                    labelText: "Recommend By",
-                                    border: InputBorder.none,
-                                    filled: true,
-                                    fillColor: Colors.grey.shade50,
-                                  ),
-                                  items: approveData?.recommendedBy
-                                      .map(
-                                        (e) => DropdownMenuItem(
-                                          value: e.id,
-                                          child: Text(e.firstName),
-                                        ),
-                                      )
-                                      .toList(),
-                                  onChanged: (val) {
-                                    setState(() => _recommenderId = val);
-                                  },
-                                  validator: (value) => value == null
-                                      ? 'Please select recommender'
-                                      : null,
-                                ),
-                              ),
+                            onTap: () => _pickNepaliDate(true),
+                            controller: TextEditingController(
+                              text: _fromDateNepali == null
+                                  ? ''
+                                  : '${_fromDateNepali!.year}-${_fromDateNepali!.month.toString().padLeft(2, '0')}-${_fromDateNepali!.day.toString().padLeft(2, '0')}',
                             ),
                           ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // From Date Section
-                      Text(
-                        'From Date:',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: TextFormField(
-                                readOnly: true,
-                                decoration: InputDecoration(
-                                  labelText: "English Date",
-                                  suffixIcon: const Icon(Icons.calendar_today),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 14,
-                                  ),
-                                ),
-                                onTap: () => _pickDate(true),
-                                controller: TextEditingController(
-                                  text: _fromDate == null
-                                      ? ''
-                                      : _fromDate!.toLocal().toString().split(
-                                          ' ',
-                                        )[0],
-                                ),
-                                validator: (value) => value?.isEmpty == true
-                                    ? 'Please select from date'
-                                    : null,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: TextFormField(
-                                readOnly: true,
-                                decoration: InputDecoration(
-                                  labelText: "Nepali Date",
-                                  suffixIcon: const Icon(Icons.calendar_today),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 14,
-                                  ),
-                                ),
-                                onTap: () => _pickNepaliDate(true),
-                                controller: TextEditingController(
-                                  text: _fromDateNepali == null
-                                      ? ''
-                                      : '${_fromDateNepali!.year}-${_fromDateNepali!.month.toString().padLeft(2, '0')}-${_fromDateNepali!.day.toString().padLeft(2, '0')}',
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // To Date Section
-                      Text(
-                        'To Date:',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: TextFormField(
-                                readOnly: true,
-                                decoration: InputDecoration(
-                                  labelText: "English Date",
-                                  suffixIcon: const Icon(Icons.calendar_today),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 14,
-                                  ),
-                                ),
-                                onTap: () => _pickDate(false),
-                                controller: TextEditingController(
-                                  text: _toDate == null
-                                      ? ''
-                                      : _toDate!.toLocal().toString().split(
-                                          ' ',
-                                        )[0],
-                                ),
-                                validator: (value) => value?.isEmpty == true
-                                    ? 'Please select to date'
-                                    : null,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: TextFormField(
-                                readOnly: true,
-                                decoration: InputDecoration(
-                                  labelText: "Nepali Date",
-                                  suffixIcon: const Icon(Icons.calendar_today),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 14,
-                                  ),
-                                ),
-                                onTap: () => _pickNepaliDate(false),
-                                controller: TextEditingController(
-                                  text: _toDateNepali == null
-                                      ? ''
-                                      : '${_toDateNepali!.year}-${_toDateNepali!.month.toString().padLeft(2, '0')}-${_toDateNepali!.day.toString().padLeft(2, '0')}',
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // Place of Visit
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: TextFormField(
-                          controller: _placeController,
-                          decoration: InputDecoration(
-                            labelText: "Place of Visit",
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(16),
-                          ),
-                          validator: (value) => value?.isEmpty == true
-                              ? 'Please enter place of visit'
-                              : null,
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Allowance Claimed
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextFormField(
-                          controller: _allowanceController,
-                          decoration: InputDecoration(
-                            labelText: "Allowance Claimed",
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(16),
-                          ),
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Half Day Switch
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: SwitchListTile(
-                          value: _halfDay,
-                          onChanged: (val) => setState(() => _halfDay = val),
-                          title: const Text("Half Day?"),
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Remarks
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextFormField(
-                          textInputAction: TextInputAction.done,
-                          controller: _remarkController,
-                          decoration: InputDecoration(
-                            labelText: "Remarks",
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(16),
-                          ),
-                          maxLines: 3,
-                        ),
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // Buttons
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: applicationPro.isLoadingPostOfficial
-                                  ? null
-                                  : () => _handleForm(),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue.shade700,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child:
-                                  //  applicationPro.isLoading
-                                  //     ? const CupertinoActivityIndicator()
-                                  //     : const
-                                  Text("Submit"),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                side: BorderSide(color: Colors.blue.shade700),
-                              ),
-                              child: Text(
-                                "Cancel",
-                                style: TextStyle(color: Colors.blue.shade700),
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
-                  // Loading overlay
-                  if (applicationPro.isLoadingPostOfficial) LoadingWidget(),
+
+                  const SizedBox(height: 20),
+
+                  // To Date Section
+                  Text(
+                    'To Date:',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: "English Date",
+                              suffixIcon: const Icon(Icons.calendar_today),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
+                              ),
+                            ),
+                            onTap: () => _pickDate(false),
+                            controller: TextEditingController(
+                              text: _toDate == null
+                                  ? ''
+                                  : _toDate!.toLocal().toString().split(' ')[0],
+                            ),
+                            validator: (value) => value?.isEmpty == true
+                                ? 'Please select to date'
+                                : null,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: "Nepali Date",
+                              suffixIcon: const Icon(Icons.calendar_today),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
+                              ),
+                            ),
+                            onTap: () => _pickNepaliDate(false),
+                            controller: TextEditingController(
+                              text: _toDateNepali == null
+                                  ? ''
+                                  : '${_toDateNepali!.year}-${_toDateNepali!.month.toString().padLeft(2, '0')}-${_toDateNepali!.day.toString().padLeft(2, '0')}',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Place of Visit
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextFormField(
+                      controller: _placeController,
+                      decoration: InputDecoration(
+                        labelText: "Place of Visit",
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(16),
+                      ),
+                      validator: (value) => value?.isEmpty == true
+                          ? 'Please enter place of visit'
+                          : null,
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Allowance Claimed
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextFormField(
+                      controller: _allowanceController,
+                      decoration: InputDecoration(
+                        labelText: "Allowance Claimed",
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(16),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Half Day Switch
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: SwitchListTile(
+                      value: _halfDay,
+                      onChanged: (val) => setState(() => _halfDay = val),
+                      title: const Text("Half Day?"),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Remarks
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextFormField(
+                      textInputAction: TextInputAction.done,
+                      controller: _remarkController,
+                      decoration: InputDecoration(
+                        labelText: "Remarks",
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(16),
+                      ),
+                      maxLines: 3,
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed:
+                              // applicationPro.isLoadingPostOfficial
+                              //     ? null
+                              //     :
+                              () => _handleForm(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade700,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text("Submit"),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            side: BorderSide(color: Colors.blue.shade700),
+                          ),
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(color: Colors.blue.shade700),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               );
             },

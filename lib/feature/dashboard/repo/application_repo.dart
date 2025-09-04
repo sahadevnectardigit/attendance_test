@@ -1,10 +1,14 @@
 import 'package:attendance/core/constants/api_constants.dart';
+import 'package:attendance/core/services/custom_snackbar.dart';
 import 'package:attendance/core/services/main_api_client.dart';
 import 'package:attendance/core/utils/error_handler.dart';
 import 'package:attendance/feature/dashboard/model/approve_recommended_model.dart';
 import 'package:attendance/feature/dashboard/model/officail_visit_model.dart';
 import 'package:attendance/models/api_response_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class ApplicationRepo {
   static final MainApiClient _client = MainApiClient();
@@ -68,17 +72,24 @@ class ApplicationRepo {
   }
 
   static Future<ApiResponse<bool>> postOfficialVisit({
+    required BuildContext? context,
     required Map<String, dynamic> applicationData,
   }) async {
     try {
+      // EasyLoading.show(status: "Loading...");
+      context?.loaderOverlay.show();
       final response = await _client.post(
         path: ApiUrl.createOfficialVisitApplication,
         data: applicationData,
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
+        CustomSnackbar.success("Application created successfully!");
+
         return ApiResponse.success(true);
       } else {
+        EasyLoading.showError("Error occured");
+
         final errorList = response.data["detail"];
         final errorMsg = (errorList is List && errorList.isNotEmpty)
             ? errorList.first
@@ -93,6 +104,11 @@ class ApplicationRepo {
       return ApiResponse.failure(backendMessage);
     } catch (e) {
       return ApiResponse.failure("Unexpected error: $e");
+    } finally {
+      // EasyLoading.dismiss();
+      if (context?.loaderOverlay.visible ?? false) {
+        context?.loaderOverlay.hide();
+      }
     }
   }
 

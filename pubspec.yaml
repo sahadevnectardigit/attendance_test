@@ -40,7 +40,6 @@ dependencies:
   cached_network_image: ^3.4.1
   path_provider: ^2.1.5
   device_info_plus: ^11.5.0
-  slide_to_act: ^2.0.2
   nepali_date_picker: ^7.0.1
   intl: ^0.20.2
   image_picker: ^1.2.0
@@ -48,6 +47,8 @@ dependencies:
   pie_chart: ^5.4.0
   shimmer: ^3.0.0
   nepali_utils: ^3.0.8
+  flutter_easyloading: ^3.0.5
+  loader_overlay: ^5.0.0
 
 dev_dependencies:
   flutter_test:

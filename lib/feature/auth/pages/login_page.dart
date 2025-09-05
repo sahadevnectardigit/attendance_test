@@ -291,30 +291,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Widget _buildRememberMeRow() {
     return Row(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(
-              color: rememberMe ? Colors.green.shade400 : Colors.grey.shade300,
-              width: 2,
-            ),
-          ),
-          child: Checkbox(
-            value: rememberMe,
-            onChanged: (value) {
-              setState(() {
-                rememberMe = value ?? false;
-              });
-            },
-            activeColor: Colors.green.shade600,
-            checkColor: Colors.white,
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
-            ),
-          ),
+        Checkbox(
+          value: rememberMe,
+          onChanged: (value) {
+            setState(() {
+              rememberMe = value ?? false;
+            });
+          },
+          activeColor: Colors.green.shade600,
+          checkColor: Colors.white,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         ),
-        SizedBox(width: 12),
+        SizedBox(width: 8),
         Text(
           "Remember Me",
           style: TextStyle(

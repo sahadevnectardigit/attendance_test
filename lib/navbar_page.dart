@@ -23,8 +23,9 @@ class NavBarPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
+          color: Colors.white,
           gradient: LinearGradient(
-            colors: [Color(0xFF2ecc71), Color(0xFF27ae60)], // Green gradient
+            colors: [Color(0xFF2ecc71), Color(0xFF27ae60)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -38,10 +39,7 @@ class NavBarPage extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          // borderRadius: const BorderRadius.only(
-          //   topLeft: Radius.circular(20),
-          //   topRight: Radius.circular(20),
-          // ),
+
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
@@ -50,32 +48,23 @@ class NavBarPage extends StatelessWidget {
             ),
           ],
         ),
-        child: ClipRRect(
-          // borderRadius: const BorderRadius.only(
-          //   topLeft: Radius.circular(20),
-          //   topRight: Radius.circular(20),
-          // ),
-          child: BottomNavigationBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            currentIndex: navProvider.currentIndex,
-            onTap: navProvider.updateIndex,
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.white70,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.attach_money),
-                label: "Salary",
-              ),
-              BottomNavigationBarItem(icon: Icon(Icons.book), label: "Ledger"),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: "Profile",
-              ),
-            ],
-          ),
+        child: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          currentIndex: navProvider.currentIndex,
+          onTap: navProvider.updateIndex,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white70,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.attach_money),
+              label: "Salary",
+            ),
+            BottomNavigationBarItem(icon: Icon(Icons.book), label: "Ledger"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          ],
         ),
       ),
     );

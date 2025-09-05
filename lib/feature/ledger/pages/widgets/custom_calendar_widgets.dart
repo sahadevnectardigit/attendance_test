@@ -177,7 +177,7 @@ class CustomCalendarWidget extends StatelessWidget {
                     }
 
                     return Expanded(
-                      child: GestureDetector(
+                      child: InkWell(
                         onTap: dayDetailData != null
                             ? () {
                                 Navigator.push(

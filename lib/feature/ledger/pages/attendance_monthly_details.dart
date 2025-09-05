@@ -52,7 +52,8 @@ class _AttendanceMonthlyDetailsState extends State<AttendanceMonthlyDetails> {
                 itemCount: widget.detailData.length ?? 0,
                 itemBuilder: (BuildContext context, int index) {
                   final detailData = widget.detailData[index];
-                  return Container(
+                  return 
+                  Container(
                     decoration: BoxDecoration(
                       color: Colors.green.shade100,
                       borderRadius: BorderRadius.circular(16),
@@ -195,6 +196,7 @@ class _AttendanceMonthlyDetailsState extends State<AttendanceMonthlyDetails> {
                       ),
                     ),
                   );
+               
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return SizedBox(height: 10);
@@ -379,4 +381,5 @@ class _AttendanceMonthlyDetailsState extends State<AttendanceMonthlyDetails> {
         return Icons.help_outline;
     }
   }
+
 }

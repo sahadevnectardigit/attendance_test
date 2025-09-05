@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Form(
               key: formKey,
               child: Column(
@@ -150,77 +150,62 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Widget _buildLoginCard(LoginProvider loginProvider) {
     return SlideTransition(
       position: _slideAnimation,
-      child: Container(
-        padding: EdgeInsets.all(32),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              blurRadius: 30,
-              spreadRadius: 0,
-              offset: Offset(0, 15),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildTextField(
-              controller: emailController,
-              label: "Email Address",
-              hint: "Enter your email",
-              icon: Icons.email_outlined,
-              keyboardType: TextInputType.emailAddress,
-              validator: (value) => value.validateEmail(),
-            ),
-            SizedBox(height: 24),
-            _buildTextField(
-              controller: companyCodeController,
-              label: "Company Code",
-              hint: "Enter company code",
-              icon: Icons.business_outlined,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter your company code";
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 24),
-            _buildTextField(
-              controller: passwordController,
-              label: "Password",
-              hint: "Enter your password",
-              icon: Icons.lock_outlined,
-              obscureText: _obscurePassword,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscurePassword
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
-                  color: Colors.green.shade600,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
-                },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildTextField(
+            controller: emailController,
+            label: "Email Address",
+            hint: "Enter your email",
+            icon: Icons.email_outlined,
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) => value.validateEmail(),
+          ),
+          SizedBox(height: 24),
+          _buildTextField(
+            controller: companyCodeController,
+            label: "Company Code",
+            hint: "Enter company code",
+            icon: Icons.business_outlined,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please enter your company code";
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 24),
+          _buildTextField(
+            controller: passwordController,
+            label: "Password",
+            hint: "Enter your password",
+            icon: Icons.lock_outlined,
+            obscureText: _obscurePassword,
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscurePassword
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: Colors.green.shade600,
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter your password";
-                }
-                return null;
+              onPressed: () {
+                setState(() {
+                  _obscurePassword = !_obscurePassword;
+                });
               },
             ),
-            SizedBox(height: 20),
-            _buildRememberMeRow(),
-            SizedBox(height: 32),
-            _buildLoginButton(loginProvider),
-          ],
-        ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please enter your password";
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 20),
+          _buildRememberMeRow(),
+          SizedBox(height: 32),
+          _buildLoginButton(loginProvider),
+        ],
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:attendance/feature/ledger/pages/attendance_monthly_details.dart';
+import 'package:attendance/feature/ledger/pages/attendance_day_detail_page.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/models/ledger_model.dart';
 import 'package:flutter/material.dart';
@@ -65,190 +65,178 @@ class CustomCalendarWidget extends StatelessWidget {
     int totalCells = maxDay + firstWeekday - 1;
     int rows = (totalCells / 7).ceil();
 
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => AttendanceMonthlyDetails(
-              detailData: detailData,
-              summaryData:
-                  summaryData ??
-                  SummaryData(
-                    total: 0,
-                    present: 0,
-                    absent: 0,
-                    leave: 0,
-                    officialVisit: 0,
-                    holiday: 0,
-                    weekend: 0,
-                    lateIn: 0,
-                    earlyOut: 0,
-                  ),
-            ),
-          ),
-        );
-     
-      },
-      child: Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 5,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Month and year header
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                "${_getNepaliMonthName(month)} $year",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(color: Colors.black12, blurRadius: 5, offset: Offset(0, 3)),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Month and year header
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              "${_getNepaliMonthName(month)} $year",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
+          ),
 
-            // Weekday headers
-            Row(
-              children: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-                  .map(
-                    (day) => Expanded(
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          day,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+          // Weekday headers
+          Row(
+            children: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                .map(
+                  (day) => Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        day,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                     ),
-                  )
-                  .toList(),
-            ),
-            Divider(height: 1),
+                  ),
+                )
+                .toList(),
+          ),
+          Divider(height: 1),
 
-            // Calendar days
-            Expanded(
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: rows,
-                itemBuilder: (context, rowIndex) {
-                  return Row(
-                    children: List.generate(7, (columnIndex) {
-                      int dayNumber =
-                          (rowIndex * 7) + columnIndex - firstWeekday + 2;
+          // Calendar days
+          Expanded(
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: rows,
+              itemBuilder: (context, rowIndex) {
+                return Row(
+                  children: List.generate(7, (columnIndex) {
+                    int dayNumber =
+                        (rowIndex * 7) + columnIndex - firstWeekday + 2;
 
-                      if (dayNumber < 1 || dayNumber > maxDay) {
-                        // Empty cell for days outside the month
-                        return Expanded(child: Container());
+                    if (dayNumber < 1 || dayNumber > maxDay) {
+                      // Empty cell for days outside the month
+                      return Expanded(child: Container());
+                    }
+
+                    // Format the date to match API response format (YYYY/MM/DD)
+                    String formattedDate =
+                        '$year/${month.toString().padLeft(2, '0')}/${dayNumber.toString().padLeft(2, '0')}';
+                    String? status = ledgerProvider.getAttendanceStatus(
+                      formattedDate,
+                    );
+                    String? day = ledgerProvider.getAttendanceDay(
+                      formattedDate,
+                    );
+
+                    // Find the detail data for this specific day
+                    DetailData? dayDetailData;
+                    for (var detail in detailData) {
+                      if (detail.date == formattedDate) {
+                        dayDetailData = detail;
+                        break;
                       }
+                    }
 
-                      // Format the date to match API response format (YYYY/MM/DD)
-                      String formattedDate =
-                          '$year/${month.toString().padLeft(2, '0')}/${dayNumber.toString().padLeft(2, '0')}';
-                      String? status = ledgerProvider.getAttendanceStatus(
-                        formattedDate,
-                      );
-                      String? day = ledgerProvider.getAttendanceDay(
-                        formattedDate,
-                      );
+                    // Determine color and icon based on status
+                    Color bgColor = Colors.transparent;
+                    Color textColor = Colors.black;
+                    IconData? icon;
 
-                      // Determine color and icon based on status
-                      Color bgColor = Colors.transparent;
-                      Color textColor = Colors.black;
-                      IconData? icon;
-
-                      // First, check for Saturday
-                      if (day != null && day.toLowerCase().contains('sat')) {
+                    // First, check for Saturday
+                    if (day != null && day.toLowerCase().contains('sat')) {
+                      bgColor = Colors.red.shade100;
+                    } else if (status != null) {
+                      if (status.toLowerCase().contains('present')) {
+                        bgColor = Colors.green.shade100;
+                        textColor = Colors.green.shade900;
+                        icon = Icons.check_circle;
+                      } else if (status.toLowerCase().contains('absent')) {
                         bgColor = Colors.red.shade100;
-                      } else if (status != null) {
-                        if (status.toLowerCase().contains('present')) {
-                          bgColor = Colors.green.shade100;
-                          textColor = Colors.green.shade900;
-                          icon = Icons.check_circle;
-                        } else if (status.toLowerCase().contains('absent')) {
-                          bgColor = Colors.red.shade100;
-                          textColor = Colors.red.shade900;
-                          icon = Icons.cancel;
-                        } else if (status.toLowerCase().contains('holiday') ||
-                            status.toLowerCase().contains('weekend')) {
-                          bgColor = Colors.blue.shade100;
-                          textColor = Colors.blue.shade900;
-                          icon = Icons.beach_access;
-                        } else if (status.toLowerCase().contains('leave')) {
-                          bgColor = Colors.orange.shade100;
-                          textColor = Colors.orange.shade900;
-                          icon = Icons.airplane_ticket;
-                        }
+                        textColor = Colors.red.shade900;
+                        icon = Icons.cancel;
+                      } else if (status.toLowerCase().contains('holiday') ||
+                          status.toLowerCase().contains('weekend')) {
+                        bgColor = Colors.blue.shade100;
+                        textColor = Colors.blue.shade900;
+                        icon = Icons.beach_access;
+                      } else if (status.toLowerCase().contains('leave')) {
+                        bgColor = Colors.orange.shade100;
+                        textColor = Colors.orange.shade900;
+                        icon = Icons.airplane_ticket;
                       }
+                    }
 
-                      return Expanded(
-                        child: GestureDetector(
-                          onTap: (){
-
-                          },
-                          child: Container(
-                            margin: EdgeInsets.all(2),
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: bgColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '$dayNumber',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: textColor,
+                    return Expanded(
+                      child: GestureDetector(
+                        onTap: dayDetailData != null
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => AttendacneDayDetail(
+                                      detailData: dayDetailData!,
                                     ),
                                   ),
-                                  if (icon != null)
-                                    Icon(icon, size: 12, color: textColor),
-                                ],
-                              ),
+                                );
+                              }
+                            : null, // Disable tap if no data for this day
+                        child: Container(
+                          margin: EdgeInsets.all(2),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: bgColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '$dayNumber',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: textColor,
+                                  ),
+                                ),
+                                if (icon != null)
+                                  Icon(icon, size: 12, color: textColor),
+                              ],
                             ),
                           ),
                         ),
-                      );
-                    }),
-                  );
-                },
-              ),
+                      ),
+                    );
+                  }),
+                );
+              },
             ),
+          ),
 
-            // Legend
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Wrap(
-                spacing: 12,
-                runSpacing: 8,
-                children: [
-                  _buildLegendItem(Colors.green, 'Present'),
-                  _buildLegendItem(Colors.red, 'Absent'),
-                  _buildLegendItem(Colors.blue, 'Holiday/Weekend'),
-                  _buildLegendItem(Colors.orange, 'Leave'),
-                ],
-              ),
+          // Legend
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Wrap(
+              spacing: 12,
+              runSpacing: 8,
+              children: [
+                _buildLegendItem(Colors.green, 'Present'),
+                _buildLegendItem(Colors.red, 'Absent'),
+                _buildLegendItem(Colors.blue, 'Holiday/Weekend'),
+                _buildLegendItem(Colors.orange, 'Leave'),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

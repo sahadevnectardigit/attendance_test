@@ -54,7 +54,7 @@ class _AttendanceMonthlyDetailsState extends State<AttendanceMonthlyDetails> {
                   final detailData = widget.detailData[index];
                   return Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.green.shade100,
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(

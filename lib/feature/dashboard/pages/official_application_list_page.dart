@@ -1,4 +1,4 @@
-import 'package:attendance/feature/dashboard/pages/official_application_page.dart';
+import 'package:attendance/feature/dashboard/pages/create_official_application_page.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,8 +43,20 @@ class _ApplicationListPageState extends State<ApplicationListPage> {
     final appList = appPro.fetchOfficialAppListState;
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade600, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        foregroundColor: Colors.white,
+
         title: const Text("Official Applications"),
-        backgroundColor: Colors.green,
       ),
       body: appList.isLoading
           ? Center(child: CircularProgressIndicator())

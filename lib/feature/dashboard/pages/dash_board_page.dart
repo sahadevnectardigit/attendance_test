@@ -84,9 +84,19 @@ class _DashboardPageState extends State<DashboardPage> {
         : Scaffold(
             backgroundColor: Color(0xFFF1F8E9),
             appBar: AppBar(
-              backgroundColor: Colors.transparent,
               elevation: 0,
-              iconTheme: IconThemeData(color: Color(0xFF2E7D32)),
+              backgroundColor: Colors.transparent,
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.green.shade600, Colors.green.shade400],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+              ),
+              iconTheme: IconThemeData(color: Colors.white),
+
               titleSpacing: 0,
               title: Row(
                 children: [
@@ -113,7 +123,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         );
                       }
-                      // return Text('image');
                       return ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: CachedNetworkImage(
@@ -157,7 +166,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   Text(
                     "Hey ${profilePro.fetchProfileState.data?.firstName ?? "there!"}",
                     style: TextStyle(
-                      color: Color(0xFF2E7D32),
+                      color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
                     ),

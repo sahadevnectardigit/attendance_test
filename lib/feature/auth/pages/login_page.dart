@@ -342,7 +342,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       height: 56,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: loginProvider.isLoading
+          colors: loginProvider.loginState.isLoading
               ? [Colors.grey.shade400, Colors.grey.shade300]
               : [Colors.blue.shade600, Colors.blue.shade500],
           begin: Alignment.topLeft,
@@ -351,7 +351,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: loginProvider.isLoading
+            color: loginProvider.loginState.isLoading
                 ? Colors.grey.withOpacity(0.3)
                 : Colors.blue.withOpacity(0.4),
             blurRadius: 15,
@@ -360,7 +360,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ],
       ),
       child: ElevatedButton(
-        onPressed: loginProvider.isLoading ? null : _handleLogin,
+        onPressed: loginProvider.loginState.isLoading ? null : _handleLogin,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
@@ -368,7 +368,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        child: loginProvider.isLoading
+        child: loginProvider.loginState.isLoading
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -415,7 +415,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
     final loginProvider = context.read<LoginProvider>();
 
-    final success = await loginProvider.login(
+    final success = await loginProvider.loginn(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
       companyCode: companyCodeController.text.trim(),
@@ -435,7 +435,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       );
     } else {
       context.showSnackBarMessage(
-        message: loginProvider.errorMessage ?? "Login failed",
+        message: loginProvider.loginState.error ?? "Login failed",
         backgroundColor: Colors.red.shade600,
       );
     }

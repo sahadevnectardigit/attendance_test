@@ -170,10 +170,20 @@ class _CreateLeaveApplicationPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Leave Application"),
-        backgroundColor: Colors.blue.shade700,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade600, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text("Create Leave Application"),
+        // backgroundColor: Colors.blue.shade700,
         foregroundColor: Colors.white,
-        elevation: 2,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -524,23 +534,6 @@ class _CreateLeaveApplicationPageState
                       Row(
                         children: [
                           Expanded(
-                            child: ElevatedButton(
-                              onPressed: () => _handleForm(),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue.shade700,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: Text("Submit"),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
                             child: OutlinedButton(
                               onPressed: () {
                                 Navigator.pop(context);
@@ -552,12 +545,30 @@ class _CreateLeaveApplicationPageState
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                side: BorderSide(color: Colors.blue.shade700),
+                                side: BorderSide(color: Colors.red.shade700),
                               ),
                               child: Text(
                                 "Cancel",
-                                style: TextStyle(color: Colors.blue.shade700),
+                                style: TextStyle(color: Colors.red.shade700),
                               ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () => _handleForm(),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green.shade700,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Text("Submit"),
                             ),
                           ),
                         ],

@@ -1,34 +1,67 @@
-import 'package:attendance/feature/auth/repo/login_repo.dart';
+import 'dart:developer';
+
+import 'package:attendance/core/constants/api_constants.dart';
+import 'package:attendance/core/services/auth_api_client.dart';
+import 'package:attendance/core/services/local_storage.dart';
+import 'package:attendance/core/utils/error_handler.dart';
+import 'package:attendance/models/api_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class LoginProvider extends ChangeNotifier {
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  static final AuthApiClient _authClient = AuthApiClient();
 
-  String? _errorMessage;
-  String? get errorMessage => _errorMessage;
+  ApiState<void> loginState = const ApiState.initial();
 
-  Future<bool> login({required String email, required String password,required String companyCode}) async {
-    _isLoading = true;
-    _errorMessage = null;
+  Future<bool> loginn({
+    required String email,
+    required String password,
+    required String companyCode,
+  }) async {
+    loginState = const ApiState.loading();
     notifyListeners();
 
-    final result = await LoginRepo.login(email: email, password: password,companyCode:companyCode);
+    try {
+      final loginData = {
+        "username": email,
+        "password": password,
+        "company_code": companyCode,
+      };
 
-    _isLoading = false;
+      final response = await _authClient.post(
+        path: ApiUrl.login,
+        data: loginData,
+      );
 
-    if (result.isSuccess) {
+      final data = response.data;
+      log("Token: ${data['access_token']}");
+
+      if (response.statusCode == 200) {
+        await LocalStorage.saveTokens(
+          accessToken: data['access_token'] ?? "",
+          refreshToken: data['refresh_token'] ?? "",
+        );
+        loginState = const ApiState.success(null);
+        notifyListeners();
+        return true; // API succeeded
+      } else {
+        loginState = ApiState.error(data["error"] ?? "Login failed");
+        notifyListeners();
+        return false; // API failed
+      }
+    } on DioException catch (e) {
+      final backendMessage = e.response?.data?["error"];
+      if (backendMessage != null) {
+        loginState = ApiState.error(backendMessage);
+      } else {
+        loginState = ApiState.error(ApiErrorHandler.handleError(e));
+      }
       notifyListeners();
-      return true; // ✅ success
-    } else {
-      _errorMessage = result.message;
+      return false;
+    } catch (e) {
+      loginState = ApiState.error("Unexpected error: $e");
       notifyListeners();
-      return false; // ❌ failure
+      return false;
     }
-  }
-
-  void clearError() {
-    _errorMessage = null;
-    notifyListeners();
   }
 }

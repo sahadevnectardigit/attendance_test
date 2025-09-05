@@ -42,8 +42,20 @@ class _LeaveAppListPageState extends State<LeaveAppListPage> {
     final appList = appPro.fetchLeaveAppListState;
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade600, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        foregroundColor: Colors.white,
+
         title: const Text("Leave Applications"),
-        backgroundColor: Colors.green,
       ),
       body: appList.isLoading
           ? Center(child: CircularProgressIndicator())

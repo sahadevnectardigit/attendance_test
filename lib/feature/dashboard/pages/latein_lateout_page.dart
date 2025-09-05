@@ -6,14 +6,15 @@ import 'package:nepali_date_picker/nepali_date_picker.dart' as nepali_picker;
 import 'package:nepali_utils/nepali_utils.dart';
 import 'package:provider/provider.dart';
 
-class LateInLateOutPage extends StatefulWidget {
-  const LateInLateOutPage({super.key});
+class LateInLateOutCreatePage extends StatefulWidget {
+  const LateInLateOutCreatePage({super.key});
 
   @override
-  State<LateInLateOutPage> createState() => _LateInLateOutPageState();
+  State<LateInLateOutCreatePage> createState() =>
+      _LateInLateOutCreatePageState();
 }
 
-class _LateInLateOutPageState extends State<LateInLateOutPage> {
+class _LateInLateOutCreatePageState extends State<LateInLateOutCreatePage> {
   final remarkController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -147,8 +148,19 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade600, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: const Text("Late In / Late Out Application"),
-        backgroundColor: Colors.blue[700],
+        // backgroundColor: Colors.blue[700],
         foregroundColor: Colors.white,
       ),
       body: Padding(
@@ -203,7 +215,7 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue[800],
+                          color: Colors.green[800],
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -308,7 +320,7 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
                               fillColor: Colors.grey.shade50,
                             ),
                             // initialValue: approver,
-                            value:approver,
+                            value: approver,
                             items: approveData?.approvedBy
                                 .map(
                                   (e) => DropdownMenuItem(
@@ -342,7 +354,7 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
                               fillColor: Colors.grey.shade50,
                             ),
                             // initialValue: recommender,
-                            value:recommender,
+                            value: recommender,
                             items: approveData?.recommendedBy
                                 .map(
                                   (e) => DropdownMenuItem(
@@ -390,14 +402,12 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
                             child: OutlinedButton(
                               onPressed: () => Navigator.pop(context),
                               style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                side: BorderSide(color: Colors.blue[700]!),
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                side: BorderSide(color: Colors.red.shade700),
                               ),
                               child: Text(
                                 "Cancel",
-                                style: TextStyle(color: Colors.blue[700]),
+                                style: TextStyle(color: Colors.red[700]),
                               ),
                             ),
                           ),
@@ -410,7 +420,7 @@ class _LateInLateOutPageState extends State<LateInLateOutPage> {
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 16,
                                 ),
-                                backgroundColor: Colors.blue[700],
+                                backgroundColor: Colors.green[700],
                               ),
                               child: const Text(
                                 "Submit",

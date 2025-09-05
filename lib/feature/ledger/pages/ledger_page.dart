@@ -229,17 +229,22 @@ class _LedgerPageState extends State<LedgerPage> {
     return Scaffold(
       backgroundColor: Color(0xFFF1F8E9),
       appBar: AppBar(
-        title: Text(
-          "Attendance Ledger",
-          style: TextStyle(
-            color: Color(0xFF2E7D32),
-            fontWeight: FontWeight.bold,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade600, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
         ),
+        title: Text(
+          "Attendance Ledger",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Color(0xFF2E7D32)),
       ),
       body: Consumer<LedgerProvider>(
         builder: (context, state, _) {

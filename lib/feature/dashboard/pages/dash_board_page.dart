@@ -69,7 +69,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     final cardWidth = (MediaQuery.of(context).size.width - 48) / 2;
     final dashBoardProvider = context.watch<DashboardProvider>();
-    final dashBoardData = dashBoardProvider.dashboard;
+    final dashBoardData = dashBoardProvider.fetchDashBoardState.data;
     final profilePro = context.read<ProfileProvider>();
 
     final Map<String, double> months = {
@@ -77,10 +77,10 @@ class _DashboardPageState extends State<DashboardPage> {
         key: dashBoardData?.monthlyStats?.toChartData()[key] ?? 0.0,
     };
 
-    return dashBoardProvider.isLoading
+    return dashBoardProvider.fetchDashBoardState.isLoading
         ? DashboardShimmer()
-        : dashBoardProvider.errorMessage != null
-        ? Center(child: Text(dashBoardProvider.errorMessage!))
+        : dashBoardProvider.fetchDashBoardState.error != null
+        ? Center(child: Text(dashBoardProvider.fetchDashBoardState.error!))
         : Scaffold(
             backgroundColor: Color(0xFFF1F8E9),
             appBar: AppBar(
@@ -92,7 +92,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: [
                   Consumer<ProfileProvider>(
                     builder: (context, data, _) {
-                      final imageUrl = data.fetchProfileState.data?.profile?.imageUrl;
+                      final imageUrl =
+                          data.fetchProfileState.data?.profile?.imageUrl;
 
                       if (imageUrl == null || imageUrl.isEmpty) {
                         // Return a placeholder or default avatar
@@ -163,26 +164,6 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ],
               ),
-
-              actions: [
-                // Padding(
-                //   padding: EdgeInsets.only(right: 16),
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //       gradient: LinearGradient(
-                //         colors: greenGradient,
-                //         begin: Alignment.topLeft,
-                //         end: Alignment.bottomRight,
-                //       ),
-                //       shape: BoxShape.circle,
-                //     ),
-                //     child: IconButton(
-                //       icon: Icon(Icons.notifications_none, color: Colors.white),
-                //       onPressed: () {},
-                //     ),
-                //   ),
-                // ),
-              ],
             ),
             drawer: AppDrawer(),
             body: SingleChildScrollView(

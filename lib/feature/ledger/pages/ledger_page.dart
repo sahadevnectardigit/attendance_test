@@ -197,7 +197,7 @@ class _LedgerPageState extends State<LedgerPage> {
                             Navigator.pop(ctx);
 
                             // Fetch data for the selected month
-                            context.read<LedgerProvider>().fetchLedgerData(
+                            context.read<LedgerProvider>().fetchLedgerDataa(
                               year: selectedYear,
                               month: selectedMonth,
                             );
@@ -308,13 +308,13 @@ class _LedgerPageState extends State<LedgerPage> {
                 SizedBox(height: 15),
 
                 // Summary statistics
-                if (state.ledgerModel?.summaryData != null)
-                  _buildSummaryCard(state.ledgerModel!.summaryData!),
+                if (state.fetchLedgerState.data?.summaryData != null)
+                  _buildSummaryCard(state.fetchLedgerState.data!.summaryData!),
                 SizedBox(height: 15),
 
                 // Calendar view
                 Expanded(
-                  child: state.isLoading
+                  child: state.fetchLedgerState.isLoading
                       ? Center(
                           child: CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
@@ -326,8 +326,9 @@ class _LedgerPageState extends State<LedgerPage> {
                           year: selectedYear!,
                           month: selectedMonth!,
                           ledgerProvider: state,
-                          summaryData: state.ledgerModel!.summaryData!,
-                          detailData: state.ledgerModel!.detailData!,
+                          summaryData: state.fetchLedgerState.data?.summaryData,
+                          detailData:
+                              state.fetchLedgerState.data?.detailData ?? [],
                         ),
                 ),
               ],

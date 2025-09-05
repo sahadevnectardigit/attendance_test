@@ -17,7 +17,7 @@ class AppProviders {
     ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),
 
     ChangeNotifierProvider<DashboardProvider>(
-      create: (_) => DashboardProvider()..fetchDashboard(),
+      create: (_) => DashboardProvider()..fetchDashboardData(),
     ),
     ChangeNotifierProvider<ProfileProvider>(
       create: (_) => ProfileProvider()..fetchProfileData(),
@@ -31,7 +31,7 @@ class AppProviders {
 
     ChangeNotifierProvider<LedgerProvider>(
       create: (_) => LedgerProvider()
-        ..fetchLedgerData(
+        ..fetchLedgerDataa(
           month: NepaliDateTime.now().month,
           year: NepaliDateTime.now().year,
         ),

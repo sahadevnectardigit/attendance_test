@@ -36,12 +36,12 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<SalaryProvider>();
-    final data = provider.salaryList;
+    final data = provider.fetchSalaryState.data;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: _buildAppBar(),
-      body: provider.isLoading
+      body: provider.fetchSalaryState.isLoading
           ? _buildLoadingState()
           : data == null || data.isEmpty
           ? _buildEmptyState()

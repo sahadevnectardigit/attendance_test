@@ -8,15 +8,15 @@ class CustomCalendarWidget extends StatelessWidget {
   final int month;
   final LedgerProvider ledgerProvider;
   final List<DetailData> detailData;
-  final SummaryData summaryData;
+  final SummaryData? summaryData;
 
   const CustomCalendarWidget({
     super.key,
     required this.year,
     required this.month,
     required this.ledgerProvider,
-    required this.detailData,
-    required this.summaryData,
+    this.detailData = const [], // ✅ default empty list
+    this.summaryData, // ✅ nullable
   });
 
   @override
@@ -72,7 +72,19 @@ class CustomCalendarWidget extends StatelessWidget {
           MaterialPageRoute(
             builder: (_) => AttendanceMonthlyDetails(
               detailData: detailData,
-              summaryData: summaryData,
+              summaryData:
+                  summaryData ??
+                  SummaryData(
+                    total: 0,
+                    present: 0,
+                    absent: 0,
+                    leave: 0,
+                    officialVisit: 0,
+                    holiday: 0,
+                    weekend: 0,
+                    lateIn: 0,
+                    earlyOut: 0,
+                  ),
             ),
           ),
         );

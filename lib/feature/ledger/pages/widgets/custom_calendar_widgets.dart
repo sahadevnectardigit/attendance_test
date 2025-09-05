@@ -88,6 +88,7 @@ class CustomCalendarWidget extends StatelessWidget {
             ),
           ),
         );
+     
       },
       child: Container(
         padding: EdgeInsets.all(8),
@@ -113,7 +114,7 @@ class CustomCalendarWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade700,
+                  color: Colors.black,
                 ),
               ),
             ),
@@ -130,7 +131,7 @@ class CustomCalendarWidget extends StatelessWidget {
                           day,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue.shade700,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -196,27 +197,32 @@ class CustomCalendarWidget extends StatelessWidget {
                       }
 
                       return Expanded(
-                        child: Container(
-                          margin: EdgeInsets.all(2),
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: bgColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '$dayNumber',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: textColor,
+                        child: GestureDetector(
+                          onTap: (){
+
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(2),
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: bgColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '$dayNumber',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: textColor,
+                                    ),
                                   ),
-                                ),
-                                if (icon != null)
-                                  Icon(icon, size: 12, color: textColor),
-                              ],
+                                  if (icon != null)
+                                    Icon(icon, size: 12, color: textColor),
+                                ],
+                              ),
                             ),
                           ),
                         ),

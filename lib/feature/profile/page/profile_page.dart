@@ -370,7 +370,11 @@ class _ProfilePageState extends State<ProfilePage>
         children: [
           Row(
             children: [
-              Icon(Icons.person_outline, color: Colors.blue.shade600, size: 24),
+              Icon(
+                Icons.person_outline,
+                color: Colors.green.shade600,
+                size: 24,
+              ),
               SizedBox(width: 12),
               Text(
                 'Profile Information',

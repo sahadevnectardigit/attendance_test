@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue.shade50, Colors.white, Colors.grey.shade50],
+            colors: [Colors.green.shade100, Colors.white, Colors.grey.shade50],
             stops: [0.0, 0.4, 1.0],
           ),
         ),
@@ -200,7 +200,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   _obscurePassword
                       ? Icons.visibility_outlined
                       : Icons.visibility_off_outlined,
-                  color: Colors.grey.shade600,
+                  color: Colors.green.shade600,
                 ),
                 onPressed: () {
                   setState(() {
@@ -238,14 +238,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: Colors.grey.shade700,
-          ),
-        ),
+        // Text(
+        //   label,
+        //   style: TextStyle(
+        //     fontSize: 14,
+        //     fontWeight: FontWeight.w600,
+        //     color: Colors.grey.shade700,
+        //   ),
+        // ),
         SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -254,7 +254,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           validator: validator,
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           decoration: InputDecoration(
+            labelText: label,
             hintText: hint,
+            // labelStyle: TextStyle(
+            //   color: Colors.green.shade400,
+            //   fontWeight: FontWeight.w400,
+            // ),
             hintStyle: TextStyle(
               color: Colors.grey.shade400,
               fontWeight: FontWeight.w400,
@@ -263,32 +268,32 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               margin: EdgeInsets.all(12),
               padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.blue.shade50,
+                color: Colors.green.shade50,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, size: 20, color: Colors.blue.shade600),
+              child: Icon(icon, size: 20, color: Colors.green.shade600),
             ),
             suffixIcon: suffixIcon,
             filled: true,
             fillColor: Colors.grey.shade50,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey.shade200),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey.shade200),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.blue.shade400, width: 2),
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.green.shade400, width: 2),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.red.shade400),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.red.shade400, width: 2),
             ),
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -305,7 +310,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-              color: rememberMe ? Colors.blue.shade400 : Colors.grey.shade300,
+              color: rememberMe ? Colors.green.shade400 : Colors.grey.shade300,
               width: 2,
             ),
           ),
@@ -316,7 +321,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 rememberMe = value ?? false;
               });
             },
-            activeColor: Colors.blue.shade600,
+            activeColor: Colors.green.shade600,
             checkColor: Colors.white,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
@@ -344,7 +349,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         gradient: LinearGradient(
           colors: loginProvider.loginState.isLoading
               ? [Colors.grey.shade400, Colors.grey.shade300]
-              : [Colors.blue.shade600, Colors.blue.shade500],
+              : [Colors.green.shade600, Colors.green.shade500],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -353,7 +358,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           BoxShadow(
             color: loginProvider.loginState.isLoading
                 ? Colors.grey.withOpacity(0.3)
-                : Colors.blue.withOpacity(0.4),
+                : Colors.green.withOpacity(0.4),
             blurRadius: 15,
             offset: Offset(0, 8),
           ),

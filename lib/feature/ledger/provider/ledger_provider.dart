@@ -9,10 +9,6 @@ import '../../../core/constants/api_constants.dart';
 import '../../../core/services/custom_snackbar.dart';
 
 class LedgerProvider extends ChangeNotifier {
-  // LedgerModel? ledgerModel;
-  // String? errorMessage;
-  // bool isLoading = false;
-
   static final MainApiClient _client = MainApiClient();
 
   ApiState<LedgerModel> fetchLedgerState = const ApiState.initial();
@@ -51,30 +47,6 @@ class LedgerProvider extends ChangeNotifier {
       return true;
     }
   }
-
-  // Future<bool> fetchLedgerData({int? year, int? month}) async {
-  //   isLoading = true;
-  //   errorMessage = null;
-  //   notifyListeners();
-
-  //   final result = await LedgerRepo.fetchLedgerData(month: month, year: year);
-
-  //   isLoading = false;
-
-  //   if (result.isSuccess && result.data != null) {
-  //     ledgerModel = result.data;
-  //     notifyListeners();
-  //     errorMessage = null;
-  //     return true;
-  //   } else {
-  //     ledgerModel = null;
-  //     errorMessage =
-  //         result.message ?? "Failed to load ledger data"; // failure → string
-
-  //     notifyListeners();
-  //     return false;
-  //   }
-  // }
 
   // Helper method to get attendance status for a specific date
   String? getAttendanceStatus(String date) {

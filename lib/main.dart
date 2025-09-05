@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Attendance Login',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade50),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green.shade700),
         ),
         builder: EasyLoading.init(),
         home: SplashPage(),

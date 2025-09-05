@@ -25,9 +25,9 @@ class ApiUrl {
 
   ///getApplications status api
   static const String getLeaveApplications =
-      "$palpajun//api/leave-applications/";
+      "$palpajun/api/leave-applications/";
   static const String getOfficialVisitApplications =
-      "$palpajun/official-visit-applications/";
+      "$palpajun/api/official-visit-applications/";
   static const String getLateInEaryOutApplications =
-      "$palpajun/lateIn-earlyOut-applications/";
+      "$palpajun/api/lateIn-earlyOut-applications/";
 }

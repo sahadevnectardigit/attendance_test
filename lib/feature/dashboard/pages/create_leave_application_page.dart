@@ -5,14 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
 
-class LeaveApplicationPage extends StatefulWidget {
-  const LeaveApplicationPage({super.key});
+class CreateLeaveApplicationPage extends StatefulWidget {
+  const CreateLeaveApplicationPage({super.key});
 
   @override
-  State<LeaveApplicationPage> createState() => _LeaveApplicationPageState();
+  State<CreateLeaveApplicationPage> createState() =>
+      _CreateLeaveApplicationPageState();
 }
 
-class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
+class _CreateLeaveApplicationPageState
+    extends State<CreateLeaveApplicationPage> {
   final _formKey = GlobalKey<FormState>();
 
   // Controllers
@@ -194,8 +196,8 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: DropdownButtonFormField<int>(
-                            initialValue: _leaveType,
-
+                            // initialValue: _leaveType,
+                            value: _leaveType,
                             decoration: InputDecoration(
                               labelText: "Leave Type",
                               border: InputBorder.none,
@@ -235,7 +237,8 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: DropdownButtonFormField<int>(
-                                  initialValue: _approverId,
+                                  // initialValue: _approverId,
+                                  value: _approverId,
                                   decoration: InputDecoration(
                                     labelText: "Approve By",
                                     border: InputBorder.none,
@@ -273,7 +276,8 @@ class _LeaveApplicationPageState extends State<LeaveApplicationPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: DropdownButtonFormField<int>(
-                                  initialValue: _recommenderId,
+                                  // initialValue: _recommenderId,
+                                  value: _recommenderId,
                                   decoration: InputDecoration(
                                     labelText: "Recommend By",
                                     border: InputBorder.none,

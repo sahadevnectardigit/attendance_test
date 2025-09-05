@@ -5,7 +5,10 @@ import 'package:attendance/core/utils/error_handler.dart';
 import 'package:attendance/feature/dashboard/model/approve_recommended_model.dart';
 import 'package:attendance/feature/dashboard/model/officail_visit_model.dart';
 import 'package:attendance/models/api_state.dart';
+import 'package:attendance/models/latein_earlyout_app_list_model.dart';
+import 'package:attendance/models/leave_application_list_model.dart';
 import 'package:attendance/models/leave_type_model.dart';
+import 'package:attendance/models/official_application_list_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -20,6 +23,114 @@ class ApplicationProvider extends ChangeNotifier {
   ApiState<void> postOfficialAppState = const ApiState.initial();
   ApiState<void> postLeaveAppState = const ApiState.initial();
   ApiState<void> postLateInAppState = const ApiState.initial();
+  ApiState<List<OfficialApplicationListModel>> fetchOfficialAppListState =
+      const ApiState.initial();
+  ApiState<List<LeaveApplicationListModel>> fetchLeaveAppListState =
+      const ApiState.initial();
+  ApiState<List<LateInOutAppListModel>> fetchLateInAppListState =
+      const ApiState.initial();
+
+  Future<void> fetchLateInAppList() async {
+    fetchLateInAppListState = const ApiState.loading();
+    notifyListeners();
+
+    try {
+      final response = await _client.get(
+        path: ApiUrl.getLateInEaryOutApplications,
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        final modelList = data
+            .map((item) => LateInOutAppListModel.fromJson(item))
+            .toList();
+        fetchLateInAppListState = ApiState.success(modelList);
+        notifyListeners();
+      } else {
+        fetchOfficialAppListState = const ApiState.error(
+          "Failed to fetch latein earlyout applications",
+        );
+        CustomSnackbar.error(fetchLateInAppListState.error.toString());
+        notifyListeners();
+      }
+    } on DioException catch (e) {
+      fetchLateInAppListState = ApiState.error(ApiErrorHandler.handleError(e));
+      CustomSnackbar.error(fetchLateInAppListState.error.toString());
+      notifyListeners();
+    } catch (e) {
+      fetchLateInAppListState = ApiState.error("Unexpected error: $e");
+      CustomSnackbar.error(fetchLateInAppListState.error.toString());
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchLeaveAppList() async {
+    fetchLeaveAppListState = const ApiState.loading();
+    notifyListeners();
+
+    try {
+      final response = await _client.get(path: ApiUrl.getLeaveApplications);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        final modelList = data
+            .map((item) => LeaveApplicationListModel.fromJson(item))
+            .toList();
+        fetchLeaveAppListState = ApiState.success(modelList);
+        notifyListeners();
+      } else {
+        fetchOfficialAppListState = const ApiState.error(
+          "Failed to fetch leave applications data",
+        );
+        CustomSnackbar.error(fetchLeaveAppListState.error.toString());
+        notifyListeners();
+      }
+    } on DioException catch (e) {
+      fetchLeaveAppListState = ApiState.error(ApiErrorHandler.handleError(e));
+      CustomSnackbar.error(fetchLeaveAppListState.error.toString());
+      notifyListeners();
+    } catch (e) {
+      fetchLeaveAppListState = ApiState.error("Unexpected error: $e");
+      CustomSnackbar.error(fetchLeaveAppListState.error.toString());
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchOfficialAppList() async {
+    fetchOfficialAppListState = const ApiState.loading();
+    notifyListeners();
+
+    try {
+      final response = await _client.get(
+        path: ApiUrl.getOfficialVisitApplications,
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        final modelList = data
+            .map((item) => OfficialApplicationListModel.fromJson(item))
+            .toList();
+        fetchOfficialAppListState = ApiState.success(modelList);
+        notifyListeners();
+      } else {
+        fetchOfficialAppListState = const ApiState.error(
+          "Failed to fetch official applications data",
+        );
+        CustomSnackbar.error(fetchOfficialState.error.toString());
+        notifyListeners();
+      }
+    } on DioException catch (e) {
+      fetchOfficialAppListState = ApiState.error(
+        ApiErrorHandler.handleError(e),
+      );
+      CustomSnackbar.error(fetchOfficialAppListState.error.toString());
+      notifyListeners();
+    } catch (e) {
+      fetchOfficialAppListState = ApiState.error("Unexpected error: $e");
+      CustomSnackbar.error(fetchOfficialAppListState.error.toString());
+      notifyListeners();
+    }
+  }
 
   Future<bool> createLeaveApplication({
     required BuildContext context,
@@ -37,6 +148,7 @@ class ApplicationProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 201) {
+        fetchLeaveAppList();
         CustomSnackbar.success("Application created successfully!");
         notifyListeners();
         return true; // API succeeded
@@ -81,6 +193,7 @@ class ApplicationProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 201) {
+        fetchLateInAppList();
         CustomSnackbar.success("Application created successfully!");
         notifyListeners();
         return true; // API succeeded
@@ -128,6 +241,7 @@ class ApplicationProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 201) {
+        fetchOfficialAppList();
         CustomSnackbar.success("Application created successfully!");
         notifyListeners();
         return true; // API succeeded

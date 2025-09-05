@@ -1,19 +1,50 @@
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
+import 'package:attendance/feature/dashboard/pages/latein_earlyout_applist_page.dart';
 import 'package:attendance/feature/dashboard/pages/latein_lateout_page.dart';
-import 'package:attendance/feature/dashboard/pages/leave_application_page.dart';
-import 'package:attendance/feature/dashboard/pages/official_application_page.dart';
+import 'package:attendance/feature/dashboard/pages/leave_app_list_page.dart';
+import 'package:attendance/feature/dashboard/pages/official_application_list_page.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
+import 'package:attendance/models/official_application_list_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key});
+  AppDrawer({super.key});
+  // Example usage with your API response
+  // Mock API Response (as Map list)
+  List<Map<String, dynamic>> mockApiResponse = [
+    {
+      "id": 47,
+      "name": {"id": 2, "name": "Sales Meeting", "short_name": "SM"},
+      "person": 7,
+      "from_date_en": "2025-09-05",
+      "from_date_np": "2082-05-20",
+      "to_date_en": "2025-09-05",
+      "to_date_np": "2082-05-20",
+      "approved_by": 2,
+      "recommended_by": 1,
+      "approved": false,
+      "approved_date": null,
+      "recommended_date": null,
+      "days": "1.00",
+      "half_day": false,
+      "remarks": "",
+      "applied_date": "2025-09-05",
+      "place": "vsvsv",
+      "allowance_claimed": "0.00",
+      "viewed": false,
+      "current_status": "Pending",
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
+    // Convert into model
+    List<OfficialApplicationListModel> apiResponse =
+        OfficialApplicationListModel.listFromJson(mockApiResponse);
     // Green theme colors
     final List<Color> greenGradient = [Color(0xFF4CAF50), Color(0xFF2E7D32)];
 
@@ -175,10 +206,11 @@ class AppDrawer extends StatelessWidget {
               subtitle: "Submit work-related requests",
               iconColor: Color(0xFF4CAF50),
               onTap: () {
+                // OfficialApplicationPage
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OfficialApplicationPage(),
+                    builder: (context) => ApplicationListPage(),
                   ),
                 );
               },
@@ -194,7 +226,7 @@ class AppDrawer extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LeaveApplicationPage(),
+                    builder: (context) => LeaveAppListPage(),
                   ),
                 );
               },
@@ -209,7 +241,7 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LateInLateOutPage()),
+                  MaterialPageRoute(builder: (context) => LateInEarlyOutAppListPage()),
                 );
               },
             ),

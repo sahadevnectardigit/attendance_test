@@ -1,4 +1,4 @@
-import 'package:attendance/feature/dashboard/pages/create_leave_application_page.dart';
+import 'package:attendance/feature/dashboard/pages/applications/create_leave_application_page.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

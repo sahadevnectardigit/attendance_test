@@ -1,5 +1,5 @@
 import 'package:attendance/core/widgets/dashboard_shimmer.dart';
-import 'package:attendance/feature/dashboard/pages/screens/app_drawer.dart';
+import 'package:attendance/feature/dashboard/pages/app_drawer.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';

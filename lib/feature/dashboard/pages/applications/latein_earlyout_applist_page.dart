@@ -1,16 +1,17 @@
-import 'package:attendance/feature/dashboard/pages/create_official_application_page.dart';
+import 'package:attendance/feature/dashboard/pages/applications/latein_lateout_page.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ApplicationListPage extends StatefulWidget {
-  const ApplicationListPage({super.key});
+class LateInEarlyOutAppListPage extends StatefulWidget {
+  const LateInEarlyOutAppListPage({super.key});
 
   @override
-  State<ApplicationListPage> createState() => _ApplicationListPageState();
+  State<LateInEarlyOutAppListPage> createState() =>
+      _LateInEarlyOutAppListPageState();
 }
 
-class _ApplicationListPageState extends State<ApplicationListPage> {
+class _LateInEarlyOutAppListPageState extends State<LateInEarlyOutAppListPage> {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case "approved":
@@ -32,15 +33,14 @@ class _ApplicationListPageState extends State<ApplicationListPage> {
       Provider.of<ApplicationProvider>(
         context,
         listen: false,
-      ).fetchOfficialAppList();
+      ).fetchLateInAppList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final appPro = context.watch<ApplicationProvider>();
-
-    final appList = appPro.fetchOfficialAppListState;
+    final appList = appPro.fetchLateInAppListState;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -55,8 +55,8 @@ class _ApplicationListPageState extends State<ApplicationListPage> {
           ),
         ),
         foregroundColor: Colors.white,
+        title: const Text("Latein Earlyout Applications"),
 
-        title: const Text("Official Applications"),
       ),
       body: appList.isLoading
           ? Center(child: CircularProgressIndicator())
@@ -87,7 +87,7 @@ class _ApplicationListPageState extends State<ApplicationListPage> {
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16),
                       title: Text(
-                        app?.name ?? "N/A",
+                        app?.lateInOut ?? "N/A",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.green,
@@ -99,11 +99,9 @@ class _ApplicationListPageState extends State<ApplicationListPage> {
                         children: [
                           const SizedBox(height: 6),
                           Text("Applied Date: ${app?.appliedDate}"),
-                          Text(
-                            "From: ${app?.fromDateEn}  To: ${app?.toDateEn}",
-                          ),
-                          Text("Days: ${app?.days}"),
-                          Text("Place: ${app?.place}"),
+                          Text("From: ${app?.dateNp}"),
+                          // Text("Days: ${app?.name?}"),
+                          // Text("Place: ${app?.place}"),
                           const SizedBox(height: 6),
                           Row(
                             children: [
@@ -143,7 +141,7 @@ class _ApplicationListPageState extends State<ApplicationListPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => CreateOfficialApplicationPage()),
+            MaterialPageRoute(builder: (_) => LateInLateOutCreatePage()),
           );
         },
         label: Text('Create'),

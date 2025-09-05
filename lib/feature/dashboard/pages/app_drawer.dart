@@ -1,9 +1,9 @@
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
-import 'package:attendance/feature/dashboard/pages/latein_earlyout_applist_page.dart';
-import 'package:attendance/feature/dashboard/pages/latein_lateout_page.dart';
-import 'package:attendance/feature/dashboard/pages/leave_app_list_page.dart';
-import 'package:attendance/feature/dashboard/pages/official_application_list_page.dart';
+import 'package:attendance/feature/dashboard/pages/applications/latein_earlyout_applist_page.dart';
+import 'package:attendance/feature/dashboard/pages/applications/latein_lateout_page.dart';
+import 'package:attendance/feature/dashboard/pages/applications/leave_app_list_page.dart';
+import 'package:attendance/feature/dashboard/pages/applications/official_application_list_page.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:attendance/models/official_application_list_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';

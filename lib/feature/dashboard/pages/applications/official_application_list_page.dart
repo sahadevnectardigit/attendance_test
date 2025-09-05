@@ -1,17 +1,16 @@
-import 'package:attendance/feature/dashboard/pages/latein_lateout_page.dart';
+import 'package:attendance/feature/dashboard/pages/applications/create_official_application_page.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LateInEarlyOutAppListPage extends StatefulWidget {
-  const LateInEarlyOutAppListPage({super.key});
+class ApplicationListPage extends StatefulWidget {
+  const ApplicationListPage({super.key});
 
   @override
-  State<LateInEarlyOutAppListPage> createState() =>
-      _LateInEarlyOutAppListPageState();
+  State<ApplicationListPage> createState() => _ApplicationListPageState();
 }
 
-class _LateInEarlyOutAppListPageState extends State<LateInEarlyOutAppListPage> {
+class _ApplicationListPageState extends State<ApplicationListPage> {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case "approved":
@@ -33,14 +32,15 @@ class _LateInEarlyOutAppListPageState extends State<LateInEarlyOutAppListPage> {
       Provider.of<ApplicationProvider>(
         context,
         listen: false,
-      ).fetchLateInAppList();
+      ).fetchOfficialAppList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final appPro = context.watch<ApplicationProvider>();
-    final appList = appPro.fetchLateInAppListState;
+
+    final appList = appPro.fetchOfficialAppListState;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -55,8 +55,8 @@ class _LateInEarlyOutAppListPageState extends State<LateInEarlyOutAppListPage> {
           ),
         ),
         foregroundColor: Colors.white,
-        title: const Text("Latein Earlyout Applications"),
 
+        title: const Text("Official Applications"),
       ),
       body: appList.isLoading
           ? Center(child: CircularProgressIndicator())
@@ -87,7 +87,7 @@ class _LateInEarlyOutAppListPageState extends State<LateInEarlyOutAppListPage> {
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16),
                       title: Text(
-                        app?.lateInOut ?? "N/A",
+                        app?.name ?? "N/A",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.green,
@@ -99,9 +99,11 @@ class _LateInEarlyOutAppListPageState extends State<LateInEarlyOutAppListPage> {
                         children: [
                           const SizedBox(height: 6),
                           Text("Applied Date: ${app?.appliedDate}"),
-                          Text("From: ${app?.dateNp}"),
-                          // Text("Days: ${app?.name?}"),
-                          // Text("Place: ${app?.place}"),
+                          Text(
+                            "From: ${app?.fromDateEn}  To: ${app?.toDateEn}",
+                          ),
+                          Text("Days: ${app?.days}"),
+                          Text("Place: ${app?.place}"),
                           const SizedBox(height: 6),
                           Row(
                             children: [
@@ -141,7 +143,7 @@ class _LateInEarlyOutAppListPageState extends State<LateInEarlyOutAppListPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => LateInLateOutCreatePage()),
+            MaterialPageRoute(builder: (_) => CreateOfficialApplicationPage()),
           );
         },
         label: Text('Create'),

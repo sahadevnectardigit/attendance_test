@@ -13,7 +13,7 @@ class LedgerProvider extends ChangeNotifier {
 
   ApiState<LedgerModel> fetchLedgerState = const ApiState.initial();
 
-  Future<bool> fetchLedgerDataa({int? year, int? month}) async {
+  Future<bool> fetchLedgerData({int? year, int? month}) async {
     fetchLedgerState = const ApiState.loading();
     notifyListeners();
 

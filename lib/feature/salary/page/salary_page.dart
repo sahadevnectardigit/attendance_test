@@ -177,7 +177,7 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
           ElevatedButton.icon(
             onPressed: () {
               // Add refresh functionality
-              setState(() {});
+              context.read<SalaryProvider>().fetchSalary();
             },
             icon: Icon(Icons.refresh),
             label: Text('Refresh'),

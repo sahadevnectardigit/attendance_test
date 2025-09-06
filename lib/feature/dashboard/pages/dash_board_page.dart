@@ -1,7 +1,9 @@
 import 'package:attendance/core/widgets/dashboard_shimmer.dart';
 import 'package:attendance/feature/dashboard/pages/app_drawer.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
+import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
+import 'package:attendance/feature/salary/provider/salary_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -79,10 +81,13 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return dashBoardProvider.fetchDashBoardState.isLoading
         ? DashboardShimmer()
+        : dashBoardData == null
+        ? _buildEmptyState()
         : dashBoardProvider.fetchDashBoardState.error != null
         ? Center(child: Text(dashBoardProvider.fetchDashBoardState.error!))
         : Scaffold(
-            backgroundColor: Color(0xFFF1F8E9),
+            // backgroundColor: Color(0xFFF1F8E9),
+            backgroundColor: Colors.white,
             appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.transparent,
@@ -215,7 +220,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             Text(
                               selectedStringMonth != null
                                   ? "$selectedStringMonth,$selectedMonth $selectedYear"
-                                  : dashBoardData?.nepaliMonth ?? "N/A",
+                                  : dashBoardData.nepaliMonth ?? "N/A",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
@@ -330,42 +335,42 @@ class _DashboardPageState extends State<DashboardPage> {
                             buildStatCard(
                               cardWidth,
                               "Present",
-                              "${dashBoardData?.monthlyStats?.present ?? 0}",
+                              "${dashBoardData.monthlyStats?.present ?? 0}",
                               "",
                               Color(0xFF4CAF50),
                             ),
                             buildStatCard(
                               cardWidth,
                               "Absent",
-                              "${dashBoardData?.monthlyStats?.absent ?? 0}",
+                              "${dashBoardData.monthlyStats?.absent ?? 0}",
                               "",
                               Color(0xFFF44336),
                             ),
                             buildStatCard(
                               cardWidth,
                               "Late in",
-                              "${dashBoardData?.monthlyStats?.lateIn ?? 0}",
+                              "${dashBoardData.monthlyStats?.lateIn ?? 0}",
                               "",
                               Color(0xFFFF9800),
                             ),
                             buildStatCard(
                               cardWidth,
                               "Early Out",
-                              "${dashBoardData?.monthlyStats?.earlyOut ?? 0}",
+                              "${dashBoardData.monthlyStats?.earlyOut ?? 0}",
                               "",
                               Color(0xFF9C27B0),
                             ),
                             buildStatCard(
                               cardWidth,
                               "Holidays",
-                              "${dashBoardData?.monthlyStats?.holiday ?? 0}",
+                              "${dashBoardData.monthlyStats?.holiday ?? 0}",
                               "",
                               Color(0xFF2196F3),
                             ),
                             buildStatCard(
                               cardWidth,
                               "Approved leave",
-                              "${dashBoardData?.monthlyStats?.approvedLeave ?? 0}",
+                              "${dashBoardData.monthlyStats?.approvedLeave ?? 0}",
                               "",
                               Color(0xFF009688),
                             ),
@@ -430,6 +435,61 @@ class _DashboardPageState extends State<DashboardPage> {
                 fontWeight: FontWeight.w400,
               ),
             ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(40),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.apps, size: 80, color: Colors.grey.shade400),
+          ),
+          SizedBox(height: 24),
+          Text(
+            'No Data Available',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade700,
+            ),
+          ),
+          SizedBox(height: 8),
+          FittedBox(
+            child: Text(
+              'Your dashboard data will appear here once available',
+              style: TextStyle(fontSize: 14, color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(height: 32),
+          ElevatedButton.icon(
+            onPressed: () {
+              // Add refresh functionality
+              context.read<DashboardProvider>().fetchDashboardData();
+              context.read<ProfileProvider>().fetchProfileData();
+              context.read<LedgerProvider>().fetchLedgerData();
+              context.read<SalaryProvider>().fetchSalary();
+            },
+            icon: Icon(Icons.refresh),
+            label: Text('Refresh'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green.shade600,
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
+          ),
         ],
       ),
     );

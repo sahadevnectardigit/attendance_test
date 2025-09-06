@@ -197,7 +197,7 @@ class _LedgerPageState extends State<LedgerPage> {
                             Navigator.pop(ctx);
 
                             // Fetch data for the selected month
-                            context.read<LedgerProvider>().fetchLedgerDataa(
+                            context.read<LedgerProvider>().fetchLedgerData(
                               year: selectedYear,
                               month: selectedMonth,
                             );

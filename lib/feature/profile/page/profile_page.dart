@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:attendance/core/provider/locale_provider.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
+import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
+import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/page/change_password.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
+import 'package:attendance/feature/salary/provider/salary_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -162,6 +165,25 @@ class _ProfilePageState extends State<ProfilePage>
                 errorMessage,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+              ),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                // Add refresh functionality
+                context.read<DashboardProvider>().fetchDashboardData();
+                context.read<ProfileProvider>().fetchProfileData();
+                context.read<LedgerProvider>().fetchLedgerData();
+                context.read<SalaryProvider>().fetchSalary();
+              },
+              icon: Icon(Icons.refresh),
+              label: Text('Refresh'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green.shade600,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
               ),
             ),
           ],

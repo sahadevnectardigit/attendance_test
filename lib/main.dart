@@ -1,4 +1,5 @@
 import 'package:attendance/core/provider/locale_provider.dart';
+import 'package:attendance/core/provider/provider_class.dart';
 import 'package:attendance/core/services/easy_loading_config.dart';
 import 'package:attendance/core/services/main_api_client.dart';
 import 'package:attendance/core/widgets/loading_widget.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 
-import 'core/provider/provider_class.dart';
+// import 'core/provider/provider_class.dart';
 import 'l10n/app_localizations.dart'; // auto-generated
 
 // Add this to your main.dart or a global file

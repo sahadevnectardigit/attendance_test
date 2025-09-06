@@ -198,11 +198,11 @@ class TaxBreakdown {
   // Helper methods
   double get taxRateValue => double.tryParse(taxRate?.replaceAll('%', '') ?? '0') ?? 0;
   double get taxLiabilityValue {
-    final value = taxLiability?.replaceAll('Rs.', '')?.replaceAll(',', '')?.trim() ?? '0';
+    final value = taxLiability?.replaceAll('Rs.', '').replaceAll(',', '').trim() ?? '0';
     return double.tryParse(value) ?? 0;
   }
   double get taxableAmountValue {
-    final value = taxableAmount?.replaceAll('Rs.', '')?.replaceAll(',', '')?.trim() ?? '0';
+    final value = taxableAmount?.replaceAll('Rs.', '').replaceAll(',', '').trim() ?? '0';
     return double.tryParse(value) ?? 0;
   }
 

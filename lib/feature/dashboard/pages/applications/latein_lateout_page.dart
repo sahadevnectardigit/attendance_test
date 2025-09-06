@@ -190,7 +190,7 @@ class _LateInLateOutCreatePageState extends State<LateInLateOutCreatePage> {
                               fillColor: Colors.grey.shade50,
                             ),
                             // initialValue: lateInLateOut,
-                            value: lateInLateOut,
+                            initialValue: lateInLateOut,
                             items: lateOptions
                                 .map(
                                   (e) => DropdownMenuItem(
@@ -320,7 +320,7 @@ class _LateInLateOutCreatePageState extends State<LateInLateOutCreatePage> {
                               fillColor: Colors.grey.shade50,
                             ),
                             // initialValue: approver,
-                            value: approver,
+                            initialValue: approver,
                             items: approveData?.approvedBy
                                 .map(
                                   (e) => DropdownMenuItem(
@@ -354,7 +354,7 @@ class _LateInLateOutCreatePageState extends State<LateInLateOutCreatePage> {
                               fillColor: Colors.grey.shade50,
                             ),
                             // initialValue: recommender,
-                            value: recommender,
+                            initialValue: recommender,
                             items: approveData?.recommendedBy
                                 .map(
                                   (e) => DropdownMenuItem(

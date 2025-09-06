@@ -465,6 +465,7 @@ class _ProfilePageState extends State<ProfilePage>
         _buildLanguageCard(context),
         SizedBox(height: 12),
 
+        ///change password card
         _buildActionCard(
           context,
           icon: Icons.lock_outline,
@@ -494,6 +495,7 @@ class _ProfilePageState extends State<ProfilePage>
 
         SizedBox(height: 12),
 
+        ///logout card
         _buildActionCard(
           context,
           icon: Icons.logout_rounded,

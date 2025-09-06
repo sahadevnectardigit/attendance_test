@@ -1,5 +1,6 @@
 import 'package:attendance/core/provider/bottom_navbar_provider.dart';
 import 'package:attendance/core/provider/internet_checker.dart';
+import 'package:attendance/core/provider/locale_provider.dart';
 import 'package:attendance/feature/auth/provider/login_provider.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 class AppProviders {
   /// Returns a list of all providers in the app
   static List<ChangeNotifierProvider> get providers => [
+    ChangeNotifierProvider(create: (_) => LocaleProvider()),
     ChangeNotifierProvider(create: (_) => ConnectivityProvider()),
 
     ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),

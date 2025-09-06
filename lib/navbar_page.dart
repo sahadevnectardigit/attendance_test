@@ -3,6 +3,7 @@ import 'package:attendance/feature/dashboard/pages/dash_board_page.dart';
 import 'package:attendance/feature/ledger/pages/ledger_page.dart';
 import 'package:attendance/feature/profile/page/profile_page.dart';
 import 'package:attendance/feature/salary/page/salary_page.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -56,8 +57,12 @@ class NavBarPage extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.white70,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: AppLocalizations.of(context)!.home,
+            ),
+
             BottomNavigationBarItem(
               icon: Icon(Icons.attach_money),
               label: "Salary",

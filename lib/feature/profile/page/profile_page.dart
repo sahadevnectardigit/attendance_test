@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:attendance/core/provider/locale_provider.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
 import 'package:attendance/feature/profile/page/change_password.dart';
@@ -376,6 +377,7 @@ class _ProfilePageState extends State<ProfilePage>
                 size: 24,
               ),
               SizedBox(width: 12),
+
               Text(
                 'Profile Information',
                 style: TextStyle(
@@ -386,6 +388,8 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ],
           ),
+
+          ///TEst code for localization
           SizedBox(height: 16),
           _buildInfoRow(
             'Full Name',
@@ -458,6 +462,9 @@ class _ProfilePageState extends State<ProfilePage>
   Widget _buildActionCards(BuildContext context) {
     return Column(
       children: [
+        _buildLanguageCard(context),
+        SizedBox(height: 12),
+
         _buildActionCard(
           context,
           icon: Icons.lock_outline,
@@ -484,7 +491,9 @@ class _ProfilePageState extends State<ProfilePage>
             );
           },
         ),
+
         SizedBox(height: 12),
+
         _buildActionCard(
           context,
           icon: Icons.logout_rounded,
@@ -494,6 +503,91 @@ class _ProfilePageState extends State<ProfilePage>
           onTap: () => _showLogoutDialog(context),
         ),
       ],
+    );
+  }
+
+  Widget _buildLanguageCard(BuildContext context) {
+    final provider = Provider.of<LocaleProvider>(context, listen: false);
+    final currentLocale = Provider.of<LocaleProvider>(context).locale;
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        elevation: 2,
+        shadowColor: Colors.grey.withOpacity(0.2),
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Language Settings',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Select your preferred language',
+                style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
+              ),
+              SizedBox(height: 16),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<Locale>(
+                    isExpanded: true,
+                    value: currentLocale,
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.grey.shade600,
+                    ),
+                    elevation: 8,
+                    style: TextStyle(color: Colors.grey.shade800, fontSize: 16),
+                    onChanged: (Locale? newLocale) {
+                      if (newLocale != null) {
+                        provider.setLocale(newLocale);
+                      }
+                    },
+                    items: <Locale>[const Locale('en'), const Locale('ne')]
+                        .map<DropdownMenuItem<Locale>>((Locale value) {
+                          return DropdownMenuItem<Locale>(
+                            value: value,
+                            child: Row(
+                              children: [
+                                Text(
+                                  value.languageCode == 'en' ? '🇺🇸' : '🇳🇵',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                  ), // flag size
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  value.languageCode == 'en'
+                                      ? 'English'
+                                      : 'नेपाली',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          );
+                        })
+                        .toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

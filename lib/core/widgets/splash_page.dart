@@ -28,13 +28,14 @@ class _SplashPageState extends State<SplashPage> {
 
     // Validate that tokens exist and are not empty
     final hasValidToken = token != null && token.isNotEmpty;
-    final hasValidRefreshToken = refreshToken != null && refreshToken.isNotEmpty;
+    final hasValidRefreshToken =
+        refreshToken != null && refreshToken.isNotEmpty;
 
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (_) => (rememberMe && hasValidToken && hasValidRefreshToken)
-            ?  NavBarPage()
+            ? NavBarPage()
             : const LoginPage(),
       ),
     );

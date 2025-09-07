@@ -21,6 +21,15 @@ class AppLocalizationsNe extends AppLocalizations {
   String get emailAddress => 'इमेल ठेगाना';
 
   @override
+  String get enterEmail => 'तपाईंको इमेल प्रविष्ट गर्नुहोस्';
+
+  @override
+  String get enterCompanyCode => 'कम्पनी कोड प्रविष्ट गर्नुहोस्';
+
+  @override
+  String get enterPassword => 'तपाईंको पासवर्ड प्रविष्ट गर्नुहोस्';
+
+  @override
   String get companyCode => 'कम्पनी कोड';
 
   @override

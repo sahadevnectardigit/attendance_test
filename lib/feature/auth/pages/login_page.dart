@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           _buildTextField(
             controller: emailController,
             label: AppLocalizations.of(context)!.emailAddress,
-            hint: "Enter your email",
+            hint: AppLocalizations.of(context)!.enterEmail,
             icon: Icons.email_outlined,
             keyboardType: TextInputType.emailAddress,
             validator: (value) => value.validateEmail(),
@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           _buildTextField(
             controller: companyCodeController,
             label: AppLocalizations.of(context)!.companyCode,
-            hint: "Enter company code",
+            hint: AppLocalizations.of(context)!.enterCompanyCode,
             icon: Icons.business_outlined,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -179,8 +179,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           _buildTextField(
             controller: passwordController,
             label: AppLocalizations.of(context)!.password,
-
-            hint: "Enter your password",
+            hint: AppLocalizations.of(context)!.enterPassword,
             icon: Icons.lock_outlined,
             obscureText: _obscurePassword,
             suffixIcon: IconButton(
@@ -334,8 +333,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         boxShadow: [
           BoxShadow(
             color: loginProvider.loginState.isLoading
-                ? Colors.grey.withOpacity(0.3)
-                : Colors.green.withOpacity(0.4),
+                ? Colors.grey.withValues(alpha: 0.3)
+                : Colors.green.withValues(alpha: 0.4),
             blurRadius: 15,
             offset: Offset(0, 8),
           ),

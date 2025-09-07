@@ -21,6 +21,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailAddress => 'Email Address';
 
   @override
+  String get enterEmail => 'Enter your email';
+
+  @override
+  String get enterCompanyCode => 'Enter company code';
+
+  @override
+  String get enterPassword => 'Enter your password';
+
+  @override
   String get companyCode => 'Company Code';
 
   @override

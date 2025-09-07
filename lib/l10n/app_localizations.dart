@@ -119,6 +119,24 @@ abstract class AppLocalizations {
   /// **'Email Address'**
   String get emailAddress;
 
+  /// No description provided for @enterEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get enterEmail;
+
+  /// No description provided for @enterCompanyCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter company code'**
+  String get enterCompanyCode;
+
+  /// No description provided for @enterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get enterPassword;
+
   /// No description provided for @companyCode.
   ///
   /// In en, this message translates to:

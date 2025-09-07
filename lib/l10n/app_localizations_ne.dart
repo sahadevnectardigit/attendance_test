@@ -12,11 +12,38 @@ class AppLocalizationsNe extends AppLocalizations {
   String get hello => 'नमस्ते';
 
   @override
-  String get good => 'राम्रो';
-
-  @override
   String get welcome => 'हाम्रो एपमा स्वागत छ';
 
   @override
-  String get home => 'गृह';
+  String get home => 'ड्यासबोर्ड';
+
+  @override
+  String get salary => 'तलब';
+
+  @override
+  String get ledger => 'लेजर';
+
+  @override
+  String get profile => 'प्रोफाईल';
+
+  @override
+  String get monthlyStat => 'मासिक तथ्याङ्क';
+
+  @override
+  String get present => 'उपस्थित';
+
+  @override
+  String get absent => 'अनुपस्थित';
+
+  @override
+  String get lateIn => 'ढिलो प्रवेश';
+
+  @override
+  String get earlyOut => 'चाडै बाहिर';
+
+  @override
+  String get holidays => 'बिदा';
+
+  @override
+  String get approvedLeave => 'स्वीकृत बिदा';
 }

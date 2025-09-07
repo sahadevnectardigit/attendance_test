@@ -206,8 +206,7 @@ class _CreateLeaveApplicationPageState
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: DropdownButtonFormField<int>(
-                            // initialValue: _leaveType,
-                            initialValue: _leaveType,
+                            value: _leaveType,
                             decoration: InputDecoration(
                               labelText: "Leave Type",
                               border: InputBorder.none,
@@ -247,8 +246,7 @@ class _CreateLeaveApplicationPageState
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: DropdownButtonFormField<int>(
-                                  // initialValue: _approverId,
-                                  initialValue: _approverId,
+                                  value: _approverId,
                                   decoration: InputDecoration(
                                     labelText: "Approve By",
                                     border: InputBorder.none,
@@ -286,8 +284,7 @@ class _CreateLeaveApplicationPageState
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: DropdownButtonFormField<int>(
-                                  // initialValue: _recommenderId,
-                                  initialValue: _recommenderId,
+                                  value: _recommenderId,
                                   decoration: InputDecoration(
                                     labelText: "Recommend By",
                                     border: InputBorder.none,

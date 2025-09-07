@@ -98,14 +98,8 @@ abstract class AppLocalizations {
   /// No description provided for @hello.
   ///
   /// In en, this message translates to:
-  /// **'Hello'**
+  /// **'Hey'**
   String get hello;
-
-  /// No description provided for @good.
-  ///
-  /// In en, this message translates to:
-  /// **'good'**
-  String get good;
 
   /// No description provided for @welcome.
   ///
@@ -116,8 +110,68 @@ abstract class AppLocalizations {
   /// No description provided for @home.
   ///
   /// In en, this message translates to:
-  /// **'Home'**
+  /// **'Dashboard'**
   String get home;
+
+  /// No description provided for @salary.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary'**
+  String get salary;
+
+  /// No description provided for @ledger.
+  ///
+  /// In en, this message translates to:
+  /// **'Ledger'**
+  String get ledger;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @monthlyStat.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Statistics'**
+  String get monthlyStat;
+
+  /// No description provided for @present.
+  ///
+  /// In en, this message translates to:
+  /// **'Present'**
+  String get present;
+
+  /// No description provided for @absent.
+  ///
+  /// In en, this message translates to:
+  /// **'Absent'**
+  String get absent;
+
+  /// No description provided for @lateIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Late in'**
+  String get lateIn;
+
+  /// No description provided for @earlyOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Early out'**
+  String get earlyOut;
+
+  /// No description provided for @holidays.
+  ///
+  /// In en, this message translates to:
+  /// **'Holidays'**
+  String get holidays;
+
+  /// No description provided for @approvedLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved Leave'**
+  String get approvedLeave;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

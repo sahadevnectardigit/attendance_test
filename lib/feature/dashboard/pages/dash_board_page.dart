@@ -4,6 +4,7 @@ import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:attendance/feature/salary/provider/salary_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -169,7 +170,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   const SizedBox(width: 12),
 
                   Text(
-                    "Hey ${profilePro.fetchProfileState.data?.firstName ?? "there!"}",
+                    "${AppLocalizations.of(context)!.hello} ${profilePro.fetchProfileState.data?.firstName ?? "there!"}",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -320,7 +321,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         Padding(
                           padding: EdgeInsets.only(bottom: 16),
                           child: Text(
-                            "Monthly Statistics",
+                            AppLocalizations.of(context)!.monthlyStat,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -334,42 +335,42 @@ class _DashboardPageState extends State<DashboardPage> {
                           children: [
                             buildStatCard(
                               cardWidth,
-                              "Present",
+                              AppLocalizations.of(context)!.present,
                               "${dashBoardData.monthlyStats?.present ?? 0}",
                               "",
                               Color(0xFF4CAF50),
                             ),
                             buildStatCard(
                               cardWidth,
-                              "Absent",
+                              AppLocalizations.of(context)!.absent,
                               "${dashBoardData.monthlyStats?.absent ?? 0}",
                               "",
                               Color(0xFFF44336),
                             ),
                             buildStatCard(
                               cardWidth,
-                              "Late in",
+                              AppLocalizations.of(context)!.lateIn,
                               "${dashBoardData.monthlyStats?.lateIn ?? 0}",
                               "",
                               Color(0xFFFF9800),
                             ),
                             buildStatCard(
                               cardWidth,
-                              "Early Out",
+                              AppLocalizations.of(context)!.earlyOut,
                               "${dashBoardData.monthlyStats?.earlyOut ?? 0}",
                               "",
                               Color(0xFF9C27B0),
                             ),
                             buildStatCard(
                               cardWidth,
-                              "Holidays",
+                              AppLocalizations.of(context)!.holidays,
                               "${dashBoardData.monthlyStats?.holiday ?? 0}",
                               "",
                               Color(0xFF2196F3),
                             ),
                             buildStatCard(
                               cardWidth,
-                              "Approved leave",
+                              AppLocalizations.of(context)!.approvedLeave,
                               "${dashBoardData.monthlyStats?.approvedLeave ?? 0}",
                               "",
                               Color(0xFF009688),

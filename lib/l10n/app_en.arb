@@ -1,7 +1,19 @@
 {
   "@@locale": "en",
-  "hello": "Hello",
-  "good":"good",
+  "hello": "Hey",
   "welcome": "Welcome to our app",
-  "home":"Home"
+  "home":"Dashboard",
+  "salary":"Salary",
+  "ledger":"Ledger",
+  "profile":"Profile",
+  "monthlyStat":"Monthly Statistics",
+  "present":"Present",
+  "absent":"Absent",
+  "lateIn":"Late in",
+  "earlyOut":"Early out",
+  "holidays":"Holidays",
+  "approvedLeave":"Approved Leave"
+
+
+
 }

@@ -1,8 +1,18 @@
 {
   "@@locale": "ne",
   "hello": "नमस्ते",
-    "good":"राम्रो",
   "welcome": "हाम्रो एपमा स्वागत छ",
-    "home":"गृह"
+  "home":"ड्यासबोर्ड",
+  "salary":"तलब",
+  "ledger":"लेजर",
+  "profile":"प्रोफाईल",
+  "monthlyStat":"मासिक तथ्याङ्क",
+  "present":"उपस्थित",
+  "absent":"अनुपस्थित",
+  "lateIn":"ढिलो प्रवेश",
+  "earlyOut":"चाडै बाहिर",
+  "holidays":"बिदा",
+  "approvedLeave":"स्वीकृत बिदा"
+
 
 }

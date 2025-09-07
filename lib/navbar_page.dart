@@ -65,10 +65,16 @@ class NavBarPage extends StatelessWidget {
 
             BottomNavigationBarItem(
               icon: Icon(Icons.attach_money),
-              label: "Salary",
+              label: AppLocalizations.of(context)!.salary,
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.book), label: "Ledger"),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.book),
+              label: AppLocalizations.of(context)!.ledger,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: AppLocalizations.of(context)!.profile,
+            ),
           ],
         ),
       ),

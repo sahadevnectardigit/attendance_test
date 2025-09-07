@@ -205,8 +205,7 @@ class _CreateOfficialApplicationPageState
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: DropdownButtonFormField<int>(
-                        // initialValue: _officialVisit,
-                        initialValue: _officialVisit,
+                        value: _officialVisit,
                         decoration: InputDecoration(
                           labelText: "Official Visit",
                           border: InputBorder.none,
@@ -246,8 +245,7 @@ class _CreateOfficialApplicationPageState
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: DropdownButtonFormField<int>(
-                              // initialValue: _approverId,
-                              initialValue: _approverId,
+                              value: _approverId,
                               decoration: InputDecoration(
                                 labelText: "Approve By",
                                 border: InputBorder.none,
@@ -285,8 +283,7 @@ class _CreateOfficialApplicationPageState
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: DropdownButtonFormField<int>(
-                              // initialValue: _recommenderId,
-                              initialValue: _recommenderId,
+                              value: _recommenderId,
                               decoration: InputDecoration(
                                 labelText: "Recommend By",
                                 border: InputBorder.none,

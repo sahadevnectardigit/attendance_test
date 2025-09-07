@@ -8,6 +8,7 @@ import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/page/change_password.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:attendance/feature/salary/provider/salary_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -401,7 +402,7 @@ class _ProfilePageState extends State<ProfilePage>
               SizedBox(width: 12),
 
               Text(
-                'Profile Information',
+                AppLocalizations.of(context)!.profileInfo,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -414,22 +415,22 @@ class _ProfilePageState extends State<ProfilePage>
           ///TEst code for localization
           SizedBox(height: 16),
           _buildInfoRow(
-            'Full Name',
+            AppLocalizations.of(context)!.fullName,
             "${model?.firstName ?? "Unknown"} ${model?.lastName ?? ""}",
             Icons.badge_outlined,
           ),
           _buildInfoRow(
-            'Address',
+            AppLocalizations.of(context)!.address,
             model?.tempAddress ?? "Not provided",
             Icons.home_outlined,
           ),
           _buildInfoRow(
-            'Email',
+            AppLocalizations.of(context)!.email,
             model?.username ?? "Not provided",
             Icons.email_outlined,
           ),
           _buildInfoRow(
-            'Phone',
+            AppLocalizations.of(context)!.phone,
             model?.phone ?? "Not provided",
             Icons.phone_outlined,
           ),
@@ -491,8 +492,8 @@ class _ProfilePageState extends State<ProfilePage>
         _buildActionCard(
           context,
           icon: Icons.lock_outline,
-          title: 'Change Password',
-          subtitle: 'Update your account password',
+          title: AppLocalizations.of(context)!.changePassword,
+          subtitle: AppLocalizations.of(context)!.updatePassword,
           color: Colors.orange,
           onTap: () {
             Navigator.push(
@@ -521,8 +522,8 @@ class _ProfilePageState extends State<ProfilePage>
         _buildActionCard(
           context,
           icon: Icons.logout_rounded,
-          title: 'Logout',
-          subtitle: 'Sign out of your account',
+          title: AppLocalizations.of(context)!.logout,
+          subtitle: AppLocalizations.of(context)!.signOutAccount,
           color: Colors.red,
           onTap: () => _showLogoutDialog(context),
         ),
@@ -547,7 +548,7 @@ class _ProfilePageState extends State<ProfilePage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Language Settings',
+                AppLocalizations.of(context)!.languageSetting,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -556,7 +557,7 @@ class _ProfilePageState extends State<ProfilePage>
               ),
               SizedBox(height: 12),
               Text(
-                'Select your preferred language',
+                AppLocalizations.of(context)!.selectLanguage,
                 style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
               ),
               SizedBox(height: 16),
@@ -769,22 +770,22 @@ class _ProfilePageState extends State<ProfilePage>
           title: Row(
             children: [
               Icon(Icons.logout_rounded, color: Colors.red.shade600),
-              SizedBox(width: 8),
+              SizedBox(width: 3),
               Text(
-                'Confirm Logout',
+                AppLocalizations.of(context)!.confirmLogout,
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ],
           ),
           content: Text(
-            'Are you sure you want to logout? You will need to sign in again to access your account.',
+            AppLocalizations.of(context)!.areusureLogout,
             style: TextStyle(color: Colors.grey.shade700, height: 1.4),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                'Cancel',
+                AppLocalizations.of(context)!.cancel,
                 style: TextStyle(color: Colors.grey.shade600),
               ),
             ),
@@ -817,7 +818,7 @@ class _ProfilePageState extends State<ProfilePage>
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text('Logout'),
+              child: Text(AppLocalizations.of(context)!.logout),
             ),
           ],
         );

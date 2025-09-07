@@ -1,5 +1,6 @@
 import 'package:attendance/feature/salary/page/salary_details.dart';
 import 'package:attendance/feature/salary/provider/salary_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -79,7 +80,7 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
           // ),
           SizedBox(width: 12),
           Text(
-            'Salary Slips',
+            AppLocalizations.of(context)!.salarySlips,
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
@@ -226,7 +227,7 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Total Records',
+                        AppLocalizations.of(context)!.totalRecords,
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.9),
                           fontSize: 14,
@@ -264,7 +265,7 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
                 Icon(Icons.history, color: Colors.grey.shade600, size: 20),
                 SizedBox(width: 8),
                 Text(
-                  'Salary History',
+                  AppLocalizations.of(context)!.salaryHistory,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -380,7 +381,7 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
                               ),
                               SizedBox(height: 2),
                               Text(
-                                'Salary Slip',
+                                AppLocalizations.of(context)!.salarySlips,
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.grey.shade500,
@@ -409,14 +410,14 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
                     // Details section
                     _buildDetailRow(
                       Icons.person_outline,
-                      "Employee",
+                      AppLocalizations.of(context)!.employee,
                       modelData.employeeName ?? "Not specified",
                       Colors.blue,
                     ),
                     SizedBox(height: 8),
                     _buildDetailRow(
                       Icons.business_outlined,
-                      "Department",
+                      AppLocalizations.of(context)!.department,
                       modelData.department ?? "Not specified",
                       Colors.orange,
                     ),
@@ -444,7 +445,7 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
                           ),
                           SizedBox(width: 8),
                           Text(
-                            'Net Salary: ',
+                            '${AppLocalizations.of(context)!.netSalary}: ',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey.shade600,

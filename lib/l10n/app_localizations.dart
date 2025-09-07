@@ -104,8 +104,104 @@ abstract class AppLocalizations {
   /// No description provided for @welcome.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to our app'**
+  /// **'Welcome Back!'**
   String get welcome;
+
+  /// No description provided for @signInToContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to continue your account'**
+  String get signInToContinue;
+
+  /// No description provided for @emailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get emailAddress;
+
+  /// No description provided for @companyCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Code'**
+  String get companyCode;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @rememberMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember Me'**
+  String get rememberMe;
+
+  /// No description provided for @signIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signIn;
+
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance App'**
+  String get appName;
+
+  /// No description provided for @manageApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your applications'**
+  String get manageApp;
+
+  /// No description provided for @appSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Application Section'**
+  String get appSection;
+
+  /// No description provided for @offcialApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Official Application'**
+  String get offcialApplication;
+
+  /// No description provided for @submitWorkQuery.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit work related requests'**
+  String get submitWorkQuery;
+
+  /// No description provided for @leaveApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Application'**
+  String get leaveApplication;
+
+  /// No description provided for @applytimeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply for time off'**
+  String get applytimeOff;
+
+  /// No description provided for @lateInEarlyOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Late In Early Out Application'**
+  String get lateInEarlyOut;
+
+  /// No description provided for @reportTimingAdjustment.
+  ///
+  /// In en, this message translates to:
+  /// **'Report timing adjustment'**
+  String get reportTimingAdjustment;
+
+  /// No description provided for @create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
 
   /// No description provided for @home.
   ///
@@ -172,6 +268,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Approved Leave'**
   String get approvedLeave;
+
+  /// No description provided for @salarySlips.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary Slips'**
+  String get salarySlips;
+
+  /// No description provided for @totalRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Records'**
+  String get totalRecords;
+
+  /// No description provided for @salaryHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary History'**
+  String get salaryHistory;
+
+  /// No description provided for @employee.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee'**
+  String get employee;
+
+  /// No description provided for @department.
+  ///
+  /// In en, this message translates to:
+  /// **'Department'**
+  String get department;
+
+  /// No description provided for @netSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Net Salary'**
+  String get netSalary;
+
+  /// No description provided for @attendanceLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Ledger'**
+  String get attendanceLedger;
+
+  /// No description provided for @total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get total;
+
+  /// No description provided for @sun.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get sun;
+
+  /// No description provided for @mon.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get mon;
+
+  /// No description provided for @tue.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get tue;
+
+  /// No description provided for @wed.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get wed;
+
+  /// No description provided for @thu.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get thu;
+
+  /// No description provided for @fri.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get fri;
+
+  /// No description provided for @sat.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get sat;
+
+  /// No description provided for @attendanceDayDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Day Detail'**
+  String get attendanceDayDetail;
+
+  /// No description provided for @timeIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Time In'**
+  String get timeIn;
+
+  /// No description provided for @timeOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Out'**
+  String get timeOut;
+
+  /// No description provided for @workedHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Worked Hours'**
+  String get workedHours;
+
+  /// No description provided for @overtime.
+  ///
+  /// In en, this message translates to:
+  /// **'Overtime'**
+  String get overtime;
+
+  /// No description provided for @profileInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Information'**
+  String get profileInfo;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullName;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get phone;
+
+  /// No description provided for @languageSetting.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Settings'**
+  String get languageSetting;
+
+  /// No description provided for @selectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your preferred language'**
+  String get selectLanguage;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @updatePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your account password'**
+  String get updatePassword;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @confirmLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Logout'**
+  String get confirmLogout;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @areusureLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get areusureLogout;
+
+  /// No description provided for @signOutAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of your account'**
+  String get signOutAccount;
+
+  /// No description provided for @createSecurePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new secure password'**
+  String get createSecurePassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

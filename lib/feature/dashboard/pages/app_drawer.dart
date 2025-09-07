@@ -4,6 +4,7 @@ import 'package:attendance/feature/dashboard/pages/applications/latein_earlyout_
 import 'package:attendance/feature/dashboard/pages/applications/leave_app_list_page.dart';
 import 'package:attendance/feature/dashboard/pages/applications/official_application_list_page.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -124,9 +125,9 @@ class AppDrawer extends StatelessWidget {
                       );
                     },
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 11),
                   Text(
-                    'Attendance App',
+                    AppLocalizations.of(context)!.appName,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -134,7 +135,7 @@ class AppDrawer extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Manage your applications',
+                    AppLocalizations.of(context)!.manageApp,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white.withOpacity(0.9),
@@ -144,7 +145,7 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 18),
 
             // Section Header
             Padding(
@@ -154,7 +155,7 @@ class AppDrawer extends StatelessWidget {
                   Icon(Icons.apps, color: Color(0xFF2E7D32), size: 22),
                   SizedBox(width: 8),
                   Text(
-                    'Application Section',
+                    AppLocalizations.of(context)!.appSection,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -165,14 +166,14 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 10),
+            SizedBox(height: 8),
 
             // Applications section
             _buildDrawerItem(
               context,
               icon: Icons.business_center,
-              title: "Official Application",
-              subtitle: "Submit work-related requests",
+              title: AppLocalizations.of(context)!.offcialApplication,
+              subtitle: AppLocalizations.of(context)!.submitWorkQuery,
               iconColor: Color(0xFF4CAF50),
               onTap: () {
                 // OfficialApplicationPage
@@ -188,8 +189,8 @@ class AppDrawer extends StatelessWidget {
             _buildDrawerItem(
               context,
               icon: Icons.beach_access,
-              title: "Leave Application",
-              subtitle: "Apply for time off",
+              title: AppLocalizations.of(context)!.leaveApplication,
+              subtitle: AppLocalizations.of(context)!.applytimeOff,
               iconColor: Color(0xFF66BB6A),
               onTap: () {
                 Navigator.push(
@@ -202,8 +203,8 @@ class AppDrawer extends StatelessWidget {
             _buildDrawerItem(
               context,
               icon: Icons.access_time,
-              title: "Late In/Out Application",
-              subtitle: "Report timing adjustments",
+              title: AppLocalizations.of(context)!.lateInEarlyOut,
+              subtitle: AppLocalizations.of(context)!.reportTimingAdjustment,
               iconColor: Color(0xFF43A047),
               onTap: () {
                 Navigator.push(
@@ -215,7 +216,7 @@ class AppDrawer extends StatelessWidget {
               },
             ),
 
-            Spacer(),
+            // Spacer(),
 
             // Divider with style
             Container(
@@ -232,7 +233,7 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 10),
+            SizedBox(height: 5),
 
             // Logout button
             Container(
@@ -256,14 +257,14 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
                 title: Text(
-                  "Logout",
+                  AppLocalizations.of(context)!.logout,
                   style: TextStyle(
                     color: Color(0xFFD32F2F),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 subtitle: Text(
-                  "Sign out of your account",
+                  AppLocalizations.of(context)!.signOutAccount,
                   style: TextStyle(color: Color(0xFFE57373), fontSize: 12),
                 ),
                 onTap: () async {
@@ -342,9 +343,9 @@ class AppDrawer extends StatelessWidget {
           title: Row(
             children: [
               Icon(Icons.logout_rounded, color: Color(0xFFD32F2F)),
-              SizedBox(width: 8),
+              SizedBox(width: 3),
               Text(
-                'Confirm Logout',
+                AppLocalizations.of(context)!.confirmLogout,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF2E7D32),
@@ -353,7 +354,7 @@ class AppDrawer extends StatelessWidget {
             ],
           ),
           content: Text(
-            'Are you sure you want to logout? You will need to sign in again to access your account.',
+            AppLocalizations.of(context)!.areusureLogout,
             style: TextStyle(color: Colors.grey.shade700, height: 1.4),
           ),
           actions: [
@@ -365,7 +366,7 @@ class AppDrawer extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               ),
               child: Text(
-                'Cancel',
+                AppLocalizations.of(context)!.cancel,
                 style: TextStyle(
                   color: Colors.grey.shade600,
                   fontWeight: FontWeight.w500,
@@ -410,7 +411,7 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               child: Text(
-                'Logout',
+                AppLocalizations.of(context)!.logout,
                 style: TextStyle(fontWeight: FontWeight.w500),
               ),
             ),

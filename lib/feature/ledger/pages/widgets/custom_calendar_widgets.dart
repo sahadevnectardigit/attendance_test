@@ -1,5 +1,6 @@
 import 'package:attendance/feature/ledger/pages/attendance_day_detail_page.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:attendance/models/ledger_model.dart';
 import 'package:flutter/material.dart';
 
@@ -92,23 +93,32 @@ class CustomCalendarWidget extends StatelessWidget {
 
           // Weekday headers
           Row(
-            children: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-                .map(
-                  (day) => Expanded(
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        day,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+            children:
+                [
+                      AppLocalizations.of(context)!.sun,
+                      AppLocalizations.of(context)!.mon,
+                      AppLocalizations.of(context)!.tue,
+                      AppLocalizations.of(context)!.wed,
+                      AppLocalizations.of(context)!.thu,
+                      AppLocalizations.of(context)!.fri,
+                      AppLocalizations.of(context)!.sat,
+                    ]
+                    .map(
+                      (day) => Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            day,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                )
-                .toList(),
+                    )
+                    .toList(),
           ),
           Divider(height: 1),
 
@@ -229,10 +239,22 @@ class CustomCalendarWidget extends StatelessWidget {
               spacing: 12,
               runSpacing: 8,
               children: [
-                _buildLegendItem(Colors.green, 'Present'),
-                _buildLegendItem(Colors.red, 'Absent'),
-                _buildLegendItem(Colors.blue, 'Holiday/Weekend'),
-                _buildLegendItem(Colors.orange, 'Leave'),
+                _buildLegendItem(
+                  Colors.green,
+                  AppLocalizations.of(context)!.present,
+                ),
+                _buildLegendItem(
+                  Colors.red,
+                  AppLocalizations.of(context)!.absent,
+                ),
+                _buildLegendItem(
+                  Colors.blue,
+                  AppLocalizations.of(context)!.holidays,
+                ),
+                _buildLegendItem(
+                  Colors.orange,
+                  AppLocalizations.of(context)!.approvedLeave,
+                ),
               ],
             ),
           ),

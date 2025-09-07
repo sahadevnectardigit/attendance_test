@@ -2,6 +2,7 @@ import 'package:attendance/core/extension/snackbar.dart';
 import 'package:attendance/core/extension/string_validators.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/provider/login_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:attendance/navbar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -125,7 +126,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           SizedBox(height: 30),
 
           Text(
-            'Welcome Back!',
+            AppLocalizations.of(context)!.welcome,
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.w800,
@@ -135,7 +136,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           ),
           SizedBox(height: 8),
           Text(
-            'Sign in to continue to your account',
+            AppLocalizations.of(context)!.signInToContinue,
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey.shade600,
@@ -155,7 +156,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         children: [
           _buildTextField(
             controller: emailController,
-            label: "Email Address",
+            label: AppLocalizations.of(context)!.emailAddress,
             hint: "Enter your email",
             icon: Icons.email_outlined,
             keyboardType: TextInputType.emailAddress,
@@ -164,7 +165,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           SizedBox(height: 24),
           _buildTextField(
             controller: companyCodeController,
-            label: "Company Code",
+            label: AppLocalizations.of(context)!.companyCode,
             hint: "Enter company code",
             icon: Icons.business_outlined,
             validator: (value) {
@@ -177,7 +178,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           SizedBox(height: 24),
           _buildTextField(
             controller: passwordController,
-            label: "Password",
+            label: AppLocalizations.of(context)!.password,
+
             hint: "Enter your password",
             icon: Icons.lock_outlined,
             obscureText: _obscurePassword,
@@ -305,7 +307,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ),
         SizedBox(width: 8),
         Text(
-          "Remember Me",
+          AppLocalizations.of(context)!.rememberMe,
+
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w500,
@@ -376,7 +379,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   Icon(Icons.login, color: Colors.white, size: 20),
                   SizedBox(width: 8),
                   Text(
-                    "Sign In",
+                    AppLocalizations.of(context)!.signIn,
+
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

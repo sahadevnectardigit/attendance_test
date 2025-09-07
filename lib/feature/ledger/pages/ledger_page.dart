@@ -1,5 +1,6 @@
 import 'package:attendance/feature/ledger/pages/widgets/custom_calendar_widgets.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:attendance/models/ledger_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -241,7 +242,7 @@ class _LedgerPageState extends State<LedgerPage> {
           ),
         ),
         title: Text(
-          "Attendance Ledger",
+          AppLocalizations.of(context)!.attendanceLedger,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -362,22 +363,22 @@ class _LedgerPageState extends State<LedgerPage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildSummaryItem(
-            "Total",
+            AppLocalizations.of(context)!.total,
             summary.total.toString(),
             Color(0xFF2196F3),
           ),
           _buildSummaryItem(
-            "Present",
+            AppLocalizations.of(context)!.present,
             summary.present.toString(),
             Color(0xFF4CAF50),
           ),
           _buildSummaryItem(
-            "Absent",
+            AppLocalizations.of(context)!.absent,
             summary.absent.toString(),
             Color(0xFFF44336),
           ),
           _buildSummaryItem(
-            "Leave",
+            AppLocalizations.of(context)!.approvedLeave,
             summary.leave.toString(),
             Color(0xFFFF9800),
           ),

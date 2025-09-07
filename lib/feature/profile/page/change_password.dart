@@ -1,6 +1,7 @@
 import 'package:attendance/core/extension/snackbar.dart';
 import 'package:attendance/core/utils/text_form_field.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +39,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       backgroundColor: Color(0xFFF1F8E9),
       appBar: AppBar(
         title: Text(
-          'Change Password',
+          AppLocalizations.of(context)!.changePassword,
           style: TextStyle(
             color: Color(0xFF2E7D32),
             fontWeight: FontWeight.bold,
@@ -68,7 +69,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Text(
-                      'Create a new secure password',
+                      AppLocalizations.of(context)!.createSecurePassword,
                       style: TextStyle(fontSize: 16, color: Color(0xFF2E7D32)),
                     ),
                   ),
@@ -76,8 +77,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   // New Password Field
                   AppTextFormField(
                     controller: passwordController,
-                    label: "New Password",
-                    hint: "Enter new password",
+                    label: AppLocalizations.of(context)!.newPassword,
+                    hint: AppLocalizations.of(context)!.newPassword,
                     obscureText: _obscurePassword,
                     keyboardType: TextInputType.visiblePassword,
                     prefixIcon: Icons.lock_outline,
@@ -104,8 +105,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   // Confirm Password Field
                   AppTextFormField(
                     controller: confirmPasswordController,
-                    label: "Confirm Password",
-                    hint: "Confirm your new password",
+                    label: AppLocalizations.of(context)!.confirmPassword,
+                    hint: AppLocalizations.of(context)!.confirmPassword,
                     obscureText: _obscureConfirmPassword,
                     keyboardType: TextInputType.visiblePassword,
                     prefixIcon: Icons.lock_outline,
@@ -127,49 +128,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     },
                   ),
 
-                  SizedBox(height: 10),
-
-                  // Password requirements
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Password requirements:',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF2E7D32),
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          '• At least 8 characters long',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF2E7D32).withOpacity(0.7),
-                          ),
-                        ),
-                        Text(
-                          '• Include uppercase and lowercase letters',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF2E7D32).withOpacity(0.7),
-                          ),
-                        ),
-                        Text(
-                          '• Include numbers or special characters',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF2E7D32).withOpacity(0.7),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 30),
+                  SizedBox(height: 40),
 
                   // Change Password Button
                   SizedBox(
@@ -221,45 +180,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               ),
                             )
                           : Text(
-                              'Change Password',
+                              AppLocalizations.of(context)!.changePassword,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                    ),
-                  ),
-
-                  SizedBox(height: 20),
-
-                  // Security tip
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFE8F5E9),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Color(0xFF4CAF50).withOpacity(0.3),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.security,
-                          color: Color(0xFF4CAF50),
-                          size: 20,
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            'Use a strong, unique password that you don\'t use for other accounts',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xFF2E7D32),
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ],

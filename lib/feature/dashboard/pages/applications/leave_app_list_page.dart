@@ -1,5 +1,6 @@
 import 'package:attendance/feature/dashboard/pages/applications/create_leave_application_page.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +56,7 @@ class _LeaveAppListPageState extends State<LeaveAppListPage> {
         ),
         foregroundColor: Colors.white,
 
-        title: const Text("Leave Applications"),
+        title: Text(AppLocalizations.of(context)!.leaveApplication),
       ),
       body: appList.isLoading
           ? Center(child: CircularProgressIndicator())
@@ -145,7 +146,12 @@ class _LeaveAppListPageState extends State<LeaveAppListPage> {
             MaterialPageRoute(builder: (_) => CreateLeaveApplicationPage()),
           );
         },
-        label: Text('Create'),
+        label: Row(
+          children: [
+            Icon(Icons.add),
+            Text(AppLocalizations.of(context)!.create),
+          ],
+        ),
       ),
     );
   }

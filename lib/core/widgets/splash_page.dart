@@ -2,6 +2,7 @@ import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
 import 'package:attendance/navbar_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -45,13 +46,19 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset(
-          'assets/images/splash_image.png',
-          fit: BoxFit.cover,
+        child: SvgPicture.asset(
+          "assets/images/splash.svg",
           height: double.infinity,
           width: double.infinity,
+          fit: BoxFit.cover,
         ),
       ),
+      //  Image.asset(
+      //   'assets/images/splash_image.png',
+      //   fit: BoxFit.cover,
+      //   height: double.infinity,
+      //   width: double.infinity,
+      // ),
     );
   }
 }

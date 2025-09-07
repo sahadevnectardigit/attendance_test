@@ -1,5 +1,6 @@
 import 'package:attendance/feature/dashboard/pages/applications/create_official_application_page.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +57,7 @@ class _ApplicationListPageState extends State<ApplicationListPage> {
         ),
         foregroundColor: Colors.white,
 
-        title: const Text("Official Applications"),
+        title: Text(AppLocalizations.of(context)!.offcialApplication),
       ),
       body: appList.isLoading
           ? Center(child: CircularProgressIndicator())
@@ -146,7 +147,12 @@ class _ApplicationListPageState extends State<ApplicationListPage> {
             MaterialPageRoute(builder: (_) => CreateOfficialApplicationPage()),
           );
         },
-        label: Text('Create'),
+        label: Row(
+          children: [
+            Icon(Icons.add),
+            Text(AppLocalizations.of(context)!.create),
+          ],
+        ),
       ),
     );
   }

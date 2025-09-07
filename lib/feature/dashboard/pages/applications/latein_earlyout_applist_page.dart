@@ -1,5 +1,6 @@
 import 'package:attendance/feature/dashboard/pages/applications/latein_lateout_page.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,8 +56,7 @@ class _LateInEarlyOutAppListPageState extends State<LateInEarlyOutAppListPage> {
           ),
         ),
         foregroundColor: Colors.white,
-        title: const Text("Latein Earlyout Applications"),
-
+        title: Text(AppLocalizations.of(context)!.lateInEarlyOut),
       ),
       body: appList.isLoading
           ? Center(child: CircularProgressIndicator())
@@ -144,7 +144,12 @@ class _LateInEarlyOutAppListPageState extends State<LateInEarlyOutAppListPage> {
             MaterialPageRoute(builder: (_) => LateInLateOutCreatePage()),
           );
         },
-        label: Text('Create'),
+        label: Row(
+          children: [
+            Icon(Icons.add),
+            Text(AppLocalizations.of(context)!.create),
+          ],
+        ),
       ),
     );
   }

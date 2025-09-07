@@ -59,7 +59,7 @@ class NavBarPage extends StatelessWidget {
           unselectedItemColor: Colors.white70,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.apps),
               label: AppLocalizations.of(context)!.home,
             ),
 

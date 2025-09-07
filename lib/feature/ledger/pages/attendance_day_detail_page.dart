@@ -1,3 +1,4 @@
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:attendance/models/ledger_model.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class AttendacneDayDetail extends StatelessWidget {
     return Scaffold(
       // backgroundColor: Colors.green.shade100,
       appBar: AppBar(
-        title: Text('Attendance Day Details'),
+        title: Text(AppLocalizations.of(context)!.attendanceDayDetail),
         elevation: 0,
         backgroundColor: Colors.transparent,
         flexibleSpace: Container(
@@ -129,8 +130,16 @@ class AttendacneDayDetail extends StatelessWidget {
                     SizedBox(height: 16),
 
                     // Time information
-                    _infoRow("Time In", detailData.timeIn, Icons.login),
-                    _infoRow("Time Out", detailData.timeOut, Icons.logout),
+                    _infoRow(
+                      AppLocalizations.of(context)!.timeIn,
+                      detailData.timeIn,
+                      Icons.login,
+                    ),
+                    _infoRow(
+                      AppLocalizations.of(context)!.timeOut,
+                      detailData.timeOut,
+                      Icons.logout,
+                    ),
 
                     SizedBox(height: 8),
 
@@ -139,7 +148,7 @@ class AttendacneDayDetail extends StatelessWidget {
                       children: [
                         Expanded(
                           child: _metricCard(
-                            "Worked Hours",
+                            AppLocalizations.of(context)!.workedHours,
                             detailData.workedHour ?? "N/A",
                             Icons.access_time,
                             Color(0xFF2196F3),
@@ -148,7 +157,7 @@ class AttendacneDayDetail extends StatelessWidget {
                         SizedBox(width: 10),
                         Expanded(
                           child: _metricCard(
-                            "Overtime",
+                            AppLocalizations.of(context)!.overtime,
                             detailData.ot ?? "N/A",
                             Icons.timer,
                             Color(0xFFFF9800),

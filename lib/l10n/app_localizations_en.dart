@@ -214,4 +214,79 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get employeeDetails => 'Employee Details';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get employeId => 'Employee Id';
+
+  @override
+  String get designation => 'Designaion';
+
+  @override
+  String get panNo => 'PAN No';
+
+  @override
+  String get month => 'Month';
+
+  @override
+  String get earnings => 'Earnings';
+
+  @override
+  String get basicSalary => 'Basic Salary';
+
+  @override
+  String get dearnessAllowance => 'Dearness Allowance';
+
+  @override
+  String get grossSalary => 'Gross Salary';
+
+  @override
+  String get deductions => 'Deductions';
+
+  @override
+  String get employerPf => 'Employer PF';
+
+  @override
+  String get employeePf => 'Employee PF';
+
+  @override
+  String get employerSsf => 'Employer SSF';
+
+  @override
+  String get employeeSsf => 'Employee SSF';
+
+  @override
+  String get incomeTax => 'Income Tax';
+
+  @override
+  String get socialSecurityTax => 'Social Security Tax';
+
+  @override
+  String get loanDeduction => 'Loan Deduction';
+
+  @override
+  String get advanceDeduction => 'Advance Deduction';
+
+  @override
+  String get totalDeduction => 'Total Deductions';
+
+  @override
+  String get taxBreakdown => 'Tax Breakdown';
+
+  @override
+  String get totalTax => 'Total Tax';
+
+  @override
+  String get additionalInformation => 'Additional Information';
+
+  @override
+  String get taxableIncome => 'Taxable Income';
+
+  @override
+  String get paymentMode => 'Payment Mode';
 }

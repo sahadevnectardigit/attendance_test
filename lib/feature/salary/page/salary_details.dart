@@ -1,3 +1,4 @@
+import 'package:attendance/l10n/app_localizations.dart';
 import 'package:attendance/models/salary_model.dart';
 import 'package:flutter/material.dart';
 
@@ -46,36 +47,36 @@ class _SalaryDetailsState extends State<SalaryDetails> {
             children: [
               // Employee Info
               _buildInfoCard(
-                title: "Employee Details",
+                title: AppLocalizations.of(context)!.employeeDetails,
                 icon: Icons.person_outline,
                 children: [
                   _infoRow(
-                    "Name",
+                    AppLocalizations.of(context)!.name,
                     widget.data?.employeeName ?? "",
                     Icons.person,
                   ),
                   _infoRow(
-                    "Employee ID",
+                    AppLocalizations.of(context)!.employeId,
                     widget.data?.employeeId?.toString(),
                     Icons.badge,
                   ),
                   _infoRow(
-                    "Department",
+                    AppLocalizations.of(context)!.department,
                     widget.data?.department,
                     Icons.business,
                   ),
                   _infoRow(
-                    "Designation",
+                    AppLocalizations.of(context)!.designation,
                     widget.data?.designationTitle,
                     Icons.work_outline,
                   ),
                   _infoRow(
-                    "PAN No",
+                    AppLocalizations.of(context)!.panNo,
                     widget.data?.panNo ?? "N/A",
                     Icons.credit_card,
                   ),
                   _infoRow(
-                    "Month",
+                    AppLocalizations.of(context)!.month,
                     widget.data?.salaryMonth,
                     Icons.calendar_today,
                   ),
@@ -85,21 +86,21 @@ class _SalaryDetailsState extends State<SalaryDetails> {
 
               // Earnings Section
               _buildInfoCard(
-                title: "Earnings",
+                title: AppLocalizations.of(context)!.earnings,
                 icon: Icons.trending_up,
                 children: [
                   _infoRow(
-                    "Basic Salary",
+                    AppLocalizations.of(context)!.basicSalary,
                     widget.data?.basicSalary,
                     Icons.account_balance_wallet,
                   ),
                   _infoRow(
-                    "Dearness Allowance",
+                    AppLocalizations.of(context)!.dearnessAllowance,
                     widget.data?.dearnessAllowance,
                     Icons.attach_money,
                   ),
                   _infoRow(
-                    "Gross Salary",
+                    AppLocalizations.of(context)!.grossSalary,
                     widget.data?.monthlyGross,
                     Icons.account_balance,
                     isHighlight: true,
@@ -110,60 +111,60 @@ class _SalaryDetailsState extends State<SalaryDetails> {
 
               // Deductions Section
               _buildInfoCard(
-                title: "Deductions",
+                title: AppLocalizations.of(context)!.deductions,
                 icon: Icons.trending_down,
                 children: [
                   // PF Contributions
                   _infoRow(
-                    "Employer PF",
+                    AppLocalizations.of(context)!.employerPf,
                     widget.data?.employerContributionPf,
                     Icons.account_balance_wallet,
                   ),
                   _infoRow(
-                    "Employee PF",
+                    AppLocalizations.of(context)!.employeePf,
                     widget.data?.employeeContributionPf,
                     Icons.account_balance_wallet,
                   ),
 
                   // SSF Contributions
                   _infoRow(
-                    "Employer SSF",
+                    AppLocalizations.of(context)!.employerSsf,
                     widget.data?.employerContributionSsf ?? "0.00",
                     Icons.security,
                   ),
                   _infoRow(
-                    "Employee SSF",
+                    AppLocalizations.of(context)!.employeeSsf,
                     widget.data?.employeeSsf ?? "0.00",
                     Icons.security,
                   ),
 
                   // Taxes
                   _infoRow(
-                    "Income Tax",
+                    AppLocalizations.of(context)!.incomeTax,
                     widget.data?.monthlyIncomeTax,
                     Icons.receipt,
                   ),
                   _infoRow(
-                    "Social Security Tax",
+                    AppLocalizations.of(context)!.socialSecurityTax,
                     widget.data?.socialSecurityTax ?? "0.00",
                     Icons.security,
                   ),
 
                   // Other deductions
                   _infoRow(
-                    "Loan Deduction",
+                    AppLocalizations.of(context)!.loanDeduction,
                     widget.data?.loanDeduction ?? "0.00",
                     Icons.money_off,
                   ),
                   _infoRow(
-                    "Advance Deduction",
+                    AppLocalizations.of(context)!.advanceDeduction,
                     widget.data?.advanceDeduction ?? "0.00",
                     Icons.money_off,
                   ),
 
                   const Divider(height: 20),
                   _infoRow(
-                    "Total Deductions",
+                    AppLocalizations.of(context)!.totalDeduction,
                     widget.data?.totalDeductions?.toStringAsFixed(2),
                     Icons.calculate,
                     isHighlight: true,
@@ -194,7 +195,7 @@ class _SalaryDetailsState extends State<SalaryDetails> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "Net Salary",
+                      AppLocalizations.of(context)!.netSalary,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -232,7 +233,7 @@ class _SalaryDetailsState extends State<SalaryDetails> {
               if (widget.data?.taxBreakdown != null &&
                   widget.data!.taxBreakdown!.isNotEmpty)
                 _buildInfoCard(
-                  title: "Tax Breakdown",
+                  title: AppLocalizations.of(context)!.taxBreakdown,
                   icon: Icons.receipt_long,
                   children: [
                     ...widget.data!.taxBreakdown!.map(
@@ -244,7 +245,7 @@ class _SalaryDetailsState extends State<SalaryDetails> {
                     ),
                     const Divider(height: 20),
                     _infoRow(
-                      "Total Tax",
+                      AppLocalizations.of(context)!.totalTax,
                       widget.data?.totalTax,
                       Icons.calculate,
                       isHighlight: true,
@@ -255,11 +256,12 @@ class _SalaryDetailsState extends State<SalaryDetails> {
 
               // Additional Information
               _buildInfoCard(
-                title: "Additional Information",
+                title: AppLocalizations.of(context)!.additionalInformation,
                 icon: Icons.info_outline,
                 children: [
                   _infoRow(
-                    "Taxable Income",
+                    AppLocalizations.of(context)!.taxableIncome,
+
                     widget.data?.taxableIncome,
                     Icons.attach_money,
                   ),
@@ -270,7 +272,7 @@ class _SalaryDetailsState extends State<SalaryDetails> {
                       Icons.date_range,
                     ),
                   _infoRow(
-                    "Payment Mode",
+                    AppLocalizations.of(context)!.paymentMode,
                     widget.data?.paymentMode ?? "N/A",
                     Icons.payment,
                   ),

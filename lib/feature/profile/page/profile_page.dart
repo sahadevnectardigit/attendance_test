@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:attendance/core/provider/locale_provider.dart';
-import 'package:attendance/core/services/local_storage.dart';
-import 'package:attendance/feature/auth/pages/login_page.dart';
+import 'package:attendance/feature/auth/provider/login_provider.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/page/change_password.dart';
@@ -800,16 +799,18 @@ class _ProfilePageState extends State<ProfilePage>
                   builder: (context) =>
                       Center(child: CircularProgressIndicator()),
                 );
-
-                await LocalStorage.clearTokens();
-                await LocalStorage.setRememberMe(false);
-
                 Navigator.of(context).pop(); // Close loading
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                  (Route<dynamic> route) => false,
-                );
+                Provider.of<LoginProvider>(context,listen: false).logout();
+
+                // await LocalStorage.clearTokens();
+                // await LocalStorage.setRememberMe(false);
+
+                // Navigator.of(context).pop(); // Close loading
+                // Navigator.pushAndRemoveUntil(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => LoginPage()),
+                //   (Route<dynamic> route) => false,
+                // );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red.shade600,

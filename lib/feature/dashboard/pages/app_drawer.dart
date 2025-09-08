@@ -1,5 +1,4 @@
-import 'package:attendance/core/services/local_storage.dart';
-import 'package:attendance/feature/auth/pages/login_page.dart';
+import 'package:attendance/feature/auth/provider/login_provider.dart';
 import 'package:attendance/feature/dashboard/pages/applications/latein_earlyout_applist_page.dart';
 import 'package:attendance/feature/dashboard/pages/applications/leave_app_list_page.dart';
 import 'package:attendance/feature/dashboard/pages/applications/official_application_list_page.dart';
@@ -391,16 +390,18 @@ class AppDrawer extends StatelessWidget {
                 );
 
                 // Clear login state
-                await LocalStorage.clearTokens();
-                await LocalStorage.setRememberMe(false);
+                // await LocalStorage.clearTokens();
+                // await LocalStorage.setRememberMe(false);
 
                 // Close loading dialog and navigate
                 Navigator.of(context).pop();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                  (Route<dynamic> route) => false,
-                );
+                Provider.of<LoginProvider>(context, listen: false).logout();
+
+                // Navigator.pushAndRemoveUntil(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => LoginPage()),
+                //   (Route<dynamic> route) => false,
+                // );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFD32F2F),

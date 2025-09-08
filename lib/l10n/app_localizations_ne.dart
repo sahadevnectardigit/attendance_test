@@ -214,4 +214,79 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get confirmPassword => 'पासवर्ड पुष्टि गर्नुहोस्';
+
+  @override
+  String get employeeDetails => 'कर्मचारी विवरण';
+
+  @override
+  String get name => 'नाम';
+
+  @override
+  String get employeId => 'कर्मचारी आईडी';
+
+  @override
+  String get designation => 'पद';
+
+  @override
+  String get panNo => 'प्यान नम्बर';
+
+  @override
+  String get month => 'महिना';
+
+  @override
+  String get earnings => 'आम्दानी';
+
+  @override
+  String get basicSalary => 'मूल तलब';
+
+  @override
+  String get dearnessAllowance => 'महंगी भत्ता';
+
+  @override
+  String get grossSalary => 'कुल तलब';
+
+  @override
+  String get deductions => 'कटौती';
+
+  @override
+  String get employerPf => 'नियोक्ता पीएफ';
+
+  @override
+  String get employeePf => 'कर्मचारी पीएफ';
+
+  @override
+  String get employerSsf => 'नियोक्ता एसएसएफ';
+
+  @override
+  String get employeeSsf => 'कर्मचारी एसएसएफ';
+
+  @override
+  String get incomeTax => 'आयकर';
+
+  @override
+  String get socialSecurityTax => 'सामाजिक सुरक्षा कर';
+
+  @override
+  String get loanDeduction => 'ऋण कटौती';
+
+  @override
+  String get advanceDeduction => 'अग्रिम कटौती';
+
+  @override
+  String get totalDeduction => 'कुल कटौती';
+
+  @override
+  String get taxBreakdown => 'कर विवरण';
+
+  @override
+  String get totalTax => 'कुल कर';
+
+  @override
+  String get additionalInformation => 'थप जानकारी';
+
+  @override
+  String get taxableIncome => 'करयोग्य आम्दानी';
+
+  @override
+  String get paymentMode => 'भुक्तानी माध्यम';
 }

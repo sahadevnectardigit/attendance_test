@@ -74,7 +74,35 @@
   "signOutAccount":"Sign out of your account",
   "createSecurePassword":"Create a new secure password",
   "newPassword":"New Password",
-  "confirmPassword":"Confirm Password"
+  "confirmPassword":"Confirm Password",
+
+  "employeeDetails":"Employee Details",
+  "name":"Name",
+  "employeId":"Employee Id",
+  "department":"Department",
+  "designation":"Designaion",
+  "panNo":"PAN No",
+  "month":"Month",
+  "earnings":"Earnings",
+  "basicSalary":"Basic Salary",
+  "dearnessAllowance":"Dearness Allowance",
+  "grossSalary":"Gross Salary",
+  "deductions":"Deductions",
+  "employerPf":"Employer PF",
+  "employeePf":"Employee PF",
+  "employerSsf":"Employer SSF",
+  "employeeSsf":"Employee SSF",
+  "incomeTax":"Income Tax",
+  "socialSecurityTax":"Social Security Tax",
+  "loanDeduction":"Loan Deduction",
+  "advanceDeduction":"Advance Deduction",
+  "totalDeduction":"Total Deductions",
+  "taxBreakdown":"Tax Breakdown",
+  "totalTax":"Total Tax",
+  "additionalInformation":"Additional Information",
+  "taxableIncome":"Taxable Income",
+  "paymentMode":"Payment Mode"
+
 
 
 }

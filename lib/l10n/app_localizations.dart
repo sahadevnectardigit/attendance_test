@@ -508,6 +508,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm Password'**
   String get confirmPassword;
+
+  /// No description provided for @employeeDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Details'**
+  String get employeeDetails;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @employeId.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Id'**
+  String get employeId;
+
+  /// No description provided for @designation.
+  ///
+  /// In en, this message translates to:
+  /// **'Designaion'**
+  String get designation;
+
+  /// No description provided for @panNo.
+  ///
+  /// In en, this message translates to:
+  /// **'PAN No'**
+  String get panNo;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get month;
+
+  /// No description provided for @earnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Earnings'**
+  String get earnings;
+
+  /// No description provided for @basicSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic Salary'**
+  String get basicSalary;
+
+  /// No description provided for @dearnessAllowance.
+  ///
+  /// In en, this message translates to:
+  /// **'Dearness Allowance'**
+  String get dearnessAllowance;
+
+  /// No description provided for @grossSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Gross Salary'**
+  String get grossSalary;
+
+  /// No description provided for @deductions.
+  ///
+  /// In en, this message translates to:
+  /// **'Deductions'**
+  String get deductions;
+
+  /// No description provided for @employerPf.
+  ///
+  /// In en, this message translates to:
+  /// **'Employer PF'**
+  String get employerPf;
+
+  /// No description provided for @employeePf.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee PF'**
+  String get employeePf;
+
+  /// No description provided for @employerSsf.
+  ///
+  /// In en, this message translates to:
+  /// **'Employer SSF'**
+  String get employerSsf;
+
+  /// No description provided for @employeeSsf.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee SSF'**
+  String get employeeSsf;
+
+  /// No description provided for @incomeTax.
+  ///
+  /// In en, this message translates to:
+  /// **'Income Tax'**
+  String get incomeTax;
+
+  /// No description provided for @socialSecurityTax.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Security Tax'**
+  String get socialSecurityTax;
+
+  /// No description provided for @loanDeduction.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan Deduction'**
+  String get loanDeduction;
+
+  /// No description provided for @advanceDeduction.
+  ///
+  /// In en, this message translates to:
+  /// **'Advance Deduction'**
+  String get advanceDeduction;
+
+  /// No description provided for @totalDeduction.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Deductions'**
+  String get totalDeduction;
+
+  /// No description provided for @taxBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax Breakdown'**
+  String get taxBreakdown;
+
+  /// No description provided for @totalTax.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Tax'**
+  String get totalTax;
+
+  /// No description provided for @additionalInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Information'**
+  String get additionalInformation;
+
+  /// No description provided for @taxableIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Taxable Income'**
+  String get taxableIncome;
+
+  /// No description provided for @paymentMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Mode'**
+  String get paymentMode;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

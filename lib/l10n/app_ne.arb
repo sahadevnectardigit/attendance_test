@@ -72,7 +72,34 @@
   "signOutAccount":"आफ्नो खाताबाट साइन आउट गर्नुहोस्",
   "createSecurePassword":"नयाँ सुरक्षित पासवर्ड सिर्जना गर्नुहोस्",
   "newPassword":"नयाँ पासवर्ड",
-  "confirmPassword":"पासवर्ड पुष्टि गर्नुहोस्"
+  "confirmPassword":"पासवर्ड पुष्टि गर्नुहोस्",
+
+  "employeeDetails": "कर्मचारी विवरण",
+  "name": "नाम",
+  "employeId": "कर्मचारी आईडी",
+  "department": "विभाग",
+  "designation": "पद",
+  "panNo": "प्यान नम्बर",
+  "month": "महिना",
+  "earnings": "आम्दानी",
+  "basicSalary": "मूल तलब",
+  "dearnessAllowance": "महंगी भत्ता",
+  "grossSalary": "कुल तलब",
+  "deductions": "कटौती",
+  "employerPf": "नियोक्ता पीएफ",
+  "employeePf": "कर्मचारी पीएफ",
+  "employerSsf": "नियोक्ता एसएसएफ",
+  "employeeSsf":"कर्मचारी एसएसएफ",
+  "incomeTax": "आयकर",
+  "socialSecurityTax": "सामाजिक सुरक्षा कर",
+  "loanDeduction": "ऋण कटौती",
+  "advanceDeduction": "अग्रिम कटौती",
+  "totalDeduction": "कुल कटौती",
+  "taxBreakdown": "कर विवरण",
+  "totalTax": "कुल कर",
+  "additionalInformation": "थप जानकारी",
+  "taxableIncome": "करयोग्य आम्दानी",
+  "paymentMode": "भुक्तानी माध्यम"
 
 
 }

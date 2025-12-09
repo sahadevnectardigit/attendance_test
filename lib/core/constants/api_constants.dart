@@ -1,33 +1,34 @@
 class ApiUrl {
-  static const String tattendance = "http://tattendance.com";
-  static const palpajun = "http://palpajun.tattendance.com";
-  static const String login = "$palpajun/api/tenant-login/";
-  static const String dashboard = "$palpajun/api/employee-dashboard/";
-  static const String ledger = "$palpajun/api/ledger/";
-  static const String profile = "$palpajun/api/profile/";
-  static const String updateProfileImage = "$palpajun/api/profile/image/";
-  static const String changePassword = "$palpajun/api/profile/change-password/";
-  static const String token = "$palpajun/api/api/token/";
-  static const String refreshToken = "$palpajun/api/api/token/refresh/";
-  static const String employeeSalary = "$palpajun/api/employee-salary/";
+  static const String tattendance = "https://tattendance.com";
+  //   static const tattendance = "http://palpajun.tattendance.com";
+  static const String login = "$tattendance/api/login/";
+  static const String dashboard = "$tattendance/api/employee-dashboard/";
+  static const String ledger = "$tattendance/api/ledger/";
+  static const String profile = "$tattendance/api/profile/";
+  static const String updateProfileImage = "$tattendance/api/profile/image/";
+  static const String changePassword =
+      "$tattendance/api/profile/change-password/";
+  static const String token = "$tattendance/api/api/token/";
+  static const String refreshToken = "$tattendance/api/api/token/refresh/";
+  static const String employeeSalary = "$tattendance/api/employee-salary/";
 
   ///application
-  static const String getLeavesDropDown = "$palpajun/api/leaves";
+  static const String getLeavesDropDown = "$tattendance/api/leaves";
   static const String getOfficialVisitDropDown =
-      "$palpajun/api/official-visit/";
+      "$tattendance/api/official-visit/";
   static const String createLeaveApplication =
-      "$palpajun/api/leave-applications/create/";
-  static const String getApprover = "$palpajun/api/approver-dropdowns/";
+      "$tattendance/api/leave-applications/create/";
+  static const String getApprover = "$tattendance/api/approver-dropdowns/";
   static const String lateInEarlyOut =
-      "$palpajun/api/lateIn-earlyOut-applications/create/";
+      "$tattendance/api/lateIn-earlyOut-applications/create/";
   static const String createOfficialVisitApplication =
-      "$palpajun/api/official-visit-applications/create/";
+      "$tattendance/api/official-visit-applications/create/";
 
   ///getApplications status api
   static const String getLeaveApplications =
-      "$palpajun/api/leave-applications/";
+      "$tattendance/api/leave-applications/";
   static const String getOfficialVisitApplications =
-      "$palpajun/api/official-visit-applications/";
+      "$tattendance/api/official-visit-applications/";
   static const String getLateInEaryOutApplications =
-      "$palpajun/api/lateIn-earlyOut-applications/";
+      "$tattendance/api/lateIn-earlyOut-applications/";
 }

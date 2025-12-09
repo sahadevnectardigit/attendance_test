@@ -27,14 +27,15 @@ class LoginProvider extends ChangeNotifier {
     try {
       final loginData = {
         "username": email,
-        "password": password,
         "company_code": companyCode,
+        "password": password,
       };
-
+      // log('LongIn: $loginData');
       final response = await _authClient.post(
         path: ApiUrl.login,
         data: loginData,
       );
+      // log('LongIn Response: ${response.data}');
 
       final data = response.data;
       log("Token: ${data['access_token']}");

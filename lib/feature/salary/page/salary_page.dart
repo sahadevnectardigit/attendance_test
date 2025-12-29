@@ -1,3 +1,4 @@
+import 'package:attendance/core/widgets/loading.dart';
 import 'package:attendance/feature/salary/page/salary_details.dart';
 import 'package:attendance/feature/salary/provider/salary_provider.dart';
 import 'package:attendance/l10n/app_localizations.dart';
@@ -43,7 +44,7 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
       backgroundColor: Colors.grey.shade50,
       appBar: _buildAppBar(),
       body: provider.fetchSalaryState.isLoading
-          ? _buildLoadingState()
+          ? buildLoadingState()
           : data == null || data.isEmpty
           ? _buildEmptyState()
           : _buildSalaryList(data),
@@ -102,43 +103,6 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildLoadingState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.green.withOpacity(0.2),
-                  blurRadius: 20,
-                  spreadRadius: 5,
-                ),
-              ],
-            ),
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.green.shade600),
-              strokeWidth: 3,
-            ),
-          ),
-          SizedBox(height: 24),
-          Text(
-            'Loading salary data...',
-            style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
     );
   }
 

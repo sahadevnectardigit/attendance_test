@@ -1,6 +1,5 @@
 class ApiUrl {
   static const String tattendance = "https://tattendance.com";
-  //   static const tattendance = "http://palpajun.tattendance.com";
   static const String login = "$tattendance/api/login/";
   static const String dashboard = "$tattendance/api/employee-dashboard/";
   static const String ledger = "$tattendance/api/ledger/";
@@ -31,4 +30,5 @@ class ApiUrl {
       "$tattendance/api/official-visit-applications/";
   static const String getLateInEaryOutApplications =
       "$tattendance/api/lateIn-earlyOut-applications/";
+  static const String dutyRoster = "$tattendance/api/duty-roster/list/";
 }

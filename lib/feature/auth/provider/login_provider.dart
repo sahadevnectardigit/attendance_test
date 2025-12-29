@@ -15,7 +15,7 @@ class LoginProvider extends ChangeNotifier {
 
   ApiState<void> loginState = const ApiState.initial();
 
-  Future<bool> loginn({
+  Future<bool> login({
     required String email,
     required String password,
     required String companyCode,

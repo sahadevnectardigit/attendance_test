@@ -1,9 +1,11 @@
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/core/services/main_api_client.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
+import 'package:attendance/feature/dutyRoster/duty_roster_provider.dart';
 import 'package:attendance/navbar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -36,6 +38,7 @@ class _SplashPageState extends State<SplashPage> {
           context,
           MaterialPageRoute(builder: (_) => NavBarPage()),
         );
+        // context.read<DutyRosterProvider>().fetchDutyRoster();
       } else {
         // Token validation/refresh failed, go to login
         await LocalStorage.clearTokens(); // Clear invalid tokens

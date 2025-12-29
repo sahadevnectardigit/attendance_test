@@ -1,6 +1,7 @@
 import 'package:attendance/core/widgets/dashboard_shimmer.dart';
 import 'package:attendance/feature/dashboard/pages/app_drawer.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
+import 'package:attendance/feature/dutyRoster/duty_roster_page.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:attendance/feature/salary/provider/salary_provider.dart';
@@ -73,7 +74,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final cardWidth = (MediaQuery.of(context).size.width - 48) / 2;
     final dashBoardProvider = context.watch<DashboardProvider>();
     final dashBoardData = dashBoardProvider.fetchDashBoardState.data;
-    final profilePro = context.read<ProfileProvider>();
+    final profilePro = context.watch<ProfileProvider>();
 
     final Map<String, double> months = {
       for (var key in categories)
@@ -179,6 +180,18 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ],
               ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => DutyRosterPage()),
+                    );
+                  },
+                  icon: Icon(Icons.task),
+                ),
+                // Icon(Icons.abc),
+              ],
             ),
             drawer: AppDrawer(),
             body: SingleChildScrollView(

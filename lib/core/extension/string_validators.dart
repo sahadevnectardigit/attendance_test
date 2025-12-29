@@ -13,3 +13,13 @@ extension StringValidator on String? {
     return null;
   }
 }
+
+extension StringExtension on String? {
+  bool get isNullOrEmpty => this == null || this!.isEmpty;
+  
+  bool get isNotNullOrEmpty => !isNullOrEmpty;
+  
+  bool get isNullOrBlank => this == null || this!.trim().isEmpty;
+  
+  bool get isNotNullOrBlank => !isNullOrBlank;
+}

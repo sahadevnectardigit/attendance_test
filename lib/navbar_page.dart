@@ -1,21 +1,45 @@
 import 'package:attendance/core/provider/bottom_navbar_provider.dart';
 import 'package:attendance/feature/dashboard/pages/dash_board_page.dart';
+import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/ledger/pages/ledger_page.dart';
+import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/page/profile_page.dart';
+import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:attendance/feature/salary/page/salary_page.dart';
+import 'package:attendance/feature/salary/provider/salary_provider.dart';
 import 'package:attendance/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
 
-class NavBarPage extends StatelessWidget {
-  NavBarPage({super.key});
+class NavBarPage extends StatefulWidget {
+  const NavBarPage({super.key});
 
+  @override
+  State<NavBarPage> createState() => _NavBarPageState();
+}
+
+class _NavBarPageState extends State<NavBarPage> {
   final List<Widget> _pages = [
     DashboardPage(),
     SalaryPage(),
     LedgerPage(),
     ProfilePage(),
   ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<DashboardProvider>().fetchDashboardData();
+      context.read<SalaryProvider>().fetchSalary();
+      context.read<LedgerProvider>().fetchLedgerData(
+        month: NepaliDateTime.now().month,
+        year: NepaliDateTime.now().year,
+      );
+      context.read<ProfileProvider>().fetchProfileData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

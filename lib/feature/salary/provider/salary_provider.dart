@@ -14,13 +14,15 @@ class SalaryProvider extends ChangeNotifier {
   ApiState<List<SalaryModel>> fetchSalaryState = const ApiState.initial();
 
   Future<void> fetchSalary() async {
+    final noDataFound = 'No salary record found.';
     fetchSalaryState = const ApiState.loading();
     notifyListeners();
 
     try {
       final response = await _client.get(path: ApiUrl.employeeSalary);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 &&
+          response.data['message'].toString() != noDataFound) {
         final List<dynamic> dataList = response.data;
         final listModel = dataList
             .map((item) => SalaryModel.fromJson(item))
@@ -28,7 +30,7 @@ class SalaryProvider extends ChangeNotifier {
         fetchSalaryState = ApiState.success(listModel);
         notifyListeners();
       } else {
-        fetchSalaryState = const ApiState.error("Failed to fetch salary data");
+        fetchSalaryState = ApiState.error(response.data['message']);
         CustomSnackbar.error(fetchSalaryState.error.toString());
         notifyListeners();
       }
@@ -42,5 +44,4 @@ class SalaryProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 }

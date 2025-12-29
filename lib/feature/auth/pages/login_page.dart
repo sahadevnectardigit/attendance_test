@@ -398,7 +398,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
     final loginProvider = context.read<LoginProvider>();
 
-    final success = await loginProvider.loginn(
+    final success = await loginProvider.login(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
       companyCode: companyCodeController.text.trim(),

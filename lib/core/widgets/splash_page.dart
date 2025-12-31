@@ -1,7 +1,7 @@
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/core/services/main_api_client.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
-import 'package:attendance/feature/dutyRoster/duty_roster_provider.dart';
+import 'package:attendance/feature/dutyRoster/system_setting_provider.dart';
 import 'package:attendance/navbar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,6 +33,7 @@ class _SplashPageState extends State<SplashPage> {
       final isTokenValid = await MainApiClient.validateAndRefreshToken();
 
       if (isTokenValid) {
+        context.read<SystemSettingProvider>().fetchSystemSettings();
         // Token is valid or successfully refreshed, go to main page
         Navigator.pushReplacement(
           context,

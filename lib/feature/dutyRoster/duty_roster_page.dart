@@ -1,9 +1,8 @@
 import 'package:attendance/core/extension/string_validators.dart';
 import 'package:attendance/core/widgets/loading.dart';
-import 'package:attendance/feature/auth/model/login_response.dart';
-import 'package:attendance/feature/auth/provider/login_provider.dart';
 import 'package:attendance/feature/dutyRoster/duty_roster_model.dart';
 import 'package:attendance/feature/dutyRoster/duty_roster_provider.dart';
+import 'package:attendance/feature/dutyRoster/system_setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,12 +18,10 @@ class _DutyRosterPageState extends State<DutyRosterPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      LoginResponse? loginResponse = context
-          .read<LoginProvider>()
-          .loginState
-          .data;
+      final res = context.read<SystemSettingProvider>().systemSettingState.data;
+
       context.read<DutyRosterProvider>().fetchDutyRoster(
-        nepaliEnabled: loginResponse?.enableNepaliDate ?? false,
+        nepaliEnabled: res ?? false,
       );
       // log('Login roster ..................${loginResponse?.enableNepaliDate}');
     });

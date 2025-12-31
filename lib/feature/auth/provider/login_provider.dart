@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 class LoginProvider extends ChangeNotifier {
   static final AuthApiClient _authClient = AuthApiClient();
 
-  ApiState<LoginResponse> loginState = const ApiState.initial();
+  ApiState<void> loginState = const ApiState.initial();
 
   Future<bool> login({
     required String email,
@@ -42,8 +42,8 @@ class LoginProvider extends ChangeNotifier {
       log("Token: ${data['access_token']}");
 
       if (response.statusCode == 200) {
-        final model = LoginResponse.fromJson(response.data);
-        loginState = ApiState.success(model);
+        // final model = LoginResponse.fromJson(response.data);
+        // loginState = ApiState.success(model);
         // Save tokens
         await LocalStorage.saveTokens(
           accessToken: data['access_token'] ?? "",

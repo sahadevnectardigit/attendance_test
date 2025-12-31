@@ -31,4 +31,6 @@ class ApiUrl {
   static const String getLateInEaryOutApplications =
       "$tattendance/api/lateIn-earlyOut-applications/";
   static const String dutyRoster = "$tattendance/api/duty-roster/list/";
+
+  static const String systemSetting = "$tattendance/api/system-settings/";
 }

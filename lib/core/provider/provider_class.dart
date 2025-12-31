@@ -5,6 +5,7 @@ import 'package:attendance/feature/auth/provider/login_provider.dart';
 import 'package:attendance/feature/dashboard/provider/application_provider.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/dutyRoster/duty_roster_provider.dart';
+import 'package:attendance/feature/dutyRoster/system_setting_provider.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:attendance/feature/salary/provider/salary_provider.dart';
@@ -25,5 +26,8 @@ final List<SingleChildWidget> providers = [
   ),
   ChangeNotifierProvider<DutyRosterProvider>(
     create: (_) => DutyRosterProvider(),
+  ),
+  ChangeNotifierProvider<SystemSettingProvider>(
+    create: (_) => SystemSettingProvider(),
   ),
 ];

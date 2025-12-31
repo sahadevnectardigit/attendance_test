@@ -4,6 +4,7 @@ import 'package:attendance/core/constants/api_constants.dart';
 import 'package:attendance/core/services/auth_api_client.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/core/utils/error_handler.dart';
+import 'package:attendance/feature/auth/model/login_response.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
 import 'package:attendance/main.dart' as MainApiClient;
 import 'package:attendance/models/api_state.dart';
@@ -13,7 +14,7 @@ import 'package:flutter/material.dart';
 class LoginProvider extends ChangeNotifier {
   static final AuthApiClient _authClient = AuthApiClient();
 
-  ApiState<void> loginState = const ApiState.initial();
+  ApiState<LoginResponse> loginState = const ApiState.initial();
 
   Future<bool> login({
     required String email,
@@ -41,6 +42,8 @@ class LoginProvider extends ChangeNotifier {
       log("Token: ${data['access_token']}");
 
       if (response.statusCode == 200) {
+        final model = LoginResponse.fromJson(response.data);
+        loginState = ApiState.success(model);
         // Save tokens
         await LocalStorage.saveTokens(
           accessToken: data['access_token'] ?? "",
@@ -62,7 +65,7 @@ class LoginProvider extends ChangeNotifier {
           await LocalStorage.clearUserCredentials();
         }
 
-        loginState = const ApiState.success(null);
+        // loginState = const ApiState.success(null);
         notifyListeners();
         return true; // API succeeded
       } else {
@@ -71,7 +74,7 @@ class LoginProvider extends ChangeNotifier {
         return false; // API failed
       }
     } on DioException catch (e) {
-      final backendMessage = e.response?.data?["error"];
+      final backendMessage = e.response?.data?["detail"];
       if (backendMessage != null) {
         loginState = ApiState.error(backendMessage);
       } else {

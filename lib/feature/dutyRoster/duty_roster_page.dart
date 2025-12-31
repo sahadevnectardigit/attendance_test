@@ -1,5 +1,7 @@
 import 'package:attendance/core/extension/string_validators.dart';
 import 'package:attendance/core/widgets/loading.dart';
+import 'package:attendance/feature/auth/model/login_response.dart';
+import 'package:attendance/feature/auth/provider/login_provider.dart';
 import 'package:attendance/feature/dutyRoster/duty_roster_model.dart';
 import 'package:attendance/feature/dutyRoster/duty_roster_provider.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +15,18 @@ class DutyRosterPage extends StatefulWidget {
 }
 
 class _DutyRosterPageState extends State<DutyRosterPage> {
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<DutyRosterProvider>().fetchDutyRoster();
+      LoginResponse? loginResponse = context
+          .read<LoginProvider>()
+          .loginState
+          .data;
+      context.read<DutyRosterProvider>().fetchDutyRoster(
+        nepaliEnabled: loginResponse?.enableNepaliDate ?? false,
+      );
+      // log('Login roster ..................${loginResponse?.enableNepaliDate}');
     });
   }
 
@@ -57,7 +64,7 @@ class _DutyRosterPageState extends State<DutyRosterPage> {
             return buildLoadingState();
           }
           if (state.dutyRosterState.hasError) {
-            return Text(state.dutyRosterState.error ?? "");
+            return Center(child: Text(state.dutyRosterState.error ?? ""));
           }
           return ListView.builder(
             itemCount: entries.length,

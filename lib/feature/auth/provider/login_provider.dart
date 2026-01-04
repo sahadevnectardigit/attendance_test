@@ -4,7 +4,6 @@ import 'package:attendance/core/constants/api_constants.dart';
 import 'package:attendance/core/services/auth_api_client.dart';
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/core/utils/error_handler.dart';
-import 'package:attendance/feature/auth/model/login_response.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
 import 'package:attendance/main.dart' as MainApiClient;
 import 'package:attendance/models/api_state.dart';

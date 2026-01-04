@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:attendance/core/extension/string_validators.dart';
 import 'package:attendance/core/widgets/loading.dart';
 import 'package:attendance/feature/dutyRoster/duty_roster_model.dart';
@@ -23,7 +25,7 @@ class _DutyRosterPageState extends State<DutyRosterPage> {
       context.read<DutyRosterProvider>().fetchDutyRoster(
         nepaliEnabled: res ?? false,
       );
-      // log('Login roster ..................${loginResponse?.enableNepaliDate}');
+      log('System setting value: ..................$res');
     });
   }
 

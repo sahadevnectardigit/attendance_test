@@ -14,7 +14,13 @@ class AttendanceDayDetail extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
         flexibleSpace: Container(
-          decoration: BoxDecoration(color: Colors.green.shade300),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade600, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
         ),
         foregroundColor: Colors.white,
       ),

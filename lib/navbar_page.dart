@@ -33,10 +33,10 @@ class _NavBarPageState extends State<NavBarPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<DashboardProvider>().fetchDashboardData();
       context.read<SalaryProvider>().fetchSalary();
-      context.read<LedgerProvider>().fetchLedgerData(
-        month: NepaliDateTime.now().month,
-        year: NepaliDateTime.now().year,
-      );
+      // context.read<LedgerProvider>().fetchLedgerData(
+      //   month: NepaliDateTime.now().month,
+      //   year: NepaliDateTime.now().year,
+      // );
       context.read<ProfileProvider>().fetchProfileData();
     });
   }

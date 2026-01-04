@@ -172,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage>
                 // Add refresh functionality
                 context.read<DashboardProvider>().fetchDashboardData();
                 context.read<ProfileProvider>().fetchProfileData();
-                context.read<LedgerProvider>().fetchLedgerData();
+                // context.read<LedgerProvider>().fetchLedgerData();
                 context.read<SalaryProvider>().fetchSalary();
               },
               icon: Icon(Icons.refresh),

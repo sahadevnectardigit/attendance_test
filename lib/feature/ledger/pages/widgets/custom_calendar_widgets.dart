@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:attendance/feature/ledger/pages/attendance_day_detail_page.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/l10n/app_localizations.dart';
@@ -16,50 +18,46 @@ class CustomCalendarWidget extends StatelessWidget {
     required this.year,
     required this.month,
     required this.ledgerProvider,
-    this.detailData = const [], // ✅ default empty list
-    this.summaryData, // ✅ nullable
+    this.detailData = const [],
+    this.summaryData,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Get all dates from the API response
-    final allDates = ledgerProvider.getAllDates();
+    // Debug: Print what data we have
+    print('Calendar Widget - Year: $year, Month: $month');
+    print('DetailData count: ${detailData.length}');
+    if (detailData.isNotEmpty) {
+      print('Sample dates: ${detailData.take(3).map((d) => d.date).toList()}');
+    }
 
-    // Determine the maximum day in the month from the API data
-    int maxDay = 0;
-    for (var date in allDates) {
+    // Create a map for quick lookup: day number -> DetailData
+    Map<int, DetailData> dayDataMap = {};
+    for (var detail in detailData) {
       try {
-        final parts = date.split('/');
+        final parts = detail.date.split('-');
         if (parts.length == 3) {
           final day = int.tryParse(parts[2]);
-          if (day != null && day > maxDay) {
-            maxDay = day;
+          if (day != null) {
+            dayDataMap[day] = detail;
           }
         }
       } catch (e) {
-        // Ignore invalid dates
+        print('Error parsing date: ${detail.date}');
       }
     }
 
-    // If we couldn't determine maxDay from data, use a default
-    if (maxDay == 0) maxDay = 32;
+    print('DayDataMap keys: ${dayDataMap.keys.toList()}');
+
+    // Determine the maximum day in the month from the API data
+    int maxDay = dayDataMap.keys.isEmpty
+        ? 32
+        : dayDataMap.keys.reduce((a, b) => a > b ? a : b);
 
     // Find the weekday of the first day of the month
-    // We'll use the API data to determine this
     int firstWeekday = 7; // Default to Sunday if not found
-
-    for (var date in allDates) {
-      try {
-        final parts = date.split('/');
-        if (parts.length == 3 && parts[2] == '01') {
-          // This is the first day of the month, get its weekday
-          final dayName = ledgerProvider.getDayName(date);
-          firstWeekday = _getWeekdayNumber(dayName);
-          break;
-        }
-      } catch (e) {
-        // Ignore invalid dates
-      }
+    if (dayDataMap.containsKey(1)) {
+      firstWeekday = _getWeekdayNumber(dayDataMap[1]!.day);
     }
 
     // Calculate total cells needed (including empty cells at the beginning)
@@ -67,7 +65,7 @@ class CustomCalendarWidget extends StatelessWidget {
     int rows = (totalCells / 7).ceil();
 
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -80,7 +78,7 @@ class CustomCalendarWidget extends StatelessWidget {
         children: [
           // Month and year header
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.symmetric(vertical: 0.0),
             child: Text(
               "${_getNepaliMonthName(month)} $year",
               style: TextStyle(
@@ -107,7 +105,7 @@ class CustomCalendarWidget extends StatelessWidget {
                       (day) => Expanded(
                         child: Container(
                           alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(vertical: 8),
+                          padding: EdgeInsets.symmetric(vertical: 2),
                           child: Text(
                             day,
                             style: TextStyle(
@@ -138,35 +136,45 @@ class CustomCalendarWidget extends StatelessWidget {
                       return Expanded(child: Container());
                     }
 
-                    // Format the date to match API response format (YYYY/MM/DD)
-                    String formattedDate =
-                        '$year/${month.toString().padLeft(2, '0')}/${dayNumber.toString().padLeft(2, '0')}';
-                    String? status = ledgerProvider.getAttendanceStatus(
-                      formattedDate,
-                    );
-                    String? day = ledgerProvider.getAttendanceDay(
-                      formattedDate,
-                    );
+                    // Get detail data for this day from the map
+                    DetailData? dayDetailData = dayDataMap[dayNumber];
 
-                    // Find the detail data for this specific day
-                    DetailData? dayDetailData;
-                    for (var detail in detailData) {
-                      if (detail.date == formattedDate) {
-                        dayDetailData = detail;
-                        break;
-                      }
+                    // Debug for first few days
+                    if (dayNumber <= 3) {
+                      print(
+                        'Day $dayNumber: ${dayDetailData != null ? "Found (${dayDetailData.date})" : "Not found"}',
+                      );
                     }
 
                     // Determine color and icon based on status
                     Color bgColor = Colors.transparent;
                     Color textColor = Colors.black;
                     IconData? icon;
+                    bool hasMultipleBadges = false;
 
-                    // First, check for Saturday
-                    if (day != null && day.toLowerCase().contains('sat')) {
-                      bgColor = Colors.red.shade100;
-                    } else if (status != null) {
-                      if (status.toLowerCase().contains('present')) {
+                    if (dayDetailData != null) {
+                      String status = dayDetailData.overallStatus;
+
+                      // Check for special day conditions first (highest priority)
+                      if (dayDetailData.dayIsWeekend) {
+                        bgColor = Colors.grey.shade200;
+                        textColor = Colors.grey.shade700;
+                        icon = Icons.weekend;
+                      } else if (dayDetailData.dayHasHoliday) {
+                        bgColor = Colors.purple.shade100;
+                        textColor = Colors.purple.shade900;
+                        icon = Icons.celebration;
+                      } else if (dayDetailData.dayHasLeave) {
+                        bgColor = Colors.orange.shade100;
+                        textColor = Colors.orange.shade900;
+                        icon = Icons.beach_access;
+                      } else if (dayDetailData.dayHasOv) {
+                        bgColor = Colors.indigo.shade100;
+                        textColor = Colors.indigo.shade900;
+                        icon = Icons.business_center;
+                      }
+                      // Then check overall status for attendance
+                      else if (status.toLowerCase().contains('present')) {
                         bgColor = Colors.green.shade100;
                         textColor = Colors.green.shade900;
                         icon = Icons.check_circle;
@@ -174,16 +182,28 @@ class CustomCalendarWidget extends StatelessWidget {
                         bgColor = Colors.red.shade100;
                         textColor = Colors.red.shade900;
                         icon = Icons.cancel;
-                      } else if (status.toLowerCase().contains('holiday') ||
-                          status.toLowerCase().contains('weekend')) {
+                      } else if (status.toLowerCase().contains('holiday')) {
                         bgColor = Colors.blue.shade100;
                         textColor = Colors.blue.shade900;
-                        icon = Icons.beach_access;
+                        icon = Icons.celebration;
+                      } else if (status.toLowerCase().contains('weekend')) {
+                        bgColor = Colors.grey.shade100;
+                        textColor = Colors.grey.shade900;
+                        icon = Icons.weekend;
                       } else if (status.toLowerCase().contains('leave')) {
                         bgColor = Colors.orange.shade100;
                         textColor = Colors.orange.shade900;
                         icon = Icons.airplane_ticket;
                       }
+
+                      // Check if there are multiple special conditions
+                      int specialCount = 0;
+                      if (dayDetailData.dayHasLeave) specialCount++;
+                      if (dayDetailData.dayHasOv) specialCount++;
+                      if (dayDetailData.dayHasHoliday) specialCount++;
+                      if (dayDetailData.hasMultipleShifts) specialCount++;
+
+                      hasMultipleBadges = specialCount > 1;
                     }
 
                     return Expanded(
@@ -193,7 +213,7 @@ class CustomCalendarWidget extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => AttendacneDayDetail(
+                                    builder: (_) => AttendanceDayDetail(
                                       detailData: dayDetailData!,
                                     ),
                                   ),
@@ -202,24 +222,47 @@ class CustomCalendarWidget extends StatelessWidget {
                             : null, // Disable tap if no data for this day
                         child: Container(
                           margin: EdgeInsets.all(2),
-                          padding: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: bgColor,
                             shape: BoxShape.circle,
+                            border: hasMultipleBadges
+                                ? Border.all(color: Colors.amber, width: 2)
+                                : null,
                           ),
                           child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            child: Stack(
+                              alignment: Alignment.center,
                               children: [
-                                Text(
-                                  '$dayNumber',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: textColor,
-                                  ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '$dayNumber',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: textColor,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    if (icon != null)
+                                      Icon(icon, size: 10, color: textColor),
+                                  ],
                                 ),
-                                if (icon != null)
-                                  Icon(icon, size: 12, color: textColor),
+                                // Multiple shifts indicator
+                                if (dayDetailData?.hasMultipleShifts == true)
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: Container(
+                                      width: 6,
+                                      height: 6,
+                                      decoration: BoxDecoration(
+                                        color: Colors.deepPurple,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
                               ],
                             ),
                           ),
@@ -236,8 +279,9 @@ class CustomCalendarWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Wrap(
-              spacing: 12,
-              runSpacing: 8,
+              spacing: 8,
+              runSpacing: 6,
+              alignment: WrapAlignment.center,
               children: [
                 _buildLegendItem(
                   Colors.green,
@@ -248,13 +292,16 @@ class CustomCalendarWidget extends StatelessWidget {
                   AppLocalizations.of(context)!.absent,
                 ),
                 _buildLegendItem(
-                  Colors.blue,
+                  Colors.purple,
                   AppLocalizations.of(context)!.holidays,
                 ),
                 _buildLegendItem(
                   Colors.orange,
                   AppLocalizations.of(context)!.approvedLeave,
                 ),
+                _buildLegendItem(Colors.indigo, "OV"),
+                _buildLegendItem(Colors.grey, "Weekend"),
+                _buildLegendWithDot(Colors.deepPurple, "Multiple"),
               ],
             ),
           ),
@@ -290,15 +337,30 @@ class CustomCalendarWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 12,
-          height: 12,
+          width: 10,
+          height: 10,
           decoration: BoxDecoration(
             color: color.withOpacity(0.3),
             shape: BoxShape.circle,
           ),
         ),
         SizedBox(width: 4),
-        Text(text, style: TextStyle(fontSize: 12)),
+        Text(text, style: TextStyle(fontSize: 10)),
+      ],
+    );
+  }
+
+  Widget _buildLegendWithDot(Color color, String text) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 6,
+          height: 6,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        SizedBox(width: 4),
+        Text(text, style: TextStyle(fontSize: 10)),
       ],
     );
   }

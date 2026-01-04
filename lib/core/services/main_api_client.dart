@@ -23,8 +23,8 @@ class MainApiClient {
     dio = Dio(
       BaseOptions(
         baseUrl: ApiUrl.tattendance,
-        connectTimeout: const Duration(seconds: 15),
-        receiveTimeout: const Duration(seconds: 15),
+        connectTimeout: const Duration(seconds: 20),
+        receiveTimeout: const Duration(seconds: 20),
         headers: {"Content-Type": "application/json"},
       ),
     );
@@ -163,7 +163,7 @@ class MainApiClient {
   static Future<bool> validateAndRefreshToken() async {
     final accessToken = await LocalStorage.getAccessToken();
     final refreshToken = await LocalStorage.getRefreshToken();
-    
+
     // Check if tokens exist
     if (accessToken == null || refreshToken == null) {
       return false;
@@ -179,18 +179,20 @@ class MainApiClient {
       // Decode the payload (middle part of JWT)
       final payload = tokenParts[1];
       final normalizedPayload = base64Url.normalize(payload);
-      final payloadMap = jsonDecode(utf8.decode(base64Url.decode(normalizedPayload)));
-      
+      final payloadMap = jsonDecode(
+        utf8.decode(base64Url.decode(normalizedPayload)),
+      );
+
       final exp = payloadMap['exp'];
       if (exp != null) {
         final expirationTime = DateTime.fromMillisecondsSinceEpoch(exp * 1000);
         final now = DateTime.now();
-        
+
         // If token expires in less than 5 minutes, try to refresh
         if (expirationTime.isBefore(now.add(const Duration(minutes: 5)))) {
           return await _refreshToken();
         }
-        
+
         // Token is still valid
         return true;
       }

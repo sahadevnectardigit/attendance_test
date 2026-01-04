@@ -22,6 +22,10 @@ class _LedgerPageState extends State<LedgerPage> {
   int? selectedMonth;
   String? selectedStringMonth;
 
+  // For UI display (always Nepali)
+  int? selectedYearForDisplay;
+  int? selectedMonthForDisplay;
+
   final List<String> nepaliMonths = [
     "Baisakh",
     "Jestha",
@@ -39,9 +43,39 @@ class _LedgerPageState extends State<LedgerPage> {
 
   // Green theme colors
   final List<Color> greenGradient = [Color(0xFF4CAF50), Color(0xFF2E7D32)];
-
   final List<Color> lightGreenGradient = [Color(0xFFE8F5E9), Color(0xFFC8E6C9)];
+
   bool systemSettingValue = false;
+  bool get nepaliEnabled => systemSettingValue;
+
+  // Convert Nepali date to English date if needed
+  (int year, int month) convertToEnglishIfNeeded(
+    int nepaliYear,
+    int nepaliMonth,
+  ) {
+    if (nepaliEnabled) {
+      // If Nepali is enabled, send Nepali dates as is
+      return (nepaliYear, nepaliMonth);
+    } else {
+      // If English is enabled, convert Nepali date to English date
+      try {
+        // Convert Nepali to English date
+        DateTime englishDate = NepaliDateTime(
+          nepaliYear,
+          nepaliMonth,
+          15, // middle of month for conversion
+        ).toDateTime();
+
+        return (englishDate.year, englishDate.month);
+      } catch (e) {
+        // If conversion fails, fallback to current English date
+        log('Date conversion error: $e');
+        final now = DateTime.now();
+        return (now.year, now.month);
+      }
+    }
+  }
+
   Future<void> _pickYearMonthDialog() async {
     int tempYear = NepaliDateTime.now().year;
     int tempMonth = NepaliDateTime.now().month;
@@ -194,21 +228,29 @@ class _LedgerPageState extends State<LedgerPage> {
                           child: Text("OK"),
                           onPressed: () {
                             setState(() {
-                              selectedYear = tempYear;
-                              selectedMonth = tempMonth;
+                              // Store Nepali values for display
+                              selectedYearForDisplay = tempYear;
+                              selectedMonthForDisplay = tempMonth;
                               selectedStringMonth = nepaliMonths[tempMonth - 1];
+
+                              // Convert to appropriate date system for API
+                              final apiDates = convertToEnglishIfNeeded(
+                                tempYear,
+                                tempMonth,
+                              );
+                              selectedYear = apiDates.$1;
+                              selectedMonth = apiDates.$2;
                             });
                             Navigator.pop(ctx);
 
-                            // Fetch data for the selected month
+                            // Fetch data for the selected month with converted dates
                             context.read<LedgerProvider>().fetchLedgerData(
                               year: selectedYear,
                               month: selectedMonth,
                             );
                             log(
-                              'Selected year: $selectedYear, month:$selectedMonth',
+                              'Display: $selectedYearForDisplay/$selectedMonthForDisplay (Nepali) → API: $selectedYear/$selectedMonth (${nepaliEnabled ? 'Nepali' : 'English'})',
                             );
-                            // [log] Selected year: 2076, month:9
                           },
                         ),
                       ],
@@ -230,9 +272,30 @@ class _LedgerPageState extends State<LedgerPage> {
         context.read<SystemSettingProvider>().systemSettingState.data as bool;
     log('System setting value: ..................$systemSettingValue');
 
-    selectedYear = NepaliDateTime.now().year;
-    selectedMonth = NepaliDateTime.now().month;
-    selectedStringMonth = nepaliMonths[NepaliDateTime.now().month - 1];
+    // Get current Nepali date for display
+    final currentNepaliDate = NepaliDateTime.now();
+    selectedYearForDisplay = currentNepaliDate.year;
+    selectedMonthForDisplay = currentNepaliDate.month;
+    selectedStringMonth = nepaliMonths[currentNepaliDate.month - 1];
+
+    // Convert to appropriate date for API
+    final apiDates = convertToEnglishIfNeeded(
+      selectedYearForDisplay!,
+      selectedMonthForDisplay!,
+    );
+    selectedYear = apiDates.$1;
+    selectedMonth = apiDates.$2;
+
+    // Fetch initial data
+    log(
+      'InitState - Fetching data for: Year=$selectedYear, Month=$selectedMonth',
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<LedgerProvider>().fetchLedgerData(
+        year: selectedYear,
+        month: selectedMonth,
+      );
+    });
   }
 
   @override
@@ -294,11 +357,20 @@ class _LedgerPageState extends State<LedgerPage> {
                             SizedBox(width: 10),
                             Text(
                               selectedStringMonth != null
-                                  ? "$selectedStringMonth $selectedYear"
+                                  ? "$selectedStringMonth $selectedYearForDisplay"
                                   : "Select Year & Month",
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Text(
+                              "(BS)",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white.withOpacity(0.8),
                               ),
                             ),
                           ],
@@ -326,9 +398,9 @@ class _LedgerPageState extends State<LedgerPage> {
                 // Summary statistics
                 if (state.fetchLedgerState.data?.summaryData != null)
                   _buildSummaryCard(state.fetchLedgerState.data!.summaryData!),
-                SizedBox(height: 15),
+                SizedBox(height: 8),
 
-                // Calendar view
+                // Calendar view - always use Nepali dates for display
                 Expanded(
                   child: state.fetchLedgerState.isLoading
                       ? Center(
@@ -338,13 +410,34 @@ class _LedgerPageState extends State<LedgerPage> {
                             ),
                           ),
                         )
+                      : state.fetchLedgerState.data?.detailData == null ||
+                            state.fetchLedgerState.data!.detailData!.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.calendar_today_outlined,
+                                size: 64,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(height: 16),
+                              Text(
+                                "No attendance data available",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       : CustomCalendarWidget(
-                          year: selectedYear!,
-                          month: selectedMonth!,
+                          year: selectedYearForDisplay!,
+                          month: selectedMonthForDisplay!,
                           ledgerProvider: state,
                           summaryData: state.fetchLedgerState.data?.summaryData,
-                          detailData:
-                              state.fetchLedgerState.data?.detailData ?? [],
+                          detailData: state.fetchLedgerState.data!.detailData!,
                         ),
                 ),
               ],
@@ -357,7 +450,7 @@ class _LedgerPageState extends State<LedgerPage> {
 
   Widget _buildSummaryCard(SummaryData summary) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -369,28 +462,70 @@ class _LedgerPageState extends State<LedgerPage> {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Column(
         children: [
-          _buildSummaryItem(
-            AppLocalizations.of(context)!.total,
-            summary.total.toString(),
-            Color(0xFF2196F3),
+          // First row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildSummaryItem(
+                AppLocalizations.of(context)!.total,
+                summary.total.toString(),
+                Color(0xFF2196F3),
+              ),
+              _buildSummaryItem(
+                AppLocalizations.of(context)!.present,
+                summary.present.toString(),
+                Color(0xFF4CAF50),
+              ),
+              _buildSummaryItem(
+                AppLocalizations.of(context)!.absent,
+                summary.absent.toString(),
+                Color(0xFFF44336),
+              ),
+              _buildSummaryItem(
+                AppLocalizations.of(context)!.approvedLeave,
+                summary.leave.toString(),
+                Color(0xFFFF9800),
+              ),
+              _buildSummaryItem(
+                "Early Out",
+                summary.earlyOut.toString(),
+                Color(0xFF795548),
+              ),
+            ],
           ),
-          _buildSummaryItem(
-            AppLocalizations.of(context)!.present,
-            summary.present.toString(),
-            Color(0xFF4CAF50),
-          ),
-          _buildSummaryItem(
-            AppLocalizations.of(context)!.absent,
-            summary.absent.toString(),
-            Color(0xFFF44336),
-          ),
-          _buildSummaryItem(
-            AppLocalizations.of(context)!.approvedLeave,
-            summary.leave.toString(),
-            Color(0xFFFF9800),
+          SizedBox(height: 12),
+          // Second row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildSummaryItem(
+                "OV",
+                summary.officialVisit.toString(),
+                Color(0xFF9C27B0),
+              ),
+              _buildSummaryItem(
+                "Holiday",
+                summary.holiday.toString(),
+                Color(0xFF00BCD4),
+              ),
+              _buildSummaryItem(
+                "Weekend",
+                summary.weekend.toString(),
+                Color(0xFF607D8B),
+              ),
+              _buildSummaryItem(
+                "Special",
+                summary.specialDays.toString(),
+                Color(0xFFE91E63),
+              ),
+              _buildSummaryItem(
+                "Late In",
+                summary.lateIn.toString(),
+                Color(0xFFFF5722),
+              ),
+            ],
           ),
         ],
       ),
@@ -401,7 +536,7 @@ class _LedgerPageState extends State<LedgerPage> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.all(4),
           decoration: BoxDecoration(
             color: color.withOpacity(0.1),
             shape: BoxShape.circle,
@@ -415,7 +550,7 @@ class _LedgerPageState extends State<LedgerPage> {
             ),
           ),
         ),
-        SizedBox(height: 6),
+        SizedBox(height: 4),
         Text(
           label,
           style: TextStyle(

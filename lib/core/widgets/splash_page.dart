@@ -44,8 +44,10 @@ class _SplashPageState extends State<SplashPage> {
         );
         // context.read<DutyRosterProvider>().fetchDutyRoster();
       } else {
+            // Token validation/refresh failed, clear everything and go to login
+      await LocalStorage.clearTokens();
+      await LocalStorage.clearRememberMe();
         // Token validation/refresh failed, go to login
-        await LocalStorage.clearTokens(); // Clear invalid tokens
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const LoginPage()),

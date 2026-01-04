@@ -124,6 +124,8 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 }
+
+
 // class LoginProvider extends ChangeNotifier {
 //   static final AuthApiClient _authClient = AuthApiClient();
 

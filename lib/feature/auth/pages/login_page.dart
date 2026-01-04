@@ -36,6 +36,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _loadSavedCredentials(); // Load saved credentials on init
+
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
@@ -58,10 +60,28 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     _slideController.forward();
   }
 
+  // Load saved credentials if remember me was checked
+  Future<void> _loadSavedCredentials() async {
+    final savedRememberMe = await LocalStorage.getRememberMe();
+    if (savedRememberMe) {
+      final email = await LocalStorage.getSavedEmail();
+      final companyCode = await LocalStorage.getSavedCompanyCode();
+
+      setState(() {
+        rememberMe = savedRememberMe;
+        if (email != null) emailController.text = email;
+        if (companyCode != null) companyCodeController.text = companyCode;
+      });
+    }
+  }
+
   @override
   void dispose() {
     _fadeController.dispose();
     _slideController.dispose();
+    emailController.dispose();
+    companyCodeController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -107,30 +127,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       opacity: _fadeAnimation,
       child: Column(
         children: [
-          // Logo/Icon Container
-          // Container(
-          //   width: 120,
-          //   height: 120,
-          //   decoration: BoxDecoration(
-          //     gradient: LinearGradient(
-          //       colors: [Colors.blue.shade600, Colors.blue.shade400],
-          //       begin: Alignment.topLeft,
-          //       end: Alignment.bottomRight,
-          //     ),
-          //     shape: BoxShape.circle,
-          //     boxShadow: [
-          //       BoxShadow(
-          //         color: Colors.blue.withOpacity(0.3),
-          //         blurRadius: 30,
-          //         spreadRadius: 5,
-          //         offset: Offset(0, 10),
-          //       ),
-          //     ],
-          //   ),
-          //   child: Icon(Icons.fingerprint, size: 60, color: Colors.white),
-          // ),
           SizedBox(height: 30),
-
           Text(
             AppLocalizations.of(context)!.welcome,
             style: TextStyle(
@@ -230,14 +227,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(
-        //   label,
-        //   style: TextStyle(
-        //     fontSize: 14,
-        //     fontWeight: FontWeight.w600,
-        //     color: Colors.grey.shade700,
-        //   ),
-        // ),
         SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -248,10 +237,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           decoration: InputDecoration(
             labelText: label,
             hintText: hint,
-            // labelStyle: TextStyle(
-            //   color: Colors.green.shade400,
-            //   fontWeight: FontWeight.w400,
-            // ),
             hintStyle: TextStyle(
               color: Colors.grey.shade400,
               fontWeight: FontWeight.w400,
@@ -407,10 +392,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
       companyCode: companyCodeController.text.trim(),
+      rememberMe: rememberMe, // Pass the remember me value
     );
 
     if (success) {
-      await LocalStorage.setRememberMe(rememberMe);
 
       Navigator.pushAndRemoveUntil(
         context,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/core/services/main_api_client.dart';
 import 'package:attendance/feature/auth/pages/login_page.dart';
@@ -19,6 +21,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     _checkAuth();
+    context.read<SystemSettingProvider>().fetchSystemSettings();
   }
 
   Future<void> _checkAuth() async {

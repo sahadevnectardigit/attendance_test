@@ -21,7 +21,7 @@ class SystemSettingProvider extends ChangeNotifier {
     // log('Params data in roster data:${params.toString()}');
     try {
       final response = await _client.get(path: ApiUrl.systemSetting);
-      log('Duty roster reponse:${response.data.toString()}');
+      // log('System setting data............:${response.data.toString()}');
       if (response.statusCode == 200) {
         final res = response.data['enable_nepali_date'];
 

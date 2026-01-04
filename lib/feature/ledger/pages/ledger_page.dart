@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:attendance/feature/dutyRoster/system_setting_provider.dart';
 import 'package:attendance/feature/ledger/pages/widgets/custom_calendar_widgets.dart';
 import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/l10n/app_localizations.dart';
@@ -38,7 +41,7 @@ class _LedgerPageState extends State<LedgerPage> {
   final List<Color> greenGradient = [Color(0xFF4CAF50), Color(0xFF2E7D32)];
 
   final List<Color> lightGreenGradient = [Color(0xFFE8F5E9), Color(0xFFC8E6C9)];
-
+  bool systemSettingValue = false;
   Future<void> _pickYearMonthDialog() async {
     int tempYear = NepaliDateTime.now().year;
     int tempMonth = NepaliDateTime.now().month;
@@ -202,6 +205,10 @@ class _LedgerPageState extends State<LedgerPage> {
                               year: selectedYear,
                               month: selectedMonth,
                             );
+                            log(
+                              'Selected year: $selectedYear, month:$selectedMonth',
+                            );
+                            // [log] Selected year: 2076, month:9
                           },
                         ),
                       ],
@@ -219,6 +226,9 @@ class _LedgerPageState extends State<LedgerPage> {
   @override
   void initState() {
     super.initState();
+    systemSettingValue =
+        context.read<SystemSettingProvider>().systemSettingState.data as bool;
+    log('System setting value: ..................$systemSettingValue');
 
     selectedYear = NepaliDateTime.now().year;
     selectedMonth = NepaliDateTime.now().month;

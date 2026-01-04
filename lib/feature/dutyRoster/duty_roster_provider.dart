@@ -28,10 +28,9 @@ class DutyRosterProvider extends ChangeNotifier {
       monthData = DateTime.now().month;
     }
 
-    dutyRosterState = const ApiState.loading();
+  dutyRosterState = const ApiState.loading();
     notifyListeners();
-    // final params = {"year": 2025, "month": 12, "person": 2};
-    // final params = {"year": 2082, "month": 09, "person": 2};
+
     final params = {
       "year": yearData, "month": monthData, // "person": 2
     };

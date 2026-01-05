@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:attendance/core/services/local_storage.dart';
 import 'package:attendance/core/services/main_api_client.dart';

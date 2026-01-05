@@ -208,7 +208,7 @@ class CustomCalendarWidget extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => AttendanceDayDetail(
-                                      detailData: dayDetailData!,
+                                      detailData: dayDetailData,
                                     ),
                                   ),
                                 );

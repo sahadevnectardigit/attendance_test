@@ -268,9 +268,11 @@ class _LedgerPageState extends State<LedgerPage> {
   @override
   void initState() {
     super.initState();
-    systemSettingValue =
-        context.read<SystemSettingProvider>().systemSettingState.data as bool;
-    log('System setting value: ..................$systemSettingValue');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      systemSettingValue =
+          context.read<SystemSettingProvider>().systemSettingState.data ??false;
+      log('System setting value: ..................$systemSettingValue');
+    });
 
     // Get current Nepali date for display
     final currentNepaliDate = NepaliDateTime.now();
@@ -450,7 +452,7 @@ class _LedgerPageState extends State<LedgerPage> {
 
   Widget _buildSummaryCard(SummaryData summary) {
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -536,7 +538,7 @@ class _LedgerPageState extends State<LedgerPage> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(4),
+          padding: EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: color.withOpacity(0.1),
             shape: BoxShape.circle,

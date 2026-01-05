@@ -2,7 +2,6 @@ import 'package:attendance/core/widgets/dashboard_shimmer.dart';
 import 'package:attendance/feature/dashboard/pages/app_drawer.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
 import 'package:attendance/feature/dutyRoster/duty_roster_page.dart';
-import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:attendance/feature/salary/provider/salary_provider.dart';
 import 'package:attendance/l10n/app_localizations.dart';

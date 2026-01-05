@@ -202,58 +202,60 @@ class AttendanceDayDetail extends StatelessWidget {
           children: [
             // Shift header
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.schedule, color: Color(0xFF2E7D32), size: 20),
-                    SizedBox(width: 8),
-                    Text(
-                      shift.shiftName,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2E7D32),
-                        fontSize: 16,
-                      ),
-                    ),
-                    if (shift.isSpecial) ...[
+                Expanded(
+                  child: Row(
+                    children: [
+                      Icon(Icons.schedule, color: Color(0xFF2E7D32), size: 20),
                       SizedBox(width: 8),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
+                      Text(
+                        shift.shiftName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2E7D32),
+                          fontSize: 16,
                         ),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFE91E63),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          "Special",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
+                      ),
+                      if (shift.isSpecial) ...[
+                        SizedBox(width: 8),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFE91E63),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            "Special",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ],
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: _getStatusColor(shift.status),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    shift.status,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
                   ),
                 ),
+                // Container(
+                //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                //   decoration: BoxDecoration(
+                //     color: _getStatusColor(shift.status),
+                //     borderRadius: BorderRadius.circular(12),
+                //   ),
+                //   child: Text(
+                //     shift.status,
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //       fontSize: 12,
+                //       fontWeight: FontWeight.w500,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
 

@@ -85,14 +85,14 @@ class _DutyRosterPageState extends State<DutyRosterPage> {
                           color: Colors.green,
                         ),
                       ),
-                      if (rosterData.rosterData?.department != null)
-                        Text(
-                          "Dept: ${rosterData.rosterData!.department!}",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        ),
+                      // if (rosterData.rosterData?.department != null)
+                      //   Text(
+                      //     "Dept: ${rosterData.rosterData!.department!}",
+                      //     style: const TextStyle(
+                      //       fontSize: 14,
+                      //       color: Colors.grey,
+                      //     ),
+                      //   ),
                     ],
                   ),
                 ),
@@ -112,7 +112,7 @@ class _DutyRosterPageState extends State<DutyRosterPage> {
                       return Card(
                         margin: const EdgeInsets.all(8),
                         child: Padding(
-                          padding: const EdgeInsets.all(0),//8
+                          padding: const EdgeInsets.all(0), //8
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

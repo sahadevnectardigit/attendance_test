@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:attendance/core/provider/locale_provider.dart';
 import 'package:attendance/feature/auth/provider/login_provider.dart';
 import 'package:attendance/feature/dashboard/provider/dashboard_provider.dart';
-import 'package:attendance/feature/ledger/provider/ledger_provider.dart';
 import 'package:attendance/feature/profile/page/change_password.dart';
 import 'package:attendance/feature/profile/provider/profile_provider.dart';
 import 'package:attendance/feature/salary/provider/salary_provider.dart';
@@ -70,6 +69,18 @@ class _ProfilePageState extends State<ProfilePage>
         _selectedImage = File(pickedFile.path);
       });
     }
+  }
+
+  Widget _defaultAvatar() {
+    return Container(
+      height: 120,
+      width: 120,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(Icons.person, size: 60, color: Colors.grey.shade400),
+    );
   }
 
   @override
@@ -317,6 +328,44 @@ class _ProfilePageState extends State<ProfilePage>
         child: Stack(
           alignment: Alignment.center,
           children: [
+            // ClipOval(
+            //   child:
+            //    _selectedImage != null
+            //       ? Image.file(
+            //           _selectedImage!,
+            //           height: 120,
+            //           width: 120,
+            //           fit: BoxFit.cover,
+            //         )
+            //       : CachedNetworkImage(
+            //           imageUrl: model?.profile?.imageUrl?.toString() ?? "",
+            //           height: 120,
+            //           width: 120,
+            //           fit: BoxFit.cover,
+            //           placeholder: (context, url) => Container(
+            //             height: 120,
+            //             width: 120,
+            //             decoration: BoxDecoration(
+            //               color: Colors.white,
+            //               shape: BoxShape.circle,
+            //             ),
+            //             child: Center(child: CupertinoActivityIndicator()),
+            //           ),
+            //           errorWidget: (context, url, error) => Container(
+            //             height: 120,
+            //             width: 120,
+            //             decoration: BoxDecoration(
+            //               color: Colors.white,
+            //               shape: BoxShape.circle,
+            //             ),
+            //             child: Icon(
+            //               Icons.person,
+            //               size: 60,
+            //               color: Colors.grey.shade400,
+            //             ),
+            //           ),
+            //         ),
+            // ),
             ClipOval(
               child: _selectedImage != null
                   ? Image.file(
@@ -325,35 +374,29 @@ class _ProfilePageState extends State<ProfilePage>
                       width: 120,
                       fit: BoxFit.cover,
                     )
-                  : CachedNetworkImage(
-                      imageUrl: model?.profile?.imageUrl?.toString() ?? "",
+                  : (model?.profile?.imageUrl != null &&
+                        model!.profile!.imageUrl!.isNotEmpty)
+                  ? CachedNetworkImage(
+                      imageUrl: model!.profile!.imageUrl!,
                       height: 120,
                       width: 120,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
                         height: 120,
                         width: 120,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: Center(child: CupertinoActivityIndicator()),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        height: 120,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.person,
-                          size: 60,
-                          color: Colors.grey.shade400,
+                        child: const Center(
+                          child: CupertinoActivityIndicator(),
                         ),
                       ),
-                    ),
+                      errorWidget: (context, url, error) => _defaultAvatar(),
+                    )
+                  : _defaultAvatar(),
             ),
+
             Positioned(
               bottom: 5,
               right: 5,
@@ -800,7 +843,7 @@ class _ProfilePageState extends State<ProfilePage>
                       Center(child: CircularProgressIndicator()),
                 );
                 Navigator.of(context).pop(); // Close loading
-                Provider.of<LoginProvider>(context,listen: false).logout();
+                Provider.of<LoginProvider>(context, listen: false).logout();
 
                 // await LocalStorage.clearTokens();
                 // await LocalStorage.setRememberMe(false);

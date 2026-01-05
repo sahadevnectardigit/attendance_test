@@ -23,11 +23,19 @@ class DutyRosterResponse {
   }
 }
 
+class Department {
+  final String? name;
+  Department({this.name});
+  factory Department.fromJson(Map<String, dynamic> json) {
+    return Department(name: json['name']);
+  }
+}
+
 class RosterData {
   final int? person;
   final String? personName; // Added from response
   final Branch? branch;
-  final String? department;
+  // final Department? department;
   final Designation? designation;
   final Map<String, DayData>? days; // Changed from List<Shift> to DayData
 
@@ -35,7 +43,7 @@ class RosterData {
     this.person,
     this.personName,
     this.branch,
-    this.department,
+    // this.department,
     this.designation,
     this.days,
   });
@@ -56,7 +64,10 @@ class RosterData {
       person: json['person'],
       personName: json['person_name'], // Added
       branch: json['branch'] != null ? Branch.fromJson(json['branch']) : null,
-      department: json['department'],
+      // department: json['department'] != null
+      //     ? Department.fromJson(json['name'])
+      //     : null,
+
       designation: json['designation'] != null
           ? Designation.fromJson(json['designation'])
           : null,

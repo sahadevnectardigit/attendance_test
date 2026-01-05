@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:attendance/core/services/main_api_client.dart';
 import 'package:attendance/core/utils/error_handler.dart';
 import 'package:attendance/models/api_state.dart';
@@ -16,7 +14,7 @@ class SystemSettingProvider extends ChangeNotifier {
 
   Future<void> fetchSystemSettings() async {
     systemSettingState = const ApiState.loading();
-    notifyListeners();
+    // notifyListeners();
 
     // log('Params data in roster data:${params.toString()}');
     try {

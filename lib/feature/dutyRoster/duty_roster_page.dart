@@ -85,9 +85,9 @@ class _DutyRosterPageState extends State<DutyRosterPage> {
                           color: Colors.green,
                         ),
                       ),
-                      // if (rosterData.rosterData?.department != null)
+                      // if (rosterData.rosterData?.department?.name != null)
                       //   Text(
-                      //     "Dept: ${rosterData.rosterData!.department!}",
+                      //     "Dept: ${rosterData.rosterData!.department!.name}",
                       //     style: const TextStyle(
                       //       fontSize: 14,
                       //       color: Colors.grey,

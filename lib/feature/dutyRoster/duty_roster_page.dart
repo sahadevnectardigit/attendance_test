@@ -70,21 +70,21 @@ class _DutyRosterPageState extends State<DutyRosterPage> {
           return Column(
             children: [
               // Person Name Header
-              if (rosterData?.rosterData?.personName != null)
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  color: Colors.green.shade50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Employee: ${rosterData!.rosterData!.personName!}",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
-                      ),
+              // if (rosterData?.rosterData?.personName != null)
+              //   Container(
+              //     padding: const EdgeInsets.all(16),
+              //     color: Colors.green.shade50,
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         Text(
+              //           "Employee: ${rosterData!.rosterData!.personName!}",
+              //           style: const TextStyle(
+              //             fontSize: 18,
+              //             fontWeight: FontWeight.bold,
+              //             color: Colors.green,
+              //           ),
+              //         ),
                       // if (rosterData.rosterData?.department?.name != null)
                       //   Text(
                       //     "Dept: ${rosterData.rosterData!.department!.name}",
@@ -93,9 +93,9 @@ class _DutyRosterPageState extends State<DutyRosterPage> {
                       //       color: Colors.grey,
                       //     ),
                       //   ),
-                    ],
-                  ),
-                ),
+                //     ],
+                //   ),
+                // ),
 
               // Days List
               Expanded(

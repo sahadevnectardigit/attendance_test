@@ -824,45 +824,50 @@ class _ProfilePageState extends State<ProfilePage>
             style: TextStyle(color: Colors.grey.shade700, height: 1.4),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(
-                AppLocalizations.of(context)!.cancel,
-                style: TextStyle(color: Colors.grey.shade600),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                Navigator.of(context).pop();
-
-                // Show loading
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) =>
-                      Center(child: CircularProgressIndicator()),
-                );
-                Navigator.of(context).pop(); // Close loading
-                Provider.of<LoginProvider>(context, listen: false).logout();
-
-                // await LocalStorage.clearTokens();
-                // await LocalStorage.setRememberMe(false);
-
-                // Navigator.of(context).pop(); // Close loading
-                // Navigator.pushAndRemoveUntil(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => LoginPage()),
-                //   (Route<dynamic> route) => false,
-                // );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red.shade600,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    AppLocalizations.of(context)!.cancel,
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
                 ),
-              ),
-              child: Text(AppLocalizations.of(context)!.logout),
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+
+                    // Show loading
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) =>
+                          Center(child: CircularProgressIndicator()),
+                    );
+                    Navigator.of(context).pop(); // Close loading
+                    Provider.of<LoginProvider>(context, listen: false).logout();
+
+                    // await LocalStorage.clearTokens();
+                    // await LocalStorage.setRememberMe(false);
+
+                    // Navigator.of(context).pop(); // Close loading
+                    // Navigator.pushAndRemoveUntil(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => LoginPage()),
+                    //   (Route<dynamic> route) => false,
+                    // );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red.shade600,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(AppLocalizations.of(context)!.logout),
+                ),
+              ],
             ),
           ],
         );

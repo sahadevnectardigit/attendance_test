@@ -24,11 +24,11 @@ class ApiErrorHandler {
       final statusCode = e.response?.statusCode;
 
       // Try to read message from API response body
-      // final dynamic data = e.response?.data;
-      // if (data is Map && data['message'] != null) {
-      //   return data['message'].toString();
-      // }
       final dynamic data = e.response?.data;
+      if (data is Map && data['message'] != null) {
+        return data['message'].toString();
+      }
+      // final dynamic data = e.response?.data;
       if (data is Map && data['error'] != null) {
         return data['error'].toString();
       }

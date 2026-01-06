@@ -194,6 +194,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             drawer: AppDrawer(),
             body: SingleChildScrollView(
+              
               padding: const EdgeInsets.only(bottom: 20),
               child: Column(
                 children: [

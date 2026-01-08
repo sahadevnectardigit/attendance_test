@@ -63,7 +63,19 @@ class _DutyRosterPageState extends State<DutyRosterPage> {
             return buildLoadingState();
           }
           if (state.dutyRosterState.hasError) {
-            return Center(child: Text(state.dutyRosterState.error ?? ""));
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(child: Text(state.dutyRosterState.error ?? "")),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    state.fetchDutyRoster();
+                  },
+                  child: Text('Retry'),
+                ),
+              ],
+            );
           }
 
           // Add header with person name if available
@@ -85,17 +97,17 @@ class _DutyRosterPageState extends State<DutyRosterPage> {
               //             color: Colors.green,
               //           ),
               //         ),
-                      // if (rosterData.rosterData?.department?.name != null)
-                      //   Text(
-                      //     "Dept: ${rosterData.rosterData!.department!.name}",
-                      //     style: const TextStyle(
-                      //       fontSize: 14,
-                      //       color: Colors.grey,
-                      //     ),
-                      //   ),
-                //     ],
-                //   ),
-                // ),
+              // if (rosterData.rosterData?.department?.name != null)
+              //   Text(
+              //     "Dept: ${rosterData.rosterData!.department!.name}",
+              //     style: const TextStyle(
+              //       fontSize: 14,
+              //       color: Colors.grey,
+              //     ),
+              //   ),
+              //     ],
+              //   ),
+              // ),
 
               // Days List
               Expanded(

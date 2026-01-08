@@ -202,6 +202,7 @@ class _DashboardPageState extends State<DashboardPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Center(child: Text(state.error!)),
+                SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
                     provider.fetchDashboardData();
